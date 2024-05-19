@@ -1,6 +1,8 @@
 "use client";
 
 import Input from "@/app/components/global/Input";
+import { ProductLabel } from "@/app/components/product/Label";
+import { useState } from "react";
 
 // export async function handleSubmit(formData: FormData) {
 // 	'use server'
@@ -8,6 +10,29 @@ import Input from "@/app/components/global/Input";
 // }
 
 export const createProduct = () => {
+	const [selectedType, setSelectedType] = useState<string | null>(null);
+	const [selectedSize, setSelectedSize] = useState<string | null>(null);
+	const [selectedGender, setSelectedGender] = useState<string | null>(null);
+	const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
+
+	const selectType = (item: string) => {
+		setSelectedType(item);
+	};
+
+	const selectSize = (item: string) => {
+		setSelectedSize(item);
+	};
+
+	const selectGender = (item: string) => {
+		setSelectedGender(item);
+	};
+
+	const toggleStyle = (item: string) => {
+		setSelectedStyles((prev) =>
+			prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+		);
+	};
+
 	const productType = [
 		"상의",
 		"바지",
@@ -37,10 +62,10 @@ export const createProduct = () => {
 
 	return (
 		<>
-			<div className="w-full h-[84px] bg-gray-300 flex justify-center items-center display ">
+			<div className="w-full h-[84px] bg-gray-300 flex justify-center items-center display fixed top-0">
 				임시 Header
 			</div>
-			<div className=" h-screen flex flex-col justify-start items-start px-[9.5rem] mt-12">
+			<div className=" h-screen flex flex-col justify-start items-start px-[9.5rem] pt-60">
 				{/* 헤더 */}
 				<div className="display">상품 정보 수정</div>
 				<form className="w-full flex flex-col mt-[4rem]">
@@ -70,17 +95,11 @@ export const createProduct = () => {
 					{/* 상품 종류 */}
 					<div className="w-full flex flex-col gap-[0.75rem] label-1 mt-[3.75rem]">
 						<div className="font-bold">상품 종류 (1개 선택) *</div>
-						<div className="flex gap-[0.75rem]">
-							{productType.map((type) => (
-								// 이 부분 컴포넌트 만들기
-								<div
-									className="text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl"
-									key={type}
-								>
-									{type}
-								</div>
-							))}
-						</div>
+						<ProductLabel
+							list={productType}
+							selectedItems={selectedType ? [selectedType] : []}
+							onSelect={selectType}
+						/>
 					</div>
 					{/* 상품 사이즈 */}
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
@@ -88,17 +107,11 @@ export const createProduct = () => {
 							<span>상품 사이즈 *</span>
 							<span className="text-gray-400">사이즈 가이드 </span>
 						</div>
-						<div className="flex gap-[0.75rem]">
-							{size.map((s) => (
-								// 이 부분 컴포넌트 만들기
-								<div
-									className="text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl"
-									key={s}
-								>
-									{s}
-								</div>
-							))}
-						</div>
+						<ProductLabel
+							list={size}
+							selectedItems={selectedSize ? [selectedSize] : []}
+							onSelect={selectSize}
+						/>
 					</div>
 					{/* 맞춤 키 */}
 					{/* 임시로 input / select로 변경 필요 */}
@@ -113,34 +126,27 @@ export const createProduct = () => {
 						<div className="font-bold flex gap-[0.75rem] mt-[3.75rem]">
 							분류(1개 선택) *
 						</div>
-						<div className="flex gap-[0.75rem]">
-							{gender.map((s) => (
-								// 이 부분 컴포넌트 만들기
-								<div
-									className="text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl"
-									key={s}
-								>
-									{s}
-								</div>
-							))}
-						</div>
+						<ProductLabel
+							list={gender}
+							selectedItems={selectedGender ? [selectedGender] : []}
+							onSelect={selectGender}
+						/>
 					</div>
 					{/* 스타일 */}
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="font-bold flex gap-[0.75rem] mt-[3.75rem]">
 							스타일(최소 1개, 중복 가능) *
 						</div>
-						<div className="flex gap-[0.75rem] mb-12">
-							{style.map((s) => (
-								// 이 부분 컴포넌트 만들기
-								<div
-									className="text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl"
-									key={s}
-								>
-									{s}
-								</div>
-							))}
-						</div>
+						<ProductLabel
+							list={style}
+							selectedItems={selectedStyles ? selectedStyles : []}
+							onSelect={toggleStyle}
+						/>
+					</div>
+					<div className="mt-[5rem] w-full h-fit flex justify-center label-1 text-gray-100">
+						<button className="bg-primary px-12 py-4 rounded-3xl">
+							상품 등록하기
+						</button>
 					</div>
 				</form>
 			</div>
