@@ -1,9 +1,32 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import Input from "./components/global/input";
+import Button from "./components/button";
+import NavBar from "./components/header";
+import { signOut } from "firebase/auth";
+import { auth } from "@/config/firebase/firebase";
+import { handleLogout } from "./utils";
 
 export default function Home() {
   return (
     <main>
+      <NavBar />
+      <div className="flex justify-between max-w-screen-2xl pt-44">
+        <Link href="/login">로그인</Link>
+      </div>
       <div>
+        <Link href="/create-account">회원가입</Link>
+      </div>
+      <div>
+        <Link href="/change-password">비번찾기</Link>
+      </div>
+      <div>
+        <Link href="/adduser">소속정하기</Link>
+      </div>
+      <div>
+        <Input name="name" type="text" count={10} />
+
         <h1 className="display">Display</h1>
         <h1 className="heading-1">Heading 1</h1>
         <h2 className="heading-2">Heading 2</h2>
