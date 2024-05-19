@@ -25,6 +25,9 @@ const config: Config = {
         800: "#24292F",
         900: "#131418",
       },
+      screens: {
+        "2xl": "1440px",
+      },
     },
   },
   plugins: [],
