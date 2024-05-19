@@ -9,7 +9,7 @@ export async function uploadProduct(formData: FormData) {
 		productSize: formData.get("selectedSize"),
 		productHeight: formData.get("height"),
 		productGender: formData.get("selectedGender"),
-		productStyles: formData.get("selectedStyles"),
+		productStyles: formData.getAll("selectedStyles"),
 	};
 
 	console.log(data);
