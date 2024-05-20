@@ -1,6 +1,7 @@
 import { DocumentSnapshot, QueryDocumentSnapshot } from "firebase/firestore";
 
 export interface IProduct {
+  id?: string;
   createdAt: Date;
   genderCategory: string;
   height: string;
@@ -25,9 +26,11 @@ export const ProductConverter = {
     };
   },
 
-  fromFirestore: (snapshot: QueryDocumentSnapshot): IProduct => {
-    const data = snapshot.data();
+  fromFirestore: (product: QueryDocumentSnapshot): IProduct => {
+    const id = product.id;
+    const data = product.data();
     return {
+      id,
       createdAt: data.createdAt,
       genderCategory: data.genderCategory,
       height: data.height,

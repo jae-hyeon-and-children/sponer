@@ -1,43 +1,34 @@
+import { getProduct } from "@/lib/api/product";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Product() {
+interface ProductDetailParams {
+  params: {
+    id: string;
+  };
+}
+
+export default async function Product({ params: { id } }: ProductDetailParams) {
+  const response = await getProduct(id);
   return (
     <main className="flex flex-col items-center px-4">
-      <div className="max-w-screen-2xl flex gap-x-36">
-        <section className="flex flex-col gap-52 items-center pt-60">
-          <Image
-            src={
-              "https://flexible.img.hani.co.kr/flexible/normal/700/1040/imgdb/original/2021/0428/20210428504000.jpg"
-            }
-            width={465}
-            height={500}
-            alt={"상품 이미지"}
-            className="snap-start"
-          />
-          <Image
-            src={
-              "https://flexible.img.hani.co.kr/flexible/normal/700/1040/imgdb/original/2021/0428/20210428504000.jpg"
-            }
-            width={465}
-            height={500}
-            alt={"상품 이미지"}
-            className="snap-center"
-          />
-          <Image
-            src={
-              "https://flexible.img.hani.co.kr/flexible/normal/700/1040/imgdb/original/2021/0428/20210428504000.jpg"
-            }
-            width={465}
-            height={500}
-            alt={"상품 이미지"}
-            className="snap-center"
-          />
-        </section>
-        <section className="flex flex-col sticky top-0 pt-60 h-fit ">
-          <h2 className="label-1 text-gray-800 mb-4">오와이</h2>
+      <div className="max-w-screen-2xl flex gap-x-36 w-full">
+        <ul className="flex flex-col flex-1 gap-52 items-center pt-60 ">
+          {response.data!.productImages.map((value, index) => (
+            <Image
+              key={index}
+              src={value}
+              width={465}
+              height={500}
+              alt={"상품 이미지"}
+              className="snap-start"
+            />
+          ))}
+        </ul>
+        <section className="flex-1 flex flex-col sticky top-0 pt-60 h-fit">
+          <h2 className="label-1 text-gray-800 mb-4">오아이</h2>
           <h1 className="display  text-gray-900 mb-3">
-            와이셔츠 로렌 섬머 슬랙스 롤업
+            {response.data!.title}
           </h1>
           <hr className="mb-12" />
           <div className="">
@@ -47,21 +38,28 @@ export default function Product() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-6">
               <div className="flex flex-col gap-3">
                 <p className="label-1  text-gray-800">Size</p>
-                <p className="label-2  text-gray-800">M</p>
+                <p className="label-2  text-gray-800">{response.data!.size}</p>
               </div>
               <div className="flex flex-col gap-3">
                 <p className="label-1  text-gray-800">Height</p>
-                <p className="label-2  text-gray-800">170 ~ 175cm</p>
+                <p className="label-2  text-gray-800">
+                  {response.data!.height}
+                </p>
               </div>
               <div className="flex flex-col gap-3">
                 <p className="label-1  text-gray-800">Types</p>
-                <p className="label-2  text-gray-800">남자</p>
+                <p className="label-2  text-gray-800">
+                  {response.data!.genderCategory}
+                </p>
               </div>
               <div className="flex flex-col gap-3">
                 <p className="label-1  text-gray-800">Style</p>
-                <ul className="flex gap-3">
-                  <li className="label-2  text-gray-800">M</li>
-                  <li className="label-2  text-gray-800">M</li>
+                <ul className="flex gap-x-3 gap-y-2 flex-wrap">
+                  {response.data!.styleCategory.map((value, index) => (
+                    <li key={index} className="label-2  text-gray-800">
+                      {value}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
