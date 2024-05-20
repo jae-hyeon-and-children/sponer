@@ -17,7 +17,7 @@ export const ProductLabel: React.FC<ProductLabelProps> = ({
 		<div className="flex gap-[0.75rem]">
 			{list.map((s: string) => (
 				<div
-					className={`text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl ${
+					className={`text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl cursor-pointer ${
 						selectedItems.includes(s) ? "bg-primary text-gray-100" : "bg-white"
 					}`}
 					key={s}
