@@ -37,3 +37,10 @@ export const PRODUCT_STYLES = {
   basic: "베이직",
   modern: "모던",
 };
+
+/**
+ * Collection Name
+ */
+
+export const COLLECTION_NAME_CHAT = "Chat";
+export const COLLECTION_NAME_PRODUCT = "Product";
