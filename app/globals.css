@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  input:focus {
+    outline: none;
+  }
+}
+
 @layer utilities {
   .display {
     @apply font-semibold text-[1.75rem] leading-[145%];
@@ -10,7 +16,7 @@
     @apply font-normal text-[1.375rem] leading-[140%];
   }
   .heading-2 {
-    @apply font-normal text-[1.375rem] leading-[140%];
+    @apply font-normal text-[1.125rem] leading-[140%];
   }
   .heading-3 {
     @apply font-semibold text-[1rem] leading-[140%];
