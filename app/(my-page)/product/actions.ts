@@ -24,7 +24,7 @@ export async function uploadProduct(formData: FormData) {
 		productName: formData.get("productName") as string,
 		productType: formData.get("selectedType") as string,
 		productSize: formData.get("selectedSize") as string,
-		productHeight: formData.get("height") as string,
+		productHeight: formData.get("selectedHeight") as string,
 		productGender: formData.get("selectedGender") as string,
 		productStyles: formData.getAll("selectedStyles") as string[],
 	};
@@ -41,13 +41,15 @@ export async function uploadProduct(formData: FormData) {
 
 		const imageUrls = await Promise.all(imageUploadPromises);
 
+		// 추후에 브랜드 이름도 같이 포함되어야 함
+
 		const productData = {
 			title: data.productName,
-			product_category: data.productType,
+			productCategory: data.productType,
 			size: data.productSize,
 			height: data.productHeight,
-			gender_category: data.productGender,
-			style_category: data.productStyles,
+			genderCategory: data.productGender,
+			styleCategory: data.productStyles,
 			productImages: imageUrls,
 			createdAt: new Date(),
 		};
