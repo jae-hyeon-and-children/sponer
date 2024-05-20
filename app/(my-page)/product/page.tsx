@@ -1,6 +1,6 @@
 "use client";
 
-import Input from "@/app/components/global/Input";
+import Input from "@/app/components/global/input";
 import { ProductLabel } from "@/app/components/product/Label";
 import React, { ChangeEvent, DragEvent, MouseEvent, useState } from "react";
 import { uploadProduct } from "./actions";
@@ -11,11 +11,21 @@ import {
 	PRODUCT_TYPES,
 } from "@/constants/variables";
 
+const PRODUCT_HEIGHT = {
+	1: "150 ~ 155cm",
+	2: "155 ~ 160cm",
+	3: "160 ~ 165cm",
+	4: "165 ~ 170cm",
+	5: "170 ~ 175cm",
+	6: "175 ~ 180cm",
+};
+
 const createProduct = () => {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
 	const [selectedSize, setSelectedSize] = useState<string | null>(null);
 	const [selectedGender, setSelectedGender] = useState<string | null>(null);
 	const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
+	const [selectedHeight, setSelectedHeight] = useState<string | null>(null);
 	const [images, setImages] = useState<File[]>([]);
 
 	const selectType = (item: string) => {
@@ -34,6 +44,10 @@ const createProduct = () => {
 		setSelectedStyles((prev) =>
 			prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
 		);
+	};
+
+	const selectHeight = (event: ChangeEvent<HTMLInputElement>) => {
+		setSelectedHeight(event.target.value);
 	};
 
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +100,7 @@ const createProduct = () => {
 		if (selectedType) formData.append("selectedType", selectedType);
 		if (selectedSize) formData.append("selectedSize", selectedSize);
 		if (selectedGender) formData.append("selectedGender", selectedGender);
+		if (selectedHeight) formData.append("selectedHeight", selectedHeight);
 
 		selectedStyles.forEach((style) => {
 			formData.append("selectedStyles", style);
@@ -101,7 +116,7 @@ const createProduct = () => {
 			<div className="w-full h-[84px] bg-gray-300 flex justify-center items-center display fixed top-0 z-20">
 				임시 Header
 			</div>
-			<div className=" h-screen flex flex-col justify-start items-start px-[9.5rem] pt-60">
+			<div className=" h-screen flex flex-col justify-start items-start px-[9.5rem] pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 등록</div>
 				<form
 					className="w-full flex flex-col mt-[4rem]"
@@ -164,7 +179,7 @@ const createProduct = () => {
 					</div>
 					<div className="w-[36.625rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
 						<div>상품 이름 *</div>
-						<Input name="productName" count={10} />
+						<Input name="productName" count={40} />
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1 mt-[3.75rem]">
 						<div className="font-bold">상품 종류 (1개 선택) *</div>
@@ -188,7 +203,15 @@ const createProduct = () => {
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="w-[36.625rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
 							<div>맞춤 키 *</div>
-							<Input name="height" count={10} />
+							<select
+								onChange={selectHeight}
+								className="text-gray-800 p-3 rounded-md focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none"
+							>
+								<option>사이즈를 선택하세요.</option>
+								{Object.entries(PRODUCT_HEIGHT).map(([key, value]) => (
+									<option key={value}>{value}</option>
+								))}
+							</select>
 						</div>
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
