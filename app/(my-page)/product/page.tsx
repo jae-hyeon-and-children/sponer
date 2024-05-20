@@ -4,7 +4,12 @@ import Input from "@/app/components/global/Input";
 import { ProductLabel } from "@/app/components/product/Label";
 import React, { ChangeEvent, DragEvent, MouseEvent, useState } from "react";
 import { uploadProduct } from "./actions";
-import { gender, productType, size, style } from "@/app/utils/productVariant";
+import {
+	PRODUCT_CATEGORIES,
+	PRODUCT_SIZE,
+	PRODUCT_STYLES,
+	PRODUCT_TYPES,
+} from "@/constants/variables";
 
 const createProduct = () => {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -164,7 +169,7 @@ const createProduct = () => {
 					<div className="w-full flex flex-col gap-[0.75rem] label-1 mt-[3.75rem]">
 						<div className="font-bold">상품 종류 (1개 선택) *</div>
 						<ProductLabel
-							list={productType}
+							list={PRODUCT_CATEGORIES}
 							selectedItems={selectedType ? [selectedType] : []}
 							onSelect={selectType}
 						/>
@@ -175,7 +180,7 @@ const createProduct = () => {
 							<span className="text-gray-400">사이즈 가이드 </span>
 						</div>
 						<ProductLabel
-							list={size}
+							list={PRODUCT_SIZE} // size 추가 필요
 							selectedItems={selectedSize ? [selectedSize] : []}
 							onSelect={selectSize}
 						/>
@@ -191,7 +196,7 @@ const createProduct = () => {
 							분류(1개 선택) *
 						</div>
 						<ProductLabel
-							list={gender}
+							list={PRODUCT_TYPES}
 							selectedItems={selectedGender ? [selectedGender] : []}
 							onSelect={selectGender}
 						/>
@@ -201,7 +206,7 @@ const createProduct = () => {
 							스타일(최소 1개, 중복 가능) *
 						</div>
 						<ProductLabel
-							list={style}
+							list={PRODUCT_STYLES}
 							selectedItems={selectedStyles ? selectedStyles : []}
 							onSelect={toggleStyle}
 						/>
