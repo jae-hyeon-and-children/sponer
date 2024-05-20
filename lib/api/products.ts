@@ -32,7 +32,6 @@ export async function getProducts(
       query(
         collection(fireStore, COLLECTION_NAME_PRODUCT),
         orderBy("createdAt", "desc"),
-        where("productCategory", "==", category),
         ...queries
       )
     );
