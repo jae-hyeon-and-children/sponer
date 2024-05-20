@@ -15,10 +15,10 @@ export const PRODUCT_CATEGORIES_WITH_ALL = {
 };
 
 export const PRODUCT_TYPES = {
-  tops: "여자",
-  pants: "남자",
-  outwear: "여남공용",
-  shoes: "키즈",
+  women: "여자",
+  men: "남자",
+  unisex: "여남공용",
+  kids: "키즈",
 };
 
 export const PRODUCT_TYPES_WITH_ALL = {
