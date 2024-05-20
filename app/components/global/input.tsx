@@ -28,7 +28,7 @@ export default function Input({
         onChange={onChange}
         maxLength={count ? count : 30}
         name={name}
-        className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+        className="bg-transparent rounded-md h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400  w-[600px]"
         {...rest}
       />
       <div className="font-semibold  h-full absolute right-1 flex items-center">
