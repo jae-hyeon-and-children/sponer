@@ -10,9 +10,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-export default async function Products() {
+interface ProductsParams {
+  params: {
+    category: string;
+  };
+}
+
+export default async function Products({
+  params: { category },
+}: ProductsParams) {
   //const [showFilterModal, setShowFilterModal] = useState(false);
-  const response = await getProducts();
+  const response = await getProducts(category);
   console.log(response);
   return (
     <main className="flex flex-col items-center px-4 ">
@@ -41,13 +49,14 @@ export default async function Products() {
         </section>
         <ul className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-20">
           {response.data!.map((value, index) => (
-            <ProductItem
-              key={index}
-              imageUrl={value.productImages[0]}
-              title={value.title}
-              size={value.size}
-              height={value.height}
-            />
+            <Link key={index} href={`/product/${value.id}`}>
+              <ProductItem
+                imageUrl={value.productImages[0]}
+                title={value.title}
+                size={value.size}
+                height={value.height}
+              />
+            </Link>
           ))}
         </ul>
       </div>

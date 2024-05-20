@@ -9,17 +9,22 @@ import {
   getDocs,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
-export async function getProducts(): Promise<IResponse<IProduct[]>> {
+export async function getProducts(
+  category: string
+): Promise<IResponse<IProduct[]>> {
   try {
     const productsDocSnap = await getDocs(
       query(
         collection(fireStore, COLLECTION_NAME_PRODUCT),
-        orderBy("createdAt", "desc")
+        orderBy("createdAt", "desc"),
+        where("productCategory", "==", category)
       )
     );
+
     const products = [];
 
     for (const product of productsDocSnap.docs) {
