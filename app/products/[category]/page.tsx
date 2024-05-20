@@ -1,3 +1,4 @@
+import EmptyView from "@/components/global/empty-view";
 import FilterModal from "@/components/products/filter-modal";
 import ProductItem from "@/components/products/product-item";
 import {
@@ -47,18 +48,22 @@ export default async function Products({
           </ul>
           <button>Filters</button>
         </section>
-        <ul className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-20">
-          {response.data!.map((value, index) => (
-            <Link key={index} href={`/product/${value.id}`}>
-              <ProductItem
-                imageUrl={value.productImages[0]}
-                title={value.title}
-                size={value.size}
-                height={value.height}
-              />
-            </Link>
-          ))}
-        </ul>
+        {response.data!.length === 0 ? (
+          <EmptyView text="해당 상품이 없습니다" />
+        ) : (
+          <ul className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-20">
+            {response.data!.map((value, index) => (
+              <Link key={index} href={`/product/${value.id}`}>
+                <ProductItem
+                  imageUrl={value.productImages[0]}
+                  title={value.title}
+                  size={value.size}
+                  height={value.height}
+                />
+              </Link>
+            ))}
+          </ul>
+        )}
       </div>
     </main>
   );
