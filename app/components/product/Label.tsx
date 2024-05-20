@@ -20,12 +20,12 @@ export const ProductLabel: React.FC<ProductLabelProps> = ({
 			{Object.entries(list).map(([key, value]) => (
 				<div
 					className={`text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl cursor-pointer ${
-						selectedItems.includes(key)
+						selectedItems.includes(value)
 							? "bg-primary text-gray-100"
 							: "bg-white"
 					}`}
 					key={key}
-					onClick={() => onSelect(key)}
+					onClick={() => onSelect(value)}
 				>
 					{value}
 				</div>
