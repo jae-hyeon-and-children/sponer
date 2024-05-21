@@ -97,6 +97,7 @@ const createProduct = () => {
 			formData.append("images", image);
 		});
 
+		// bind
 		if (selectedType) formData.append("selectedType", selectedType);
 		if (selectedSize) formData.append("selectedSize", selectedSize);
 		if (selectedGender) formData.append("selectedGender", selectedGender);
@@ -119,11 +120,11 @@ const createProduct = () => {
 			<div className=" h-screen flex flex-col justify-start items-start px-[9.5rem] pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 등록</div>
 				<form
-					className="w-full flex flex-col mt-[4rem]"
+					className="w-full flex flex-col mt-16"
 					onSubmit={handleUploadProduct}
 				>
 					<div className="w-full">
-						<div className="label-1 flex justify-between w-full">
+						<div className="label-1 flex justify-between w-full mb-4">
 							<span>상품 이미지(최대 5장)*</span>
 							<span className="text-gray-400">
 								제일 첫 번째 이미지가 상품의 대표 이미지가 됩니다. 이미지를
@@ -177,7 +178,7 @@ const createProduct = () => {
 							</div>
 						</label>
 					</div>
-					<div className="w-[36.625rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
+					<div className="w-[36.625rem] mt-12 label-1 flex flex-col gap-3">
 						<div>상품 이름 *</div>
 						<Input name="productName" count={40} />
 					</div>
@@ -204,6 +205,7 @@ const createProduct = () => {
 						<div className="w-[36.625rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
 							<div>맞춤 키 *</div>
 							<select
+								// 수정 필요
 								onChange={selectHeight}
 								className="text-gray-800 p-3 rounded-md focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none"
 							>
