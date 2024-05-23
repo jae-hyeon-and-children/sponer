@@ -25,20 +25,20 @@ export default async function Products({
   console.log(response);
   return (
     <main className="flex flex-col items-center px-4 ">
-      <div className="max-w-screen-2xl pt-60 flex flex-col items-center w-full">
-        <form className="px-4 py-4 border-b border-b-gray-300 w-96 mb-20 ">
+      <div className="max-w-screen-sm pt-16 lg:max-w-screen-2xl lg:pt-60 flex flex-col items-center w-full">
+        <form className="w-full mb-6 px-4 py-4 border-b border-b-gray-300 lg:w-96 lg:mb-20 ">
           <input
             type="text"
             placeholder="Search"
             className="text-gray-800 placeholder-gray-300 paragraph-1 w-full "
           />
         </form>
-        <section className="flex w-full flex-col lg:flex-row lg:justify-between mb-20">
-          <ul className="flex gap-5">
+        <section className="flex w-full mb-12 flex-row justify-between lg:mb-20 overflow-hidden gap-12">
+          <ul className="flex gap-3 lg:gap-5 whitespace-nowrap w-full overflow-x-scroll scrollbar-hide">
             {Object.entries(PRODUCT_CATEGORIES_WITH_ALL).map((value, index) => (
               <>
                 <Link key={index} href={`/products/${value[0]}`}>
-                  <li className="text-gray-300 hover:text-primary">
+                  <li className={`label-2 ${value[0] === category ? "text-primary" : "text-gray-300 "}`}>
                     {value[1]}
                   </li>
                 </Link>
@@ -46,12 +46,12 @@ export default async function Products({
               </>
             ))}
           </ul>
-          <button>Filters</button>
+          <button className="label-1 text-gray-500">Filters</button>
         </section>
         {response.data!.length === 0 ? (
           <EmptyView text="해당 상품이 없습니다" />
         ) : (
-          <ul className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-20">
+          <ul className=" w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-20 w-">
             {response.data!.map((value, index) => (
               <Link key={index} href={`/product/${value.id}`}>
                 <ProductItem
