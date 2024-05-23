@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import NavBar from "../components/header";
-import Input from "../components/global/input";
-import Button from "../components/button";
+import NavBar from "../../components/header";
+
+import Button from "../../components/button";
 import Link from "next/link";
 import { useFormState } from "react-dom";
 import login from "./actions";
-import GoogleLoginButton from "../google/start/route";
+import Input from "@/components/global/input";
+import GoogleLoginButton from "./googleLogin";
 
 export default function Login() {
   const [sibal, dispatch] = useFormState(login, null);
@@ -54,7 +55,7 @@ export default function Login() {
                   <Button text="로그인" />
                 </div>
                 <div className="border bg-primary text-gray-100 rounded-[40px] w-[400px] h-[50px]">
-                  {/* <GoogleLoginButton /> */}
+                  <GoogleLoginButton />
                 </div>
                 <div className="flex gap-3">
                   <Link href="/create-account">회원가입</Link>

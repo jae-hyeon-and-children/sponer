@@ -1,10 +1,17 @@
+// /login/actions.ts
 "use server";
 
-import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 import { redirect } from "next/navigation";
 
+// 일반 로그인 처리 함수
 export default async function login(prevState: any, formData: FormData) {
   const email = formData.get("email")?.toString() || "";
   const password = formData.get("password")?.toString() || "";
@@ -17,7 +24,7 @@ export default async function login(prevState: any, formData: FormData) {
     const loginUser = await signInWithEmailAndPassword(auth, email, password);
     console.log(loginUser);
     if (!auth.currentUser?.emailVerified) {
-      return;
+      return { success: false, message: "Email is not verified" };
     }
 
     await updateProfile(loginUser.user, {});
