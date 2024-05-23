@@ -1,93 +1,50 @@
 "use client";
 
-import Button from "@/app/components/button";
-import Input from "@/app/components/global/input";
-import NavBar from "@/app/components/header";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-import { PhotoIcon } from "@heroicons/react/24/solid";
-
-import AddressForm from "@/app/components/address";
 import { useFormState } from "react-dom";
-import uploadbrabdUser from "./actions";
+import { PhotoIcon } from "@heroicons/react/24/solid";
+import NavBar from "@/components/header";
+import Input from "@/components/global/input";
+import AddressForm from "@/components/address";
+
+import uploadbrandUser from "./actions";
 
 export default function BrandUser() {
-  const [sibal, dispatch] = useFormState(uploadbrabdUser, null);
+  const [sibal, dispatch] = useFormState(uploadbrandUser, null);
   const [profilePreview, setProfilePreview] = useState("");
   const [certificatePreview, setCertificatePreview] = useState("");
   const [isProfileImageUploaded, setIsProfileImageUploaded] = useState(false);
   const [isCertificateImageUploaded, setIsCertificateImageUploaded] =
     useState(false);
   const [isValidSize, setIsValidSize] = useState(true);
-  const [formState, setFormState] = useState(null);
+
   const router = useRouter();
 
   const onProfileImageChange = (event: any) => {
+    console.log("Profile image change event:", event); // 이벤트 객체 확인
     const { files } = event.target;
+    console.log("Selected files:", files); // 선택된 파일 확인
     if (!files) return;
     const file = files[0];
     const url = URL.createObjectURL(file);
+    console.log("Profile image URL:", url); // 파일 URL 확인
     setProfilePreview(url);
     setIsProfileImageUploaded(true);
     setIsValidSize(file.size <= 4 * 1024 * 1024); // 4MB 이하인지 확인
   };
 
   const onCertificateImageChange = (event: any) => {
+    console.log("Certificate image change event:", event); // 이벤트 객체 확인
     const { files } = event.target;
+    console.log("Selected files:", files); // 선택된 파일 확인
     if (!files) return;
     const file = files[0];
     const url = URL.createObjectURL(file);
+    console.log("Certificate image URL:", url); // 파일 URL 확인
     setCertificatePreview(url);
     setIsCertificateImageUploaded(true);
     setIsValidSize(file.size <= 4 * 1024 * 1024); // 4MB 이하인지 확인
-  };
-
-  const onSubmit = async (event: any) => {
-    event.preventDefault();
-    if (isProfileImageUploaded && isCertificateImageUploaded && isValidSize) {
-      const formData = new FormData(event.currentTarget);
-      const profileImageFileInput = document.getElementById(
-        "profile_photo"
-      ) as HTMLInputElement;
-      const certificateImageFileInput = document.getElementById(
-        "certificate_photo"
-      ) as HTMLInputElement;
-
-      if (
-        profileImageFileInput &&
-        profileImageFileInput.files &&
-        profileImageFileInput.files[0]
-      ) {
-        formData.append("profile_photo", profileImageFileInput.files[0]);
-      }
-
-      if (
-        certificateImageFileInput &&
-        certificateImageFileInput.files &&
-        certificateImageFileInput.files[0]
-      ) {
-        formData.append(
-          "certificate_photo",
-          certificateImageFileInput.files[0]
-        );
-      }
-
-      // 모든 폼 데이터 확인
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      });
-
-      const result = await uploadbrabdUser(formState, formData);
-      if (result.success) {
-        alert(result.message);
-        router.push("/");
-      } else {
-        alert(result.message);
-      }
-    } else {
-      alert("이미지를 업로드하거나 이미지 크기를 확인하세요.");
-    }
   };
 
   return (
@@ -103,9 +60,9 @@ export default function BrandUser() {
           </div>
         </div>
 
-        <form className="flex flex-col mt-16 w-full gap-5" onSubmit={onSubmit}>
+        <form action={dispatch} className="flex flex-col mt-16 w-full gap-5">
           <div className="flex justify-around mr-[350px]">
-            프로필 사진 *{" "}
+            <p>프로필 사진 *</p>
             <label
               htmlFor="profile_photo"
               className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full border-dashed cursor-pointer  bg-center bg-cover w-[200px] h-[160px]"
@@ -117,19 +74,20 @@ export default function BrandUser() {
                 <>
                   <PhotoIcon className="w-14" />
                   <div className="text-neutral-400 text-sm">
-                    사진을 추가해주세요.{" "}
-                    <Input
-                      id="profile_photo"
-                      name="profile_photo"
-                      type="file"
-                      required
-                      accept="image/*"
-                      className="hidden"
-                      onChange={onProfileImageChange}
-                    />
+                    사진을 추가해주세요.
                   </div>
                 </>
               ) : null}
+              <Input
+                id="profile_photo"
+                name="profile_photo"
+                type="file"
+                required
+                multiple
+                accept="image/*"
+                className="hidden"
+                onChange={onProfileImageChange}
+              />
             </label>
             {!isValidSize && (
               <div className="text-red-500 text-center mt-2">
@@ -139,7 +97,7 @@ export default function BrandUser() {
           </div>
 
           <div className="flex justify-around">
-            브랜드명 *{" "}
+            <p>브랜드명 *</p>
             <Input
               name="brand_name"
               type="text"
@@ -149,7 +107,7 @@ export default function BrandUser() {
           </div>
 
           <div className="flex justify-around">
-            대표 연락처 *{" "}
+            <p>대표 연락처 *</p>
             <Input
               name="phone_number"
               type="tel"
@@ -158,11 +116,11 @@ export default function BrandUser() {
             />
           </div>
           <div className="flex justify-around">
-            담당자 이름 *{" "}
+            <p>담당자 이름 *</p>
             <Input name="name" type="text" placeholder="담당자 이름" required />
           </div>
           <div className="flex justify-around">
-            브랜드 홈페이지 *{" "}
+            <p>브랜드 홈페이지 *</p>
             <Input
               name="homepage"
               type="text"
@@ -172,17 +130,17 @@ export default function BrandUser() {
           </div>
 
           <div className="flex justify-around">
-            주소 * <AddressForm />
+            <p>주소 *</p> <AddressForm />
           </div>
 
           <div className="flex justify-around">
-            이메일{" "}
+            <p>이메일 *</p>
             <Input name="email" type="email" placeholder="example@gmail.com" />
           </div>
           <div className="flex justify-around">
-            사업자 등록증 사진 첨부 *{" "}
+            <p>사업자 등록증 사진 첨부 *</p>
             <label
-              htmlFor="certificate_photo"
+              htmlFor="business_photo"
               className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md border-dashed cursor-pointer  bg-center bg-cover w-[600px] h-[300px]"
               style={{
                 backgroundImage: `url(${certificatePreview})`,
@@ -192,20 +150,20 @@ export default function BrandUser() {
                 <>
                   <PhotoIcon className="w-14" />
                   <div className="text-neutral-400 text-sm">
-                    사진을 추가해주세요 .{" "}
-                    <Input
-                      id="certificate_photo"
-                      name="certificate_photo"
-                      type="file"
-                      placeholder="사업자 등록증 사진 첨부"
-                      required
-                      accept="image/*"
-                      className="hidden"
-                      onChange={onCertificateImageChange}
-                    />
+                    사진을 추가해주세요 .
                   </div>
                 </>
               ) : null}
+              <Input
+                id="business_photo"
+                name="business_photo"
+                type="file"
+                placeholder="사업자 등록증 사진 첨부"
+                required
+                accept="image/*"
+                className="hidden"
+                onChange={onCertificateImageChange}
+              />
             </label>
             {!isValidSize && (
               <div className="text-red-500 text-center mt-2">

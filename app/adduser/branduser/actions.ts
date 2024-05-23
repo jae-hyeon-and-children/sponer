@@ -17,7 +17,7 @@ async function addUserTypeToUser(userId: string, userType: string) {
   }
 }
 
-export default async function uploadbrabdUser(
+export default async function uploadbrandUser(
   prevState: any,
   formData: FormData
 ) {
@@ -26,39 +26,46 @@ export default async function uploadbrabdUser(
     const address = formData.get("address");
     const detailAddress = formData.get("detail_address");
     const extraAddress = formData.get("extra_address");
-
     const fullAddress = `${postalCode}, ${address}, ${detailAddress}, ${extraAddress}`;
+
+    // 파일 가져오기
     const profileImageFile = formData.get("profile_photo");
-    const certificateImageFile = formData.get("certificate_photo");
+    const certificateImageFile = formData.get("business_photo");
 
     let profileImageUrl = "";
-    let certificateImageUrl = "";
 
     if (profileImageFile && profileImageFile instanceof File) {
-      const storageRef = ref(
+      const Refstorage = ref(
         storage,
         `profile_images/${profileImageFile.name}`
       );
-      const snapshot = await uploadBytes(storageRef, profileImageFile);
-      profileImageUrl = await getDownloadURL(snapshot.ref);
+      const shotsnap = await uploadBytes(Refstorage, profileImageFile);
+      profileImageUrl = await getDownloadURL(shotsnap.ref);
     } else {
-      console.log("No valid profile image file found.");
+      console.log("없다");
     }
 
+    let certificateImageUrl = "";
+
     if (certificateImageFile && certificateImageFile instanceof File) {
-      const storageRef = ref(
+      const BrandRefstorage = ref(
         storage,
-        `business_certificate_images/${certificateImageFile.name}`
+        `business_certificate_image/${certificateImageFile.name}`
       );
-      const snapshot = await uploadBytes(storageRef, certificateImageFile);
-      certificateImageUrl = await getDownloadURL(snapshot.ref);
+      const Brandshotsnap = await uploadBytes(
+        BrandRefstorage,
+        certificateImageFile
+      );
+      certificateImageUrl = await getDownloadURL(Brandshotsnap.ref);
     } else {
-      console.log("No valid certificate image file found.");
+      console.log("없다");
     }
+    console.log(profileImageFile, certificateImageFile);
+    console.log(formData);
 
     const data = {
       profile_image: profileImageUrl,
-      certificate_image: certificateImageUrl,
+      business_certificate_image_url: certificateImageUrl,
       brand_name: formData.get("brand_name"),
       name: formData.get("name"),
       homepage: formData.get("homepage"),
@@ -69,7 +76,7 @@ export default async function uploadbrabdUser(
       createdAt: new Date(),
       userType: "brand",
     };
-    console.log(data);
+    console.log("User data: ", data);
 
     // Firestore에 데이터 추가
     const userDocRef = await addDoc(collection(db, "User"), data);
