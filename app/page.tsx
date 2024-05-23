@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import Input from "./components/global/input";
-import Button from "./components/button";
-import NavBar from "./components/header";
+
+import Button from "../components/button";
+import NavBar from "../components/header";
 import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { handleLogout } from "./utils";
+import Input from "@/components/global/input";
 
 export default function Home() {
   return (
