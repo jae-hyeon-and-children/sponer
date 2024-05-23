@@ -1,12 +1,12 @@
 "use client";
 
-import Button from "@/app/components/button";
-import Input from "@/app/components/global/input";
-import NavBar from "@/app/components/header";
 import Image from "next/image";
 
 import { useFormState } from "react-dom";
 import createaccount from "./actions";
+import NavBar from "@/components/header";
+import Input from "@/components/global/input";
+import Button from "@/components/button";
 
 export default function CreateAccount() {
   const [adsfadsf, dispatch] = useFormState(createaccount, null);
