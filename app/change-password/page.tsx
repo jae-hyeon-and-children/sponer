@@ -1,7 +1,7 @@
 "use client";
-import Button from "@/app/components/button";
-import Input from "@/app/components/global/input";
-import NavBar from "@/app/components/header";
+import Button from "@/components/button";
+import Input from "@/components/global/input";
+import NavBar from "@/components/header";
 import Image from "next/image";
 import Link from "next/link";
 import { useFormState } from "react-dom";
