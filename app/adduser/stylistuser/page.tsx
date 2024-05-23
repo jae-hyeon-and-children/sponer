@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import NavBar from "@/app/components/header";
-import Input from "@/app/components/global/input";
-import AddressForm from "@/app/components/address";
-import { PhotoIcon } from "@heroicons/react/24/solid";
-import uploadstylistUser from "./action";
 import { useFormState } from "react-dom";
+import { PhotoIcon } from "@heroicons/react/24/solid";
+
+import uploadstylistUser from "./action";
+import NavBar from "@/components/header";
+import Input from "@/components/global/input";
+import AddressForm from "@/components/address";
 
 export default function StylistUser() {
   const [sibal, dispatch] = useFormState(uploadstylistUser, null);
@@ -18,6 +19,7 @@ export default function StylistUser() {
   const router = useRouter();
 
   const onImageChange = (event: any) => {
+    console.log("1111111d:", event.target.files[0]);
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
@@ -27,33 +29,34 @@ export default function StylistUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024); // 4MB 이하인지 확인
   };
 
-  const onSubmit = async (event: any) => {
-    event.preventDefault();
-    if (isImageUploaded && isValidSize) {
-      const formData = new FormData(event.currentTarget);
-      const imageFileInput = document.getElementById(
-        "photo"
-      ) as HTMLInputElement;
-      if (imageFileInput && imageFileInput.files && imageFileInput.files[0]) {
-        formData.append("photo", imageFileInput.files[0]);
-      }
+  // const onSubmit = async (event: any) => {
+  //   event.preventDefault();
+  //   if (isImageUploaded && isValidSize) {
+  //     const formData = new FormData(event.currentTarget);
+  //     const imageFileInput = document.getElementById(
+  //       "photo"
+  //     ) as HTMLInputElement;
+  //     if (imageFileInput && imageFileInput.files && imageFileInput.files[0]) {
+  //       formData.append("photo", imageFileInput.files[0]);
+  //       console.log("P222222orm data:", imageFileInput.files[0]);
+  //     }
 
-      // 모든 폼 데이터 확인
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      });
+  //     // 모든 폼 데이터 확인
+  //     formData.forEach((value, key) => {
+  //       console.log("key, value is : ", key, value);
+  //     });
 
-      const result = await uploadstylistUser(formState, formData);
-      if (result.success) {
-        alert(result.message);
-        router.push("/");
-      } else {
-        alert(result.message);
-      }
-    } else {
-      alert("이미지를 업로드하거나 이미지 크기를 확인하세요.");
-    }
-  };
+  //     const result = await uploadstylistUser(formState, formData);
+  //     if (result.success) {
+  //       alert(result.message);
+  //       router.push("/");
+  //     } else {
+  //       alert(result.message);
+  //     }
+  //   } else {
+  //     alert("이미지를 업로드하거나 이미지 크기를 확인하세요.");
+  //   }
+  // };
 
   return (
     <>
@@ -68,9 +71,13 @@ export default function StylistUser() {
           </div>
         </div>
 
-        <form className="flex flex-col mt-16 w-[70%] gap-5" onSubmit={onSubmit}>
+        <form
+          action={dispatch}
+          className="flex flex-col mt-16 w-[70%] gap-5"
+          // onSubmit={onSubmit}
+        >
           <div className="flex justify-between mr-[350px]">
-            프로필 사진 *
+            <p>프로필 사진 *</p>
             <label
               htmlFor="photo"
               className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full border-dashed cursor-pointer bg-center bg-cover w-[200px] h-[160px]"
@@ -102,14 +109,15 @@ export default function StylistUser() {
           </div>
 
           <div className="flex justify-between">
-            이름 * <Input name="name" type="text" placeholder="이름" required />
+            <p>이름 *</p>
+            <Input name="name" type="text" placeholder="이름" required />
           </div>
           <div className="flex justify-between">
-            닉네임 *{" "}
+            <p>닉네임 *</p>
             <Input name="nickname" type="text" placeholder="닉네임" required />
           </div>
           <div className="flex justify-between">
-            연락처 *{" "}
+            <p>연락처 *</p>
             <Input
               name="phone_number"
               type="tel"
@@ -118,10 +126,10 @@ export default function StylistUser() {
             />
           </div>
           <div className="flex justify-between">
-            주소 * <AddressForm />
+            <p>주소 *</p> <AddressForm />
           </div>
           <div className="flex justify-between">
-            소속{" "}
+            <p>소속 *</p>
             <Input
               name="affiliation"
               type="text"
@@ -129,7 +137,7 @@ export default function StylistUser() {
             />
           </div>
           <div className="flex justify-between">
-            이메일{" "}
+            <p>이메일 *</p>
             <Input name="email" type="email" placeholder="example@gmail.com" />
           </div>
           <div className="flex justify-center mt-10">

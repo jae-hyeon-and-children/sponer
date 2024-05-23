@@ -36,6 +36,9 @@ export default async function uploadstylistUser(
       console.log("No valid image file found.");
     }
 
+    console.log(imageFile);
+    console.log(formData);
+
     const data = {
       profile_image: imageUrl,
       name: formData.get("name"),
