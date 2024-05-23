@@ -2,7 +2,13 @@
 
 import Input from "@/app/components/global/input";
 import { ProductLabel } from "@/app/components/product/Label";
-import React, { ChangeEvent, DragEvent, MouseEvent, useState } from "react";
+import React, {
+	ChangeEvent,
+	DragEvent,
+	MouseEvent,
+	useEffect,
+	useState,
+} from "react";
 import { uploadProduct } from "./actions";
 import {
 	PRODUCT_CATEGORIES,
@@ -20,36 +26,36 @@ const PRODUCT_HEIGHT = {
 	6: "175 ~ 180cm",
 };
 
-const createProduct = () => {
+export const createProduct = () => {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
 	const [selectedSize, setSelectedSize] = useState<string | null>(null);
 	const [selectedGender, setSelectedGender] = useState<string | null>(null);
 	const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
-	const [selectedHeight, setSelectedHeight] = useState<string | null>(null);
 	const [images, setImages] = useState<File[]>([]);
+	const [otherData, setFormData] = useState(new FormData());
 
-	const selectType = (item: string) => {
-		setSelectedType(item);
-	};
+	useEffect(() => {
+		const newFormData = new FormData();
+		images.forEach((image) => newFormData.append("images", image));
+		if (selectedType) newFormData.append("selectedType", selectedType);
+		if (selectedSize) newFormData.append("selectedSize", selectedSize);
+		if (selectedGender) newFormData.append("selectedGender", selectedGender);
+		selectedStyles.forEach((style) =>
+			newFormData.append("selectedStyles", style)
+		);
 
-	const selectSize = (item: string) => {
-		setSelectedSize(item);
-	};
+		console.log(otherData);
 
-	const selectGender = (item: string) => {
-		setSelectedGender(item);
-	};
+		setFormData(newFormData);
+	}, [selectedType, selectedSize, selectedGender, selectedStyles, images]);
 
-	const toggleStyle = (item: string) => {
+	const selectType = (item: string) => setSelectedType(item);
+	const selectSize = (item: string) => setSelectedSize(item);
+	const selectGender = (item: string) => setSelectedGender(item);
+	const toggleStyle = (item: string) =>
 		setSelectedStyles((prev) =>
 			prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
 		);
-	};
-
-	const selectHeight = (event: ChangeEvent<HTMLInputElement>) => {
-		setSelectedHeight(event.target.value);
-	};
-
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		const files = Array.from(event.target.files || []);
 		setImages((prevImages) => [
@@ -86,31 +92,7 @@ const createProduct = () => {
 		event.stopPropagation();
 	};
 
-	const handleUploadProduct = async (
-		event: React.FormEvent<HTMLFormElement>
-	) => {
-		event.preventDefault();
-
-		const formData = new FormData(event.currentTarget);
-
-		images.forEach((image) => {
-			formData.append("images", image);
-		});
-
-		// bind
-		if (selectedType) formData.append("selectedType", selectedType);
-		if (selectedSize) formData.append("selectedSize", selectedSize);
-		if (selectedGender) formData.append("selectedGender", selectedGender);
-		if (selectedHeight) formData.append("selectedHeight", selectedHeight);
-
-		selectedStyles.forEach((style) => {
-			formData.append("selectedStyles", style);
-		});
-
-		const result = await uploadProduct(formData);
-
-		console.log(result.message);
-	};
+	const updateProductWithList = uploadProduct.bind(null, otherData);
 
 	return (
 		<>
@@ -121,7 +103,8 @@ const createProduct = () => {
 				<div className="display">상품 정보 등록</div>
 				<form
 					className="w-full flex flex-col mt-16"
-					onSubmit={handleUploadProduct}
+					// onSubmit={handleUploadProduct}
+					action={updateProductWithList}
 				>
 					<div className="w-full">
 						<div className="label-1 flex justify-between w-full mb-4">
@@ -206,7 +189,7 @@ const createProduct = () => {
 							<div>맞춤 키 *</div>
 							<select
 								// 수정 필요
-								onChange={selectHeight}
+								name="height"
 								className="text-gray-800 p-3 rounded-md focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none"
 							>
 								<option>사이즈를 선택하세요.</option>

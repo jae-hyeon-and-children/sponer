@@ -1,32 +1,19 @@
 "use server";
 
+import { fireStore, storage } from "@/config/firebase/firebase";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-const firebaseConfig = {
-	apiKey: process.env.FIREBASE_API_KEY,
-	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-	projectId: process.env.FIREBASE_PROJECT_ID,
-	storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-	messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-	appId: process.env.FIREBASE_APP_ID,
-	measurementId: process.env.FIREBASE_MEASUREMENT_ID,
-};
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-const db = getFirestore(app);
-
-export async function uploadProduct(formData: FormData) {
+export async function uploadProduct(otherData: any, formData: FormData) {
 	const data = {
-		productImages: formData.getAll("images") as File[],
+		productImages: otherData.getAll("images") as File[],
+		productType: otherData.get("selectedType") as string,
+		productSize: otherData.get("selectedSize") as string,
+		productGender: otherData.get("selectedGender") as string,
+		productStyles: otherData.getAll("selectedStyles") as string[],
 		productName: formData.get("productName") as string,
-		productType: formData.get("selectedType") as string,
-		productSize: formData.get("selectedSize") as string,
-		productHeight: formData.get("selectedHeight") as string,
-		productGender: formData.get("selectedGender") as string,
-		productStyles: formData.getAll("selectedStyles") as string[],
+		productHeight: formData.get("height") as string,
 	};
 
 	console.log(data);
@@ -54,7 +41,7 @@ export async function uploadProduct(formData: FormData) {
 			createdAt: new Date(),
 		};
 
-		const docRef = await addDoc(collection(db, "Product"), productData);
+		const docRef = await addDoc(collection(fireStore, "Product"), productData);
 
 		return {
 			success: true,
