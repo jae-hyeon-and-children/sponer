@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import NavBar from "../components/header";
+import NavBar from "../../components/header";
 import { useRouter } from "next/navigation";
 
 export default function AdduserType() {
