@@ -10,6 +10,7 @@ import {
 	PRODUCT_TYPES,
 } from "@/constants/variables";
 import { PRODUCT_HEIGHT } from "@/app/(my-page)/my-page/product/page";
+import { updateProduct } from "@/app/(my-page)/my-page/product/[id]/actions";
 
 export default function ProductForm(data: any) {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -20,7 +21,7 @@ export default function ProductForm(data: any) {
 	const [images, setImages] = useState<File[]>([]);
 	const [imageURLs, setImageURLs] = useState<string[]>([]);
 	const [initialData, setInitialData] = useState<Product | null>(null);
-	const [formData, setFormData] = useState(new FormData());
+	const [otherData, setFormData] = useState(new FormData());
 
 	useEffect(() => {
 		if (data) {
@@ -36,7 +37,11 @@ export default function ProductForm(data: any) {
 
 	useEffect(() => {
 		const newFormData = new FormData();
-		images.forEach((image) => newFormData.append("images", image));
+		if (images.length !== 0)
+			images.forEach((image) => newFormData.append("images", image));
+		if (images.length === 0)
+			imageURLs.forEach((image) => newFormData.append("images", image));
+		console.log(images);
 		if (selectedType) newFormData.append("selectedType", selectedType);
 		if (selectedSize) newFormData.append("selectedSize", selectedSize);
 		if (selectedGender) newFormData.append("selectedGender", selectedGender);
@@ -46,6 +51,7 @@ export default function ProductForm(data: any) {
 				newFormData.append("selectedStyles", style)
 			);
 		}
+		if (data) newFormData.append("productId", data.data.id);
 		setFormData(newFormData);
 	}, [
 		selectedType,
@@ -63,8 +69,6 @@ export default function ProductForm(data: any) {
 		setSelectedStyles((prev) =>
 			prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
 		);
-	const selectHeight = (event: ChangeEvent<HTMLSelectElement>) =>
-		setSelectedHeight(event.target.value);
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		const files = Array.from(event.target.files || []);
 		setImages((prevImages) => [
@@ -102,6 +106,8 @@ export default function ProductForm(data: any) {
 		event.stopPropagation();
 	};
 
+	const updateProductWithList = updateProduct.bind(null, otherData);
+
 	if (!initialData) return <div>Loading...</div>;
 
 	return (
@@ -114,7 +120,7 @@ export default function ProductForm(data: any) {
 				<form
 					className="w-full flex flex-col mt-16"
 					// onSubmit={handleUploadProduct}
-					// action={updateProductWithList}
+					action={updateProductWithList}
 				>
 					<div className="w-full">
 						<div className="label-1 flex justify-between w-full mb-4">
