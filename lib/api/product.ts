@@ -24,7 +24,7 @@ export async function getProduct(id: string): Promise<IResponse<IProduct>> {
     return { status: 200, success: true, data: post };
   } catch (error) {
     return {
-      status: 200,
+      status: 400,
       success: false,
       message: `Error white fetching product id ${id}: ${error}`,
     };

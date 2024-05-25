@@ -46,7 +46,7 @@ export async function getProducts(
     return { status: 200, success: true, data: products };
   } catch (error) {
     return {
-      status: 200,
+      status: 400,
       success: false,
       message: `Error white fetching products: ${error}`,
     };
