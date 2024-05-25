@@ -1,7 +1,6 @@
 "use client";
 
-import Input from "@/app/components/global/input";
-import { ProductLabel } from "@/app/components/product/Label";
+import { ProductLabel } from "@/components/product/label";
 import React, {
 	ChangeEvent,
 	DragEvent,
@@ -16,8 +15,9 @@ import {
 	PRODUCT_STYLES,
 	PRODUCT_TYPES,
 } from "@/constants/variables";
+import Input from "@/components/global/input";
 
-const PRODUCT_HEIGHT = {
+export const PRODUCT_HEIGHT = {
 	1: "150 ~ 155cm",
 	2: "155 ~ 160cm",
 	3: "160 ~ 165cm",
@@ -148,7 +148,7 @@ export const createProduct = () => {
 												<button
 													type="button"
 													onClick={(event) => handleRemoveImage(event, index)}
-													className="absolute top-0 right-0 m-2 p-1 bg-white rounded-full text-gray-500 hover:text-gray-700"
+													className="absolute top-0 right-0 m-2 p-1 size-8 bg-white rounded-full text-gray-500 hover:text-gray-700"
 												>
 													X
 												</button>
