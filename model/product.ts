@@ -1,8 +1,12 @@
-import { DocumentSnapshot, QueryDocumentSnapshot } from "firebase/firestore";
+import {
+  DocumentSnapshot,
+  QueryDocumentSnapshot,
+  Timestamp,
+} from "firebase/firestore";
 
 export interface IProduct {
   id?: string;
-  createdAt: Date;
+  createdAt: Timestamp;
   genderCategory: string;
   height: string;
   productCategory: string;

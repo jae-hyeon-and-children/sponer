@@ -21,10 +21,13 @@ export default async function Product({ params: { id } }: ProductDetailParams) {
               width={465}
               height={500}
               alt={"상품 이미지"}
-              className="w-[90%] h-[150%] object-cover lg:w-fit "
+              className="w-full h-[150%] object-cover lg:w-fit "
             />
           ))}
         </ul>
+        <div>
+          {1} / {response.data!.productImages.length}
+        </div>
         <section className="flex-1 flex flex-col lg:sticky lg:top-0 pt-16 lg:pt-60 h-fit">
           <h2 className="label-1 text-gray-800 mb-4">오아이</h2>
           <h1 className="display  text-gray-900 mb-3">
@@ -67,7 +70,7 @@ export default async function Product({ params: { id } }: ProductDetailParams) {
               사이즈 가이드
             </button>
           </div>
-          <Link href={`/messages`}>
+          <Link href={`/chats`}>
             <button className="label-1 text-white mt-20 p-4 bg-primary rounded-full w-full lg:max-w-60">
               브랜드에게 연락하기
             </button>

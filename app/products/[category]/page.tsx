@@ -7,7 +7,7 @@ import {
   PRODUCT_TYPES_WITH_ALL,
 } from "@/constants/variables";
 import { getProducts } from "@/lib/api/products";
-import Image from "next/image";
+
 import Link from "next/link";
 import { useState } from "react";
 
@@ -38,7 +38,11 @@ export default async function Products({
             {Object.entries(PRODUCT_CATEGORIES_WITH_ALL).map((value, index) => (
               <>
                 <Link key={index} href={`/products/${value[0]}`}>
-                  <li className={`label-2 ${value[0] === category ? "text-primary" : "text-gray-300 "}`}>
+                  <li
+                    className={`label-2 ${
+                      value[0] === category ? "text-primary" : "text-gray-300 "
+                    }`}
+                  >
                     {value[1]}
                   </li>
                 </Link>
