@@ -26,7 +26,7 @@ export const PRODUCT_TYPES_WITH_ALL = {
 	...PRODUCT_TYPES,
 };
 
-export const PRODUCT_STYLES = {
+export const PRODUCT_STYLES: Record<string, string> = {
 	street: "스트릿",
 	formal: "정장",
 	casual: "캐쥬얼",

@@ -1,11 +1,12 @@
-import { ProductSideBar } from "@/app/components/product/sideBar";
+import { ProductSideBar } from "@/components/product/sideBar";
 import { getProduct } from "./actions";
 import Image from "next/image";
 import Link from "next/link";
+import { PRODUCT_STYLES } from "@/constants/variables";
 
 export interface Product {
 	id: string;
-	createdAt: string;
+	createdAt: Date;
 	genderCategory: string;
 	height: string;
 	productCategory: string;
@@ -13,6 +14,7 @@ export interface Product {
 	size: string;
 	styleCategory: string[];
 	title: string;
+	updatedAt?: Date;
 }
 
 export async function productList() {
@@ -61,7 +63,7 @@ export async function productList() {
 									</span>
 									<span className=" caption-1 text-gray-500 w-full flex gap-2">
 										{product.styleCategory.map((style: string) => (
-											<span>{style}</span>
+											<span key={style}>{PRODUCT_STYLES[style]}</span>
 										))}
 									</span>
 								</div>
