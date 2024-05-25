@@ -39,8 +39,26 @@ export const PRODUCT_STYLES = {
 };
 
 /**
+ * @todo Content Type을 variables 파일 안에 있는 CONTENT_TYPE을 이용하는 방법으로 수정할 필요가 있음
+ */
+
+export const CONTENT_TYPE = {
+  text: "text",
+  image: "image",
+};
+
+export type ContentType = "image" | "text";
+
+/**
  * Collection Name
  */
 
 export const COLLECTION_NAME_CHAT = "Chat";
+export const COLLECTION_NAME_MESSAGE = "Message";
 export const COLLECTION_NAME_PRODUCT = "Product";
+
+/**
+ * Storage Reference Name
+ */
+
+export const STORAGE_REF_CHAT_IMAGES = "chat_images";
