@@ -1,20 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import NavBar from "../../components/header";
+
 import Button from "../../components/button";
 import Link from "next/link";
 import Input from "@/components/global/input";
 import GoogleLoginButton from "./googleLogin";
 import { useFormState } from "react-dom";
 import login from "./actions";
+import Header from "../../components/header";
 
 export default function Login() {
-  const [sibal, dispatch] = useFormState(login, null);
+  const [_, dispatch] = useFormState(login, null);
 
   return (
     <>
-      <NavBar />
+      <Header />
       <div className="flex justify-center max-w-screen-2xl pt-60">
         <div className="flex flex-col justify-around">
           <Image
