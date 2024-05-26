@@ -5,16 +5,16 @@ import { auth } from "@/config/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignOutButton from "./logoutbutton";
 
-export default function NavBar() {
+export default function Header() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      setUser(authUser); // 이전 상태값을 새로운 상태값으로 업데이트
+      setUser(authUser);
     });
 
     return () => unsubscribe();
-  }, [user]); // user 상태가 변경될 때마다 useEffect가 실행되도록 설정
+  }, [user]);
 
   return (
     <div className="">
