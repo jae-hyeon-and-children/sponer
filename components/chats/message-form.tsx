@@ -6,7 +6,7 @@ import IcSend from "@/public/icons/ic_send.png";
 
 import { storage } from "@/config/firebase/firebase";
 import { ChangeEvent, useState } from "react";
-import { sendMessage } from "@/lib/api/chats";
+import { sendMessage } from "@/libs/api/chats";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ContentType, STORAGE_REF_CHAT_IMAGES } from "@/constants/variables";
 import { useRecoilValue } from "recoil";

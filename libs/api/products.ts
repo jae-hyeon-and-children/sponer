@@ -15,15 +15,27 @@ import {
 import { NextResponse } from "next/server";
 
 export async function getProducts(
-  category: string
+  category: string,
+  type?: string,
+  style?: string[],
+  keyword?: string
 ): Promise<IResponse<IProduct[]>> {
-  // 카테고리 및 필터링에 맞는 쿼리 담기
   const queries = [];
-
+  console.log("???");
+  console.log(category, type, style, keyword);
   if (category !== "all")
     queries.push(where("productCategory", "==", category));
 
+  if (type) queries.push(where("genderCategory", "==", type));
+  if (style) queries.push(where("styleCategory", "array-contains-any", style));
+  if (keyword) {
+    queries.push(where("title", ">=", keyword));
+    queries.push(where("title", "<=", keyword + "\uf8ff"));
+  }
+  console.log(queries);
   try {
+    console.log("헤헤");
+
     const productsDocSnap = await getDocs(
       query(
         collection(fireStore, COLLECTION_NAME_PRODUCT),
