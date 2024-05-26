@@ -2,41 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  input:focus {
-    outline: none;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
 @layer utilities {
-  .display {
-    @apply font-semibold text-[1.75rem] leading-[145%];
-  }
-  .heading-1 {
-    @apply font-normal text-[1.375rem] leading-[140%];
-  }
-  .heading-2 {
-    @apply font-normal text-[1.125rem] leading-[140%];
-  }
-  .heading-3 {
-    @apply font-semibold text-[1rem] leading-[140%];
-  }
-  .paragraph-1 {
-    @apply font-normal text-[1rem] leading-[160%];
-  }
-  .paragraph-2 {
-    @apply font-normal text-[0.875rem] leading-[160%];
-  }
-  .label-1 {
-    @apply font-semibold text-[1rem] leading-[125%];
-  }
-  .label-2 {
-    @apply font-normal text-[1rem] leading-[125%];
-  }
-  .label-3 {
-    @apply font-normal text-[0.875rem] leading-[125%];
-  }
-  .caption {
-    @apply font-normal text-[0.813rem] leading-[140%];
+  .text-balance {
+    text-wrap: balance;
   }
 }

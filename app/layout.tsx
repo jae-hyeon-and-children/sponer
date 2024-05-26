@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import localFont from "next/font/local";
-import RecoilWrapper from "@/recoil/recoil-wrapper";
 
-const suit = localFont({
-  src: "./fonts/SUIT-Variable.woff2",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,9 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={suit.className}>
-        <RecoilWrapper>{children}</RecoilWrapper>
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
