@@ -2,14 +2,25 @@
 
 import Link from "next/link";
 
-import Button from "../components/button";
 import NavBar from "../components/header";
-import { signOut } from "firebase/auth";
-import { auth } from "@/config/firebase/firebase";
-import { handleLogout } from "./utils";
+
 import Input from "@/components/global/input";
+import { auth } from "@/config/firebase/firebase";
 
 export default function Home() {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          phtoURL: user.photoURL,
+        })
+      );
+    }
+  });
   return (
     <main>
       <NavBar />
