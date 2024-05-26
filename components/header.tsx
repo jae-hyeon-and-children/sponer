@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -45,12 +47,6 @@ export default function Header() {
               <>
                 <Link href="/login" className="text-black hover:text-gray-300">
                   로그인
-                </Link>
-                <Link
-                  href="/create-account"
-                  className="text-black hover:text-gray-300"
-                >
-                  회원가입
                 </Link>
               </>
             )}
