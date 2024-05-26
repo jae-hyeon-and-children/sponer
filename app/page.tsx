@@ -1,99 +1,113 @@
-"use client";
-
-import Link from "next/link";
-
-import NavBar from "../components/header";
-
-import Input from "@/components/global/input";
-import { auth } from "@/config/firebase/firebase";
-import Footer from "@/components/global/footer";
 import Image from "next/image";
 
 export default function Home() {
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          uid: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-          phtoURL: user.photoURL,
-        })
-      );
-    }
-  });
   return (
-    <main>
-      <NavBar />
-      <div className="flex justify-between max-w-screen-2xl pt-44">
-        <Link href="/login">로그인</Link>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+          Get started by editing&nbsp;
+          <code className="font-mono font-bold">app/page.tsx</code>
+        </p>
+        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
+          <a
+            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
+            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            By{" "}
+            <Image
+              src="/vercel.svg"
+              alt="Vercel Logo"
+              className="dark:invert"
+              width={100}
+              height={24}
+              priority
+            />
+          </a>
+        </div>
       </div>
-      <div>
-        <Link href="/create-account">회원가입</Link>
-      </div>
-      <div>
-        <Link href="/change-password">비번찾기</Link>
-      </div>
-      <div>
-        <Link href="/add-user">소속정하기</Link>
-      </div>
-      <div>
-        <Input name="name" type="text" count={10} />
 
-        <h1 className="display">Display</h1>
-        <h1 className="heading-1">Heading 1</h1>
-        <h2 className="heading-2">Heading 2</h2>
-        <h3 className="heading-3">Heading 3</h3>
-        <p className="paragraph-1">paragraph 1</p>
-        <p className="paragraph-2">paragraph 2</p>
+      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
+        <Image
+          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
+          src="/next.svg"
+          alt="Next.js Logo"
+          width={180}
+          height={37}
+          priority
+        />
+      </div>
 
-        <p className="label-1">label 1</p>
-        <p className="label-2">label 2</p>
-        <p className="label-3">label 3</p>
+      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
+        <a
+          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <h2 className="mb-3 text-2xl font-semibold">
+            Docs{" "}
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              -&gt;
+            </span>
+          </h2>
+          <p className="m-0 max-w-[30ch] text-sm opacity-50">
+            Find in-depth information about Next.js features and API.
+          </p>
+        </a>
 
-        <span className="caption">caption</span>
+        <a
+          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <h2 className="mb-3 text-2xl font-semibold">
+            Learn{" "}
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              -&gt;
+            </span>
+          </h2>
+          <p className="m-0 max-w-[30ch] text-sm opacity-50">
+            Learn about Next.js in an interactive course with&nbsp;quizzes!
+          </p>
+        </a>
+
+        <a
+          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <h2 className="mb-3 text-2xl font-semibold">
+            Templates{" "}
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              -&gt;
+            </span>
+          </h2>
+          <p className="m-0 max-w-[30ch] text-sm opacity-50">
+            Explore starter templates for Next.js.
+          </p>
+        </a>
+
+        <a
+          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <h2 className="mb-3 text-2xl font-semibold">
+            Deploy{" "}
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              -&gt;
+            </span>
+          </h2>
+          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
+            Instantly deploy your Next.js site to a shareable URL with Vercel.
+          </p>
+        </a>
       </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-50">
-        gray-50
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-100">
-        gray-100
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-200">
-        gray-200
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-300">
-        gray-300
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-400">
-        gray-400
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-500">
-        gray-500
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-600">
-        gray-600
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-700">
-        gray-700
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-800">
-        gray-800
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-gray-900">
-        gray-900
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-state-green">
-        state-green
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-state-red">
-        state-red
-      </div>
-      <div className="w-40 h-20 flex items-center justify-center bg-primary">
-        primary
-      </div>
-      <Footer />
     </main>
   );
 }
