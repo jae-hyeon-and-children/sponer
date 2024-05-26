@@ -45,3 +45,12 @@ export const PRODUCT_SIZE = {
 	l: "L",
 	xl: "XL",
 };
+
+export const PRODUCT_HEIGHT = {
+	1: "150 ~ 155cm",
+	2: "155 ~ 160cm",
+	3: "160 ~ 165cm",
+	4: "165 ~ 170cm",
+	5: "170 ~ 175cm",
+	6: "175 ~ 180cm",
+};
