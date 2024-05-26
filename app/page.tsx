@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -9,7 +8,6 @@ import Input from "@/components/global/input";
 import { auth } from "@/config/firebase/firebase";
 import Footer from "@/components/global/footer";
 import Image from "next/image";
-
 
 export default function Home() {
   auth.onAuthStateChanged((user) => {
