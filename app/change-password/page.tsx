@@ -1,17 +1,18 @@
 "use client";
 import Button from "@/components/button";
 import Input from "@/components/global/input";
-import NavBar from "@/components/header";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import changepassword from "./actions";
+import ChangePassword from "./actions";
+import Header from "@/components/header";
 
-export default function ChangePassword() {
-  const [sibal, dispatch] = useFormState(changepassword, null);
+export default function ChangePasswordPage() {
+  const [_, dispatch] = useFormState(ChangePassword, null);
   return (
     <>
-      <NavBar />
+      <Header />
       <div className="flex justify-center max-w-screen-2xl pt-60">
         <div className="flex flex-col justify-around">
           <Image

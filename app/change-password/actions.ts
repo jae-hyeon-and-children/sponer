@@ -5,7 +5,7 @@ import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 import { redirect } from "next/navigation";
 
-export default async function changepassword(
+export default async function ChangePassword(
   prevState: any,
   formData: FormData
 ) {
