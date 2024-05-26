@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 
-import uploadstylistUser from "./action";
+import uploadstylistUser from "./actions";
 import NavBar from "@/components/header";
 import Input from "@/components/global/input";
 import AddressForm from "@/components/address";
