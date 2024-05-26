@@ -34,7 +34,7 @@ export default function Home() {
         <Link href="/change-password">비번찾기</Link>
       </div>
       <div>
-        <Link href="/adduser">소속정하기</Link>
+        <Link href="/add-user">소속정하기</Link>
       </div>
       <div>
         <Input name="name" type="text" count={10} />
