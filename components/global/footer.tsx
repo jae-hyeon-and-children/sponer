@@ -28,7 +28,7 @@ function FooterMenu({ text }: FooterMenuProps) {
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 py-16 flex justify-center px-4">
+    <footer className="bg-gray-800 py-16 flex justify-center px-4 mt-36 lg:mt-48">
       <div className="lg:max-w-screen-2xl flex flex-col w-full lg:flex-row gap-10 lg:gap-24">
         <div className="shrink-0">로고</div>
         <div className="w-full flex flex-col gap-6 lg:gap-16">
