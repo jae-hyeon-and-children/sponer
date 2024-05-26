@@ -37,3 +37,21 @@ export const PRODUCT_STYLES = {
   basic: "베이직",
   modern: "모던",
 };
+
+export enum ContentType {
+  text = "text",
+  image = "image",
+}
+/**
+ * Collection Name
+ */
+
+export const COLLECTION_NAME_CHAT = "Chat";
+export const COLLECTION_NAME_MESSAGE = "Message";
+export const COLLECTION_NAME_PRODUCT = "Product";
+
+/**
+ * Storage Reference Name
+ */
+
+export const STORAGE_REF_CHAT_IMAGES = "chat_images";
