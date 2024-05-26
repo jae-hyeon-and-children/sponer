@@ -54,3 +54,21 @@ export const PRODUCT_HEIGHT = {
 	5: "170 ~ 175cm",
 	6: "175 ~ 180cm",
 };
+
+export enum ContentType {
+  text = "text",
+  image = "image",
+}
+/**
+ * Collection Name
+ */
+
+export const COLLECTION_NAME_CHAT = "Chat";
+export const COLLECTION_NAME_MESSAGE = "Message";
+export const COLLECTION_NAME_PRODUCT = "Product";
+
+/**
+ * Storage Reference Name
+ */
+
+export const STORAGE_REF_CHAT_IMAGES = "chat_images";

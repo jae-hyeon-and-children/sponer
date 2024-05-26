@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
+import RecoilWrapper from "@/recoil/recoil-wrapper";
 
 const suit = localFont({
   src: "./fonts/SUIT-Variable.woff2",
@@ -18,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={suit.className}>{children}</body>
+      <body className={suit.className}>
+        <RecoilWrapper>{children}</RecoilWrapper>
+      </body>
     </html>
   );
 }
