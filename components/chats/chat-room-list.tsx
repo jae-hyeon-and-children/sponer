@@ -4,7 +4,7 @@ import ChatRoom from "@/components/chats/chat-room";
 
 import { fireStore } from "@/config/firebase/firebase";
 import { COLLECTION_NAME_CHAT } from "@/constants/variables";
-import { timeStampToDate } from "@/lib/utils/date";
+import { timeStampToDate } from "@/libs/utils/date";
 import { ChatRoomConverter, IChatRoom } from "@/model/chat-room";
 import { chatRoomIdState, chatRoomState } from "@/recoil/atoms";
 import {
