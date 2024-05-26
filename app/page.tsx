@@ -1,3 +1,4 @@
+import Footer from "@/components/global/footer";
 import Image from "next/image";
 
 export default function Home() {
@@ -56,6 +57,7 @@ export default function Home() {
       <div className="w-40 h-20 flex items-center justify-center bg-primary">
         primary
       </div>
+      <Footer />
     </main>
   );
 }
