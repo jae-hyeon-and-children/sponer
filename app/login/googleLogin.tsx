@@ -1,29 +1,34 @@
-// /login/googleLogin.tsx
 "use client";
 
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { useRouter } from "next/navigation";
-// import { FirebaseError } from "firebase/app";
+import { useEffect } from "react";
+
+import { setCookie } from "nookies";
 
 export default function GoogleLoginButton() {
   const router = useRouter();
+
   const handleGoogleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      console.log("로그인 유저 : ", auth.currentUser);
       router.push("/");
     } catch (error) {
       console.error(error);
-      //   let errorMessage = "Unknown error occurred";
-      //   if (error.code === "auth/account-exists-with-different-credential") {
-      //     errorMessage = "이미 가입된 이메일 주소입니다.";
-      //   } else if (error instanceof FirebaseError) {
-      //     errorMessage = error.message;
-      //   }
-      //   alert(errorMessage);
     }
   };
 
   return <button onClick={handleGoogleLogin}>Login with Google</button>;
 }
+
+// useEffect(() => {
+//   auth.onAuthStateChanged(async (user) => {
+//     const currentUser = auth.currentUser;
+
+//     if (!currentUser) return;
+//     setCookie("uid", currentUser.uid, 1);
+//   });
+// }, []); // 빈 배열로 설정하여 최초 렌더링 시에만 실행되도록 함
