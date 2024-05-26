@@ -14,31 +14,23 @@ export default function FilterModal() {
           <div>
             <h1>Type</h1>
             <ul className="flex flex-wrap gap-4">
-              {Object.entries(PRODUCT_TYPES_WITH_ALL).map((value, index) => (
-                <li key={index}>
-                  <input
-                    type="radio"
-                    name="type"
-                    id={value[0]}
-                    value={value[0]}
-                  />
-                  <label htmlFor={value[0]}>{value[1]}</label>
-                </li>
-              ))}
+              {Object.entries(PRODUCT_TYPES_WITH_ALL).map(
+                ([key, value], index) => (
+                  <li key={index}>
+                    <input type="radio" name="type" id={key} value={key} />
+                    <label htmlFor={key}>{value}</label>
+                  </li>
+                )
+              )}
             </ul>
           </div>
           <div>
             <h1>Style</h1>
             <ul className="flex flex-wrap gap-4">
-              {Object.entries(PRODUCT_STYLES).map((value, index) => (
+              {Object.entries(PRODUCT_STYLES).map(([key, value], index) => (
                 <li key={index}>
-                  <input
-                    type="checkbox"
-                    name="style"
-                    id={value[0]}
-                    value={value[0]}
-                  />
-                  <label htmlFor={value[0]}>{value[1]}</label>
+                  <input type="checkbox" name="style" id={key} value={key} />
+                  <label htmlFor={key}>{value}</label>
                 </li>
               ))}
             </ul>

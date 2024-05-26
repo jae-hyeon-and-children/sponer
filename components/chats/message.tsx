@@ -21,7 +21,7 @@ export default function Message({
         senderId === "test1" ? "flex-row-reverse" : "flex--row"
       }`}
     >
-      {contentType === "text" ? (
+      {contentType === ContentType.text && (
         <div
           className={`paragraph-1 ${
             senderId === "test1"
@@ -31,7 +31,8 @@ export default function Message({
         >
           {content}
         </div>
-      ) : (
+      )}
+      {contentType === ContentType.image && (
         <Image
           src={content}
           alt="df"

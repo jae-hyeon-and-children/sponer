@@ -1,17 +1,16 @@
 "use client";
 
 import { storage } from "@/config/firebase/firebase";
-import { STORAGE_REF_CHAT_IMAGES } from "@/constants/variables";
 
 import { ChangeEvent, useState } from "react";
 import { sendMessage } from "@/lib/api/chats";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { ContentType, STORAGE_REF_CHAT_IMAGES } from "@/constants/variables";
+import { useRecoilValue } from "recoil";
+import { chatRoomIdState } from "@/recoil/atoms";
 
-interface MessageFormProps {
-  chatroomId: string;
-}
-
-export default function MessageForm({ chatroomId }: MessageFormProps) {
+export default function MessageForm() {
+  const chatRoomId = useRecoilValue(chatRoomIdState);
   const [message, setMessage] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
 
@@ -55,11 +54,11 @@ export default function MessageForm({ chatroomId }: MessageFormProps) {
         },
         async () => {
           const imageURL = await getDownloadURL(uploadTask.snapshot.ref);
-          await sendMessage(chatroomId, imageURL, "image");
+          await sendMessage(chatRoomId!, imageURL, ContentType.image);
         }
       );
     } else {
-      await sendMessage(chatroomId, message, "text");
+      await sendMessage(chatRoomId!, message, ContentType.text);
     }
 
     setFile(null);

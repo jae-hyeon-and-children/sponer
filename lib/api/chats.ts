@@ -4,10 +4,10 @@ import { fireStore } from "@/config/firebase/firebase";
 import {
   COLLECTION_NAME_CHAT,
   COLLECTION_NAME_MESSAGE,
-  CONTENT_TYPE,
   ContentType,
 } from "@/constants/variables";
-import { IMessage } from "@/model/message";
+import { IMessage, MessageConverter } from "@/model/message";
+
 import { IProduct, ProductConverter } from "@/model/product";
 import { IResponse } from "@/model/responses";
 import {
@@ -35,8 +35,6 @@ export async function fetchMessages(id: string) {
       }
     );
 
-    //const post = ProductConverter.fromFirestore(productDocSnap);
-
     return { status: 200, success: true, data: messagesSnapshot };
   } catch (error) {
     return {
@@ -48,7 +46,7 @@ export async function fetchMessages(id: string) {
 }
 
 export async function sendMessage(
-  chatroomId: string,
+  chatRoomId: string,
   content: string,
   contentType: ContentType
 ) {
@@ -63,7 +61,7 @@ export async function sendMessage(
     const docRef = await addDoc(
       collection(
         fireStore,
-        `${COLLECTION_NAME_CHAT}/${chatroomId}/${COLLECTION_NAME_MESSAGE}`
+        `${COLLECTION_NAME_CHAT}/${chatRoomId}/${COLLECTION_NAME_MESSAGE}`
       ),
       data
     );
@@ -73,7 +71,7 @@ export async function sendMessage(
     return {
       status: 400,
       success: false,
-      message: `Error white fetching sending message chatroomId ${chatroomId}: ${error}`,
+      message: `Error white fetching sending message chatRoomId ${chatRoomId}: ${error}`,
     };
   }
 }

@@ -1,9 +1,9 @@
+import { ContentType } from "@/constants/variables";
 import {
   DocumentSnapshot,
   QueryDocumentSnapshot,
   Timestamp,
 } from "firebase/firestore";
-import { ContentType } from "@/constants/variables";
 
 export interface IMessage {
   id?: string;
@@ -14,22 +14,13 @@ export interface IMessage {
 }
 
 export const MessageConverter = {
-  toFirestore: (message: IMessage) => {
-    return {
-      content: message.content,
-      contentType: message.contentType,
-      createdAt: message.createdAt,
-      senderId: message.senderId,
-    };
-  },
-
   fromFirestore: (message: DocumentSnapshot): IMessage => {
     const id = message.id;
     const data = message.data();
     return {
       id,
       content: data?.content,
-      contentType: data?.contentType,
+      contentType: ContentType[data?.contentType as keyof typeof ContentType],
       createdAt: data?.createdAt,
       senderId: data?.senderId,
     };

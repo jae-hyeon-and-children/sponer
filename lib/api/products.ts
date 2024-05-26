@@ -1,9 +1,5 @@
 import { fireStore } from "@/config/firebase/firebase";
-
-import {
-  COLLECTION_NAME_PRODUCT,
-  PRODUCT_CATEGORIES_WITH_ALL,
-} from "@/constants/variables";
+import { COLLECTION_NAME_PRODUCT } from "@/constants/variables";
 
 import { IProduct, ProductConverter } from "@/model/product";
 import { IResponse } from "@/model/responses";

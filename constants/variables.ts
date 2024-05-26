@@ -38,17 +38,10 @@ export const PRODUCT_STYLES = {
   modern: "모던",
 };
 
-/**
- * @todo Content Type을 variables 파일 안에 있는 CONTENT_TYPE을 이용하는 방법으로 수정할 필요가 있음
- */
-
-export const CONTENT_TYPE = {
-  text: "text",
-  image: "image",
-};
-
-export type ContentType = "image" | "text";
-
+export enum ContentType {
+  text = "text",
+  image = "image",
+}
 /**
  * Collection Name
  */
