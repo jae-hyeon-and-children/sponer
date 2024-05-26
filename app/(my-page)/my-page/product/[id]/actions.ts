@@ -2,22 +2,18 @@
 
 import { fireStore, storage } from "@/config/firebase/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { Product } from "../../product-list/page";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import fetch from "node-fetch";
 import { redirect } from "next/navigation";
+import { urlToBase64 } from "@/libs/utils/format";
+import { IProduct } from "@/model/product";
+import { COLLECTION_NAME_PRODUCT } from "@/constants/variables";
 
-export const urlToBase64 = async (url: string) => {
-	const response = await fetch(url);
-	const buffer = await response.buffer();
-	return buffer.toString("base64");
-};
 
 export async function getProductById(
 	productId: string
-): Promise<Product | null> {
+): Promise<IProduct | null> {
 	try {
-		const docRef = doc(fireStore, "Product", productId);
+		const docRef = doc(fireStore, COLLECTION_NAME_PRODUCT, productId);
 		console.log("Fetching document with ID:", productId);
 
 		const docSnap = await getDoc(docRef);
@@ -37,7 +33,7 @@ export async function getProductById(
 				data.productImages = base64Images;
 			}
 
-			return { id: docSnap.id, ...data } as Product;
+			return { id: docSnap.id, ...data } as IProduct;
 		} else {
 			console.log("No such document!");
 			return null;
@@ -88,7 +84,7 @@ export async function updateProduct(otherData: any, formData: FormData) {
 			updatedAt: new Date(),
 		};
 
-		const docRef = doc(fireStore, "Product", data.productId);
+		const docRef = doc(fireStore, COLLECTION_NAME_PRODUCT, data.productId);
 		await updateDoc(docRef, productData);
 	} catch (error) {
 		console.error("Error updating product: ", error);

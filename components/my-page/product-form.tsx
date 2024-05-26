@@ -1,5 +1,4 @@
 "use client";
-import { Product } from "@/app/(my-page)/my-page/product-list/page";
 import { ChangeEvent, DragEvent, MouseEvent, useEffect, useState } from "react";
 import Input from "../global/input";
 import { ProductLabel } from "./label";
@@ -11,6 +10,7 @@ import {
 	PRODUCT_TYPES,
 } from "@/constants/variables";
 import { updateProduct } from "@/app/(my-page)/my-page/product/[id]/actions";
+import { IProduct } from "@/model/product";
 
 export const base64ToFile = (
 	base64Data: string,
@@ -36,7 +36,7 @@ export default function ProductForm(data: any) {
 	const [selectedHeight, setSelectedHeight] = useState<string | null>(null);
 	const [images, setImages] = useState<File[]>([]);
 	const [imageURLs, setImageURLs] = useState<string[]>([]);
-	const [initialData, setInitialData] = useState<Product | null>(null);
+	const [initialData, setInitialData] = useState<IProduct | null>(null);
 	const [otherData, setFormData] = useState(new FormData());
 
 	useEffect(() => {

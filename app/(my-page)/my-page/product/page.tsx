@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductLabel } from "@/components/product/label";
+import { ProductLabel } from "@/components/my-page/label";
 import React, {
 	ChangeEvent,
 	DragEvent,

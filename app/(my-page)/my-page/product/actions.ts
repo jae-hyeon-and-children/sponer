@@ -1,6 +1,7 @@
 "use server";
 
 import { fireStore, storage } from "@/config/firebase/firebase";
+import { COLLECTION_NAME_PRODUCT } from "@/constants/variables";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -40,7 +41,7 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 			createdAt: new Date(),
 		};
 
-		const docRef = await addDoc(collection(fireStore, "Product"), productData);
+		const docRef = await addDoc(collection(fireStore, COLLECTION_NAME_PRODUCT), productData);
 
 		// return {
 		// 	success: true,

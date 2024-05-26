@@ -1,24 +1,12 @@
-import { ProductSideBar } from "@/components/product/sideBar";
+import { ProductSideBar } from "@/components/my-page/side-bar";
 import { getProduct } from "./actions";
 import Image from "next/image";
 import Link from "next/link";
 import { PRODUCT_STYLES } from "@/constants/variables";
-
-export interface Product {
-	id: string;
-	createdAt: Date;
-	genderCategory: string;
-	height: string;
-	productCategory: string;
-	productImages: string[];
-	size: string;
-	styleCategory: string[];
-	title: string;
-	updatedAt?: Date;
-}
+import { IProduct } from "@/model/product";
 
 export default async function ProductList() {
-	const products: Product[] = await getProduct();
+	const products: IProduct[] = await getProduct();
 
 	return (
 		<>

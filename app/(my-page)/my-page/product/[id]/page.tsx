@@ -1,5 +1,5 @@
 import { getProductById } from "./actions";
-import ProductForm from "@/components/product/productForm";
+import ProductForm from "@/components/my-page/product-form";
 
 export default async function EditProduct({
 	params,
