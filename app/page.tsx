@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -6,6 +7,9 @@ import NavBar from "../components/header";
 
 import Input from "@/components/global/input";
 import { auth } from "@/config/firebase/firebase";
+import Footer from "@/components/global/footer";
+import Image from "next/image";
+
 
 export default function Home() {
   auth.onAuthStateChanged((user) => {
@@ -91,6 +95,7 @@ export default function Home() {
       <div className="w-40 h-20 flex items-center justify-center bg-primary">
         primary
       </div>
+      <Footer />
     </main>
   );
 }
