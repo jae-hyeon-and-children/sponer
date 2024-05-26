@@ -1,8 +1,7 @@
-// components/AddressForm.js
 "use client";
-// 리액트에서 상태를 관리하기 위해 'useState' 훅을 임포트합니다.
+
 import { useState } from "react";
-// Daum 우편번호 스크립트를 로드하기 위해 'DaumPostcodeScript' 컴포넌트를 임포트합니다.
+
 import DaumPostcodeScript from "../app/api/add";
 
 // AddressForm 함수형 컴포넌트를 정의합니다.
