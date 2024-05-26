@@ -1,8 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import {
+  browserSessionPersistence,
+  getAuth,
+  setPersistence,
+} from "firebase/auth"; // Add this import
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,10 +23,19 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+// console.log(firebaseConfig);
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 export const fireStore = getFirestore(app);
 export const storage = getStorage(app);
+export const auth = getAuth(app);
 
-export default app;
+// setPersistence(auth, browserSessionPersistence)
+//   .then(() => {
+//     console.log("Session persistence set");
+//   })
+//   .catch((error) => {
+//     console.error("Error setting session persistence:", error);
+//   });

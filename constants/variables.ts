@@ -72,3 +72,4 @@ export const COLLECTION_NAME_PRODUCT = "Product";
  */
 
 export const STORAGE_REF_CHAT_IMAGES = "chat_images";
+
