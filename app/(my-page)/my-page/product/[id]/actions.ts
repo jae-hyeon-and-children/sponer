@@ -4,7 +4,13 @@ import { fireStore, storage } from "@/config/firebase/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Product } from "../../product-list/page";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { redirect } from "next/navigation";
+import fetch from "node-fetch";
+
+export const urlToBase64 = async (url: string) => {
+	const response = await fetch(url);
+	const buffer = await response.buffer();
+	return buffer.toString("base64");
+};
 
 export async function getProductById(
 	productId: string
@@ -17,7 +23,20 @@ export async function getProductById(
 
 		if (docSnap.exists()) {
 			console.log("Document data:", docSnap.data());
-			return { id: docSnap.id, ...docSnap.data() } as Product;
+			const data = docSnap.data();
+
+			if (data.productImages && Array.isArray(data.productImages)) {
+				const base64Images = await Promise.all(
+					data.productImages.map(async (url) => {
+						const base64 = await urlToBase64(url);
+						return `data:image/jpeg;base64,${base64}`;
+					})
+				);
+
+				data.productImages = base64Images;
+			}
+
+			return { id: docSnap.id, ...data } as Product;
 		} else {
 			console.log("No such document!");
 			return null;

@@ -12,6 +12,22 @@ import {
 import { PRODUCT_HEIGHT } from "@/app/(my-page)/my-page/product/page";
 import { updateProduct } from "@/app/(my-page)/my-page/product/[id]/actions";
 
+export const base64ToFile = (
+	base64Data: string,
+	fileName: string,
+	contentType: string = "image/jpeg"
+) => {
+	const byteString = atob(base64Data.split(",")[1]);
+	const ab = new ArrayBuffer(byteString.length);
+	const ia = new Uint8Array(ab);
+	for (let i = 0; i < byteString.length; i++) {
+		ia[i] = byteString.charCodeAt(i);
+	}
+
+	const blob = new Blob([ab], { type: contentType });
+	return new File([blob], fileName, { type: contentType });
+};
+
 export default function ProductForm(data: any) {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
 	const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -62,6 +78,18 @@ export default function ProductForm(data: any) {
 		images,
 	]);
 
+	useEffect(() => {
+		const convertBase64ToFile = async () => {
+			if (imageURLs.length > 0) {
+				const files = imageURLs.map((url, index) =>
+					base64ToFile(url, `image${Date.now()}.jpeg`)
+				);
+				setImages(files);
+			}
+		};
+		convertBase64ToFile();
+	}, [imageURLs]);
+
 	const selectType = (item: string) => setSelectedType(item);
 	const selectSize = (item: string) => setSelectedSize(item);
 	const selectGender = (item: string) => setSelectedGender(item);
@@ -75,6 +103,8 @@ export default function ProductForm(data: any) {
 			...prevImages,
 			...files.slice(0, 5 - prevImages.length),
 		]);
+
+		setImageURLs([]);
 	};
 
 	const handleDragStart = (event: DragEvent<HTMLDivElement>, index: number) => {
@@ -153,7 +183,7 @@ export default function ProductForm(data: any) {
 										onDrop={(event) => handleDrop(event, index)}
 										onDragOver={handleDragOver}
 									>
-										{images[index] ? (
+										{images[index] && (
 											<>
 												<img
 													src={URL.createObjectURL(images[index])}
@@ -169,24 +199,6 @@ export default function ProductForm(data: any) {
 													X
 												</button>
 											</>
-										) : (
-											imageURLs[index] && (
-												<>
-													<img
-														src={imageURLs[index]}
-														alt={`existing-${index}`}
-														className="object-cover h-[311px] w-full"
-														style={{ objectFit: "cover" }}
-													/>
-													<button
-														type="button"
-														onClick={(event) => handleRemoveImage(event, index)}
-														className="absolute top-0 right-0 m-2 p-1 bg-white rounded-full text-gray-500 hover:text-gray-700"
-													>
-														X
-													</button>
-												</>
-											)
 										)}
 									</div>
 								))}
