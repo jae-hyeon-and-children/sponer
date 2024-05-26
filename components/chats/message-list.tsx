@@ -4,7 +4,7 @@ import { fireStore } from "@/config/firebase/firebase";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { timeStampToDate } from "@/lib/utils/date";
+import { timeStampToDate } from "@/libs/utils/date";
 import { IMessage, MessageConverter } from "@/model/message";
 import {
   COLLECTION_NAME_CHAT,

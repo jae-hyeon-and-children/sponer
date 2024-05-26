@@ -1,5 +1,5 @@
 import { ContentType } from "@/constants/variables";
-import { getDateTextWith } from "@/lib/utils/date";
+import { getDateTextWith } from "@/libs/utils/date";
 import Image from "next/image";
 
 interface MessageProps {

@@ -1,4 +1,4 @@
-import { getDateTextWith } from "@/lib/utils/date";
+import { getDateTextWith } from "@/libs/utils/date";
 import Image from "next/image";
 import Link from "next/link";
 
