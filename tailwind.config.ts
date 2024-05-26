@@ -7,23 +7,28 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      primary: "#092361",
-      state: {
-        red: "#EE4700",
-        green: "#00BB2A",
+    extend: {
+      screens: {
+        "2xl": "1440px",
       },
-      gray: {
-        50: "#FBFBFD",
-        100: "#F3F5F9",
-        200: "#E9EFF9",
-        300: "#C6D0DC",
-        400: "#8F97A9",
-        500: "#69717D",
-        600: "#4F535C",
-        700: "#31343D",
-        800: "#24292F",
-        900: "#131418",
+      colors: {
+        primary: "#092361",
+        state: {
+          red: "#EE4700",
+          green: "#00BB2A",
+        },
+        gray: {
+          50: "#FBFBFD",
+          100: "#F3F5F9",
+          200: "#E9EFF9",
+          300: "#C6D0DC",
+          400: "#8F97A9",
+          500: "#69717D",
+          600: "#4F535C",
+          700: "#31343D",
+          800: "#24292F",
+          900: "#131418",
+        },
       },
     },
   },
