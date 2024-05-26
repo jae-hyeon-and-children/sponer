@@ -1,7 +1,10 @@
 "use client";
 
-import { storage } from "@/config/firebase/firebase";
+import Image from "next/image";
+import IcPhoto from "@/public/icons/ic_photo.png";
+import IcSend from "@/public/icons/ic_send.png";
 
+import { storage } from "@/config/firebase/firebase";
 import { ChangeEvent, useState } from "react";
 import { sendMessage } from "@/lib/api/chats";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -69,7 +72,7 @@ export default function MessageForm() {
     <div className="sticky bottom-0  flex items-center px-3 pb-4">
       <form
         onSubmit={handleSubmit}
-        className="flex gap-8 items-center w-full bg-white border-gray-200 border rounded-full py-5 px-3"
+        className="flex gap-8 items-center w-full bg-white border-gray-200 border rounded-full py-5 px-4"
       >
         <input
           type="file"
@@ -77,8 +80,17 @@ export default function MessageForm() {
           id="file-upload"
           onChange={handleFileChange}
         />
-        <label htmlFor="file-upload" className="cursor-pointer">
-          <p>이미지</p>
+        <label
+          htmlFor="file-upload"
+          className="cursor-pointer shrink-0 w-7 h-7 p-1 flex justify-center items-center"
+        >
+          <Image
+            src={IcPhoto}
+            alt="photo"
+            width={24}
+            height={24}
+            className="w-full aspect-square"
+          />
         </label>
         {file ? (
           <p className="text-gray-500 text-sm truncate mb-16">{file.name}</p>
@@ -95,9 +107,15 @@ export default function MessageForm() {
         <button
           type="submit"
           disabled={!message.trim() && !file}
-          className="disabled:bg-slate-100 w-6 h-6 rounded-full"
+          className="disabled:bg-slate-100 shrink-0 bg-primary w-7 h-7 p-1 rounded-full flex justify-center items-center"
         >
-          <p>전송</p>
+          <Image
+            src={IcSend}
+            alt="photo"
+            width={24}
+            height={24}
+            className="w-full aspect-square"
+          />
         </button>
       </form>
     </div>
