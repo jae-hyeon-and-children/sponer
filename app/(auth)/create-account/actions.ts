@@ -29,7 +29,7 @@ export default async function createaccount(
     );
     console.log(createUser);
 
-    await sendEmailVerification(createUser.user);
+    // await sendEmailVerification(createUser.user);
 
     await updateProfile(createUser.user, {});
   } catch (e) {
