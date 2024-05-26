@@ -9,8 +9,10 @@ import Input from "@/components/global/input";
 import AddressForm from "@/components/address";
 
 import uploadbrandUser from "./actions";
+// import useAuth from "@/libs/\bauth";
 
 export default function BrandUser() {
+  // const auth = useAuth();
   const [sibal, dispatch] = useFormState(uploadbrandUser, null);
   const [profilePreview, setProfilePreview] = useState("");
   const [certificatePreview, setCertificatePreview] = useState("");
@@ -22,29 +24,27 @@ export default function BrandUser() {
   const router = useRouter();
 
   const onProfileImageChange = (event: any) => {
-    console.log("Profile image change event:", event); // 이벤트 객체 확인
     const { files } = event.target;
-    console.log("Selected files:", files); // 선택된 파일 확인
+
     if (!files) return;
     const file = files[0];
     const url = URL.createObjectURL(file);
-    console.log("Profile image URL:", url); // 파일 URL 확인
+
     setProfilePreview(url);
     setIsProfileImageUploaded(true);
-    setIsValidSize(file.size <= 4 * 1024 * 1024); // 4MB 이하인지 확인
+    setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
   const onCertificateImageChange = (event: any) => {
-    console.log("Certificate image change event:", event); // 이벤트 객체 확인
     const { files } = event.target;
-    console.log("Selected files:", files); // 선택된 파일 확인
+
     if (!files) return;
     const file = files[0];
     const url = URL.createObjectURL(file);
-    console.log("Certificate image URL:", url); // 파일 URL 확인
+
     setCertificatePreview(url);
     setIsCertificateImageUploaded(true);
-    setIsValidSize(file.size <= 4 * 1024 * 1024); // 4MB 이하인지 확인
+    setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
   return (

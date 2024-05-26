@@ -2,31 +2,21 @@
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
-import { db, storage } from "@/config/firebase/firebase";
-
-async function addUserTypeToUser(userId: string, userType: string) {
-  const userDocRef = doc(db, "User", userId);
-
-  try {
-    await updateDoc(userDocRef, {
-      userType: userType,
-    });
-    console.log("유저타입 추가 성공");
-  } catch (error) {
-    console.error("Error updating user type: ", error);
-  }
-}
+import { auth, db, storage } from "@/config/firebase/firebase";
 
 export default async function uploadbrandUser(
   prevState: any,
   formData: FormData
 ) {
   try {
+    const uid = auth.currentUser?.uid;
+
     const postalCode = formData.get("postal_code");
     const address = formData.get("address");
     const detailAddress = formData.get("detail_address");
     const extraAddress = formData.get("extra_address");
     const fullAddress = `${postalCode}, ${address}, ${detailAddress}, ${extraAddress}`;
+    console.log("없다 uid : ", uid);
 
     // 파일 가져오기
     const profileImageFile = formData.get("profile_photo");
@@ -42,7 +32,6 @@ export default async function uploadbrandUser(
       const shotsnap = await uploadBytes(Refstorage, profileImageFile);
       profileImageUrl = await getDownloadURL(shotsnap.ref);
     } else {
-      console.log("없다");
     }
 
     let certificateImageUrl = "";
@@ -58,9 +47,8 @@ export default async function uploadbrandUser(
       );
       certificateImageUrl = await getDownloadURL(Brandshotsnap.ref);
     } else {
-      console.log("없다");
     }
-    console.log(profileImageFile, certificateImageFile);
+
     console.log(formData);
 
     const data = {
@@ -78,11 +66,19 @@ export default async function uploadbrandUser(
     };
     console.log("User data: ", data);
 
-    // Firestore에 데이터 추가
-    const userDocRef = await addDoc(collection(db, "User"), data);
+    const tada = {
+      approve: false,
+      brand_name: formData.get("brand_name"),
+      created_at: new Date(),
+      reason: false,
+    };
 
-    // 사용자 유형 추가
-    await addUserTypeToUser(userDocRef.id, "brand");
+    console.log("User tada: ", tada);
+
+    // Firestore에 데이터 추가
+    await addDoc(collection(db, "User"), data);
+    await addDoc(collection(db, `/User/${uid}/History`), tada);
+    // 꺽새로 바꿔서 uid 땡겨와서 추가
 
     return { success: true, message: "사용자가 성공적으로 추가되었습니다." };
   } catch (error) {
