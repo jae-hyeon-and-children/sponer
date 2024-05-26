@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import NavBar from "../../components/header";
-
 import Button from "../../components/button";
 import Link from "next/link";
-import { useFormState } from "react-dom";
-import login from "./actions";
 import Input from "@/components/global/input";
 import GoogleLoginButton from "./googleLogin";
+import { useFormState } from "react-dom";
+import login from "./actions";
 
 export default function Login() {
   const [sibal, dispatch] = useFormState(login, null);
