@@ -4,16 +4,17 @@ import Image from "next/image";
 
 import { useFormState } from "react-dom";
 import createaccount from "./actions";
-import NavBar from "@/components/header";
+
 import Input from "@/components/global/input";
 import Button from "@/components/button";
+import Header from "@/components/header";
 
 export default function CreateAccount() {
-  const [adsfadsf, dispatch] = useFormState(createaccount, null);
+  const [_, dispatch] = useFormState(createaccount, null);
 
   return (
     <>
-      <NavBar />
+      <Header />
       <div className="flex justify-center max-w-screen-2xl pt-60">
         <div className="flex flex-col justify-around">
           <Image
