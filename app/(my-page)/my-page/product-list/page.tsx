@@ -17,7 +17,7 @@ export interface Product {
 	updatedAt?: Date;
 }
 
-export async function productList() {
+export default async function ProductList() {
 	const products: Product[] = await getProduct();
 
 	return (
@@ -43,11 +43,14 @@ export async function productList() {
 							<Link
 								href={`/my-page/product/${product.id}`}
 								className="h-[22.5rem]"
+								key={product.id}
 							>
 								<Image
 									src={product.productImages[0]}
 									width={220}
 									height={260}
+									quality={50}
+									priority
 									alt={product.title}
 									className="object-cover h-[260px]"
 									style={{ objectFit: "cover" }}
@@ -75,7 +78,5 @@ export async function productList() {
 		</>
 	);
 }
-
-export default productList;
 
 // max-w-screen-2xl

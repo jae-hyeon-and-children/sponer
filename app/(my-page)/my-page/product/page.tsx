@@ -11,22 +11,15 @@ import React, {
 import { uploadProduct } from "./actions";
 import {
 	PRODUCT_CATEGORIES,
+	PRODUCT_HEIGHT,
 	PRODUCT_SIZE,
 	PRODUCT_STYLES,
 	PRODUCT_TYPES,
 } from "@/constants/variables";
 import Input from "@/components/global/input";
+import { useFormStatus } from "react-dom";
 
-export const PRODUCT_HEIGHT = {
-	1: "150 ~ 155cm",
-	2: "155 ~ 160cm",
-	3: "160 ~ 165cm",
-	4: "165 ~ 170cm",
-	5: "170 ~ 175cm",
-	6: "175 ~ 180cm",
-};
-
-export const createProduct = () => {
+export default function CreateProduct() {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
 	const [selectedSize, setSelectedSize] = useState<string | null>(null);
 	const [selectedGender, setSelectedGender] = useState<string | null>(null);
@@ -228,6 +221,4 @@ export const createProduct = () => {
 			</div>
 		</>
 	);
-};
-
-export default createProduct;
+}

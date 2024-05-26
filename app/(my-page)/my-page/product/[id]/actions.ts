@@ -5,6 +5,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Product } from "../../product-list/page";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import fetch from "node-fetch";
+import { redirect } from "next/navigation";
 
 export const urlToBase64 = async (url: string) => {
 	const response = await fetch(url);
@@ -89,13 +90,6 @@ export async function updateProduct(otherData: any, formData: FormData) {
 
 		const docRef = doc(fireStore, "Product", data.productId);
 		await updateDoc(docRef, productData);
-
-		// redirect("/my-page/product-list");
-
-		return {
-			success: true,
-			message: "Product updated successfully!",
-		};
 	} catch (error) {
 		console.error("Error updating product: ", error);
 		return {
@@ -103,4 +97,5 @@ export async function updateProduct(otherData: any, formData: FormData) {
 			message: "Failed to update product",
 		};
 	}
+	redirect("/my-page/product-list");
 }

@@ -1,3 +1,4 @@
+"use server";
 import { fireStore } from "@/config/firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Product } from "./page";

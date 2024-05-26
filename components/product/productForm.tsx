@@ -5,11 +5,11 @@ import Input from "../global/input";
 import { ProductLabel } from "./label";
 import {
 	PRODUCT_CATEGORIES,
+	PRODUCT_HEIGHT,
 	PRODUCT_SIZE,
 	PRODUCT_STYLES,
 	PRODUCT_TYPES,
 } from "@/constants/variables";
-import { PRODUCT_HEIGHT } from "@/app/(my-page)/my-page/product/page";
 import { updateProduct } from "@/app/(my-page)/my-page/product/[id]/actions";
 
 export const base64ToFile = (

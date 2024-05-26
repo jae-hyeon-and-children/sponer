@@ -4,6 +4,7 @@ import { fireStore, storage } from "@/config/firebase/firebase";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { redirect } from "next/navigation";
 
 export async function uploadProduct(otherData: any, formData: FormData) {
 	const data = {
@@ -15,8 +16,6 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 		productName: formData.get("productName") as string,
 		productHeight: formData.get("height") as string,
 	};
-
-	console.log(data);
 
 	try {
 		const imageUploadPromises = data.productImages.map(async (image) => {
@@ -43,10 +42,10 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 
 		const docRef = await addDoc(collection(fireStore, "Product"), productData);
 
-		return {
-			success: true,
-			message: "Product uploaded successfully..!",
-		};
+		// return {
+		// 	success: true,
+		// 	message: "Product uploaded successfully..!",
+		// };
 	} catch (error) {
 		console.error("Error uploading product : ", error);
 		return {
@@ -54,4 +53,5 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 			message: "Failed to upload product",
 		};
 	}
+	redirect("/my-page/product-list");
 }
