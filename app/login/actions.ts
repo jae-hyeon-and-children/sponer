@@ -12,17 +12,12 @@ export default async function login(prevState: any, formData: FormData) {
   }
 
   try {
-    // 사용자 로그인
     const loginUser = await signInWithEmailAndPassword(auth, email, password);
 
-    // 로그인한 사용자의 UID 가져오기
     const uid = auth.currentUser?.uid || "";
-
-    // 사용자 정보 업데이트 등 다른 작업 수행
 
     console.log("로그인 유저 UID:", uid);
 
-    // 사용자 상태가 변경될 때까지 대기
     await new Promise((resolve) => {
       const unsubscribe = auth.onAuthStateChanged((user) => {
         if (user) {
