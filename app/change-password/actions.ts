@@ -1,10 +1,6 @@
 "use server";
 
-import {
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 import { redirect } from "next/navigation";
