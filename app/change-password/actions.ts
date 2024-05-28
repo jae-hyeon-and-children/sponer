@@ -17,12 +17,12 @@ export default async function ChangePassword(
 
   try {
     await sendPasswordResetEmail(auth, email);
-    alert("발송 완");
+    // alert("발송 완");
+    redirect("/login");
   } catch (e) {
     if (e instanceof FirebaseError) {
       return { success: false, message: e.message };
     }
     return { success: false, message: "Unknown error occurred" };
   }
-  redirect("/login");
 }
