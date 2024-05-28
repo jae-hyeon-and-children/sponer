@@ -1,22 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@/config/firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import SignOutButton from "./logoutbutton";
+import useAuth from "@/libs/auth";
 
 export default function Header() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      setUser(authUser);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
+  const user = useAuth();
 
   return (
     <div className="">
