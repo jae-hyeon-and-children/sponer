@@ -11,6 +11,19 @@ export default function GoogleLoginButton() {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify({
+              uid: user.uid,
+              displayName: user.displayName,
+              email: user.email,
+              phtoURL: user.photoURL,
+            })
+          );
+        }
+      });
       console.log("로그인 유저 : ", auth.currentUser);
       router.push("/");
     } catch (error) {
