@@ -17,19 +17,23 @@ export default async function login(prevState: any, formData: FormData) {
     const uid = auth.currentUser?.uid || "";
 
     console.log("로그인 유저 UID:", uid);
-
-    await new Promise((resolve) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        if (user) {
-          unsubscribe();
-          resolve(user);
-        }
-      });
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify({
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            phtoURL: user.photoURL,
+          })
+        );
+      }
     });
 
-    if (!auth.currentUser?.emailVerified) {
-      return { success: false, message: "이메일이 확인되지 않았습니다." };
-    }
+    // if (!auth.currentUser?.emailVerified) {
+    //   return { success: false, message: "이메일이 확인되지 않았습니다." };
+    // }
 
     await updateProfile(loginUser.user, {});
   } catch (e) {
