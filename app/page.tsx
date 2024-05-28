@@ -2,30 +2,16 @@
 
 import Link from "next/link";
 
-import NavBar from "../components/header";
-
 import Input from "@/components/global/input";
-import { auth } from "@/config/firebase/firebase";
+
 import Footer from "@/components/global/footer";
 import Image from "next/image";
+import Header from "../components/header";
 
 export default function Home() {
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          uid: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-          phtoURL: user.photoURL,
-        })
-      );
-    }
-  });
   return (
     <main>
-      <NavBar />
+      <Header />
       <div className="flex justify-between max-w-screen-2xl pt-44">
         <Link href="/login">로그인</Link>
       </div>
