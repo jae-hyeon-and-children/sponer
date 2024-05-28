@@ -8,9 +8,14 @@ const SignOutButton = () => {
   const router = useRouter();
 
   const handleSignOut = async () => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        localStorage.removeItem("currentUser");
+      }
+    });
     await signOut(auth);
-    console.log("User signed out", auth.currentUser); // 로그아웃 확인용 콘솔 로그
-    router.push("/");
+    console.log("User signed out", auth.currentUser);
+    router.push("/login");
   };
 
   return <button onClick={handleSignOut}>로그아웃</button>;
