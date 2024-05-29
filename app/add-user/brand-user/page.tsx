@@ -9,7 +9,7 @@ import uploadbrandUser from "./actions";
 import { auth } from "@/config/firebase/firebase";
 import Header from "@/components/global/header";
 import { useRouter } from "next/navigation";
-import { IUser } from "@/model/\buser";
+import { IUser } from "@/model/user";
 
 export default function BrandUser() {
   const router = useRouter();

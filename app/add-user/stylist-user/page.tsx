@@ -9,8 +9,7 @@ import AddressForm from "@/components/address";
 import { auth } from "@/config/firebase/firebase";
 import { useRouter } from "next/navigation";
 import Header from "@/components/global/header";
-
-import { IUser } from "@/model/\buser";
+import { IUser } from "@/model/user";
 
 export default function StylistUser() {
   const router = useRouter();
