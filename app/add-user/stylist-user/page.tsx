@@ -1,42 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { PhotoIcon } from "@heroicons/react/24/solid";
-
 import uploadstylistUser from "./actions";
-import NavBar from "@/components/header";
 import Input from "@/components/global/input";
 import AddressForm from "@/components/address";
-
 import { auth } from "@/config/firebase/firebase";
+import { useRouter } from "next/navigation";
+import Header from "@/components/global/header";
+
+import { IUser } from "@/model/\buser";
 
 export default function StylistUser() {
-  const uid = auth.currentUser?.uid;
-
-  // console.log(uid);
-  const [preview, setPreview] = useState("");
+  const router = useRouter();
+  const [profilephoto, setProfilephoto] = useState("");
   const [isValidSize, setIsValidSize] = useState(true);
 
-  // const router = useRouter();
-
   const onImageChange = (event: any) => {
-    console.log("1111111d:", event.target.files[0]);
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
     const url = URL.createObjectURL(file);
-    setPreview(url);
-
+    setProfilephoto(url);
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
+
+  const uid = auth.currentUser?.uid;
+  useEffect(() => {
+    if (!uid) {
+      router.push("/login");
+    }
+  }, [uid, router]);
+
   const bindData = uploadstylistUser.bind(null, uid!);
-  const [_, dispatch] = useFormState(bindData, null);
+  const prevState = { success: undefined, message: "" };
+  const [uploadResponse, dispatch] = useFormState<IUser>(bindData, prevState);
+
+  useEffect(() => {
+    if (uploadResponse.success) {
+      router.push("/");
+    }
+  }, [uploadResponse, router]);
 
   return (
     <>
-      <NavBar />
+      <Header />
       <div className="flex flex-col items-center max-w-screen-2xl pt-60 ml-24">
         <div>
           <div className="w-[65px] f-[25px] bg-gray-700 border rounded-lg text-center text-gray-100 mb-5 mt-[120px] mr-[700px]">
@@ -53,9 +62,9 @@ export default function StylistUser() {
             <label
               htmlFor="photo"
               className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full border-dashed cursor-pointer bg-center bg-cover w-[200px] h-[160px]"
-              style={{ backgroundImage: `url(${preview})` }}
+              style={{ backgroundImage: `url(${profilephoto})` }}
             >
-              {preview === "" ? (
+              {profilephoto === "" ? (
                 <>
                   <PhotoIcon className="w-16" />
                   <div className="text-neutral-400 text-sm">
