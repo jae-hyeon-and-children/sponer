@@ -1,18 +1,31 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
-import Header from "../../components/header";
+import Header from "../../components/global/header";
+import { auth } from "@/config/firebase/firebase";
+import {
+  ADD_USER_OPTION_PAGE,
+  USER_OPTION_BRAND_URL,
+  USER_OPTION_STYLIST_URL,
+} from "@/constants/variables";
+import useAuth from "@/libs/auth";
 
 export default function AdduserType() {
   const [selectedOption, setSelectedOption] = useState("");
-  const router = useRouter();
-  // const stylistUserPage='stylist-user'
-  // const brandUserPage = 'brand-user'
 
-  const handleSelection = (option: any) => {
+  const router = useRouter();
+  const uid = auth.currentUser?.uid;
+
+  useEffect(() => {
+    if (!uid) {
+      router.push("/login");
+    }
+  }, [uid, router]);
+
+  const handleSelection = (option: string) => {
     console.log(option);
     setSelectedOption(option);
   };
@@ -20,10 +33,10 @@ export default function AdduserType() {
   const handleNextClick = () => {
     console.log(selectedOption);
 
-    if (selectedOption === "stylist-user") {
-      router.push("/add-user/stylist-user");
-    } else if (selectedOption === "brand-user") {
-      router.push("/add-user/brand-user");
+    if (selectedOption === USER_OPTION_STYLIST_URL) {
+      router.push(`/${ADD_USER_OPTION_PAGE}/${USER_OPTION_STYLIST_URL}`);
+    } else if (selectedOption === USER_OPTION_BRAND_URL) {
+      router.push(`/${ADD_USER_OPTION_PAGE}/${USER_OPTION_BRAND_URL}`);
     } else {
       alert("소속을 선택하세요.");
     }
