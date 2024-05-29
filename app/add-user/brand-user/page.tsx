@@ -1,56 +1,55 @@
 "use client";
 
-import { useState } from "react";
-// import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { PhotoIcon } from "@heroicons/react/24/solid";
-
 import Input from "@/components/global/input";
 import AddressForm from "@/components/address";
-
 import uploadbrandUser from "./actions";
-
 import { auth } from "@/config/firebase/firebase";
-import Header from "@/components/header";
+import Header from "@/components/global/header";
+import { useRouter } from "next/navigation";
+import { IUser } from "@/model/\buser";
 
 export default function BrandUser() {
-  const uid = auth.currentUser?.uid;
-
-  // console.log(uid);
-
-  const [profilePreview, setProfilePreview] = useState("");
-  const [certificatePreview, setCertificatePreview] = useState("");
-
+  const router = useRouter();
+  const [profilephoto, setProfilephoto] = useState("");
+  const [certificatephoto, setCertificatephoto] = useState("");
   const [isValidSize, setIsValidSize] = useState(true);
-
-  // const router = useRouter();
 
   const onProfileImageChange = (event: any) => {
     const { files } = event.target;
-
     if (!files) return;
     const file = files[0];
     const url = URL.createObjectURL(file);
-
-    setProfilePreview(url);
-
+    setProfilephoto(url);
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
   const onCertificateImageChange = (event: any) => {
     const { files } = event.target;
-
     if (!files) return;
     const file = files[0];
     const url = URL.createObjectURL(file);
-
-    setCertificatePreview(url);
-
+    setCertificatephoto(url);
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
+  const uid = auth.currentUser?.uid;
+  useEffect(() => {
+    if (!uid) {
+      router.push("/login");
+    }
+  }, [uid, router]);
+
   const bindData = uploadbrandUser.bind(null, uid!);
-  const [_, dispatch] = useFormState(bindData, null);
+  const prevState = { success: undefined, message: "" };
+  const [uploadResponse, dispatch] = useFormState<IUser>(bindData, prevState);
+  useEffect(() => {
+    if (uploadResponse.success) {
+      router.push("/");
+    }
+  }, [uploadResponse, router]);
 
   return (
     <>
@@ -72,10 +71,10 @@ export default function BrandUser() {
               htmlFor="profile_photo"
               className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full border-dashed cursor-pointer  bg-center bg-cover w-[200px] h-[160px]"
               style={{
-                backgroundImage: `url(${profilePreview})`,
+                backgroundImage: `url(${profilephoto})`,
               }}
             >
-              {profilePreview === "" ? (
+              {profilephoto === "" ? (
                 <>
                   <PhotoIcon className="w-14" />
                   <div className="text-neutral-400 text-sm">
@@ -148,10 +147,10 @@ export default function BrandUser() {
               htmlFor="business_photo"
               className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md border-dashed cursor-pointer  bg-center bg-cover w-[600px] h-[300px]"
               style={{
-                backgroundImage: `url(${certificatePreview})`,
+                backgroundImage: `url(${certificatephoto})`,
               }}
             >
-              {certificatePreview === "" ? (
+              {certificatephoto === "" ? (
                 <>
                   <PhotoIcon className="w-14" />
                   <div className="text-neutral-400 text-sm">
