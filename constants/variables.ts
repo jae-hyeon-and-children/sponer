@@ -59,6 +59,13 @@ export enum ContentType {
   text = "text",
   image = "image",
 }
+
+export const ADD_USER_OPTION_PAGE = "add-user";
+
+export const USER_OPTION_STYLIST_URL = "stylist-user";
+
+export const USER_OPTION_BRAND_URL = "brand-user";
+
 /**
  * Collection Name
  */
