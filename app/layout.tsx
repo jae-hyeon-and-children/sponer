@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import RecoilWrapper from "@/recoil/recoil-wrapper";
-import Header from "@/components/header";
+import Header from "@/components/global/header";
 
 const suit = localFont({
   src: "./fonts/SUIT-Variable.woff2",

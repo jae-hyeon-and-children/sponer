@@ -6,7 +6,7 @@ import Input from "@/components/global/input";
 
 import Footer from "@/components/global/footer";
 import Image from "next/image";
-import Header from "../components/header";
+import Header from "../components/global/header";
 
 export default function Home() {
   return (
