@@ -6,80 +6,82 @@ import { fireStore, storage } from "@/config/firebase/firebase";
 
 export default async function uploadbrandUser(
   uid: string,
-  prevState: any,
+  prevState: { success: undefined; message: "" },
   formData: FormData
 ) {
+  if (!uid) {
+    return { success: false, message: "유효하지 않은 사용자입니다." };
+  }
   try {
     const postalCode = formData.get("postal_code");
     const address = formData.get("address");
     const detailAddress = formData.get("detail_address");
     const extraAddress = formData.get("extra_address");
     const fullAddress = `${postalCode}, ${address}, ${detailAddress}, ${extraAddress}`;
-    console.log("없다 uid : ", uid);
-
-    // 파일 가져오기
     const profileImageFile = formData.get("profile_photo");
     const certificateImageFile = formData.get("business_photo");
 
     let profileImageUrl = "";
 
     if (profileImageFile && profileImageFile instanceof File) {
-      const Refstorage = ref(
+      const profileStorage = ref(
         storage,
         `profile_images/${profileImageFile.name}`
       );
-      const shotsnap = await uploadBytes(Refstorage, profileImageFile);
-      profileImageUrl = await getDownloadURL(shotsnap.ref);
+      const snapshot = await uploadBytes(profileStorage, profileImageFile);
+      profileImageUrl = await getDownloadURL(snapshot.ref);
     } else {
+      console.log("not found : ", profileImageUrl);
     }
 
     let certificateImageUrl = "";
 
     if (certificateImageFile && certificateImageFile instanceof File) {
-      const BrandRefstorage = ref(
+      const brandProfileStorage = ref(
         storage,
         `business_certificate_image/${certificateImageFile.name}`
       );
-      const Brandshotsnap = await uploadBytes(
-        BrandRefstorage,
+      const brandSnapShot = await uploadBytes(
+        brandProfileStorage,
         certificateImageFile
       );
-      certificateImageUrl = await getDownloadURL(Brandshotsnap.ref);
+      certificateImageUrl = await getDownloadURL(brandSnapShot.ref);
     } else {
+      console.log("not found : ", certificateImageUrl);
     }
 
+    console.log(profileImageUrl, certificateImageUrl);
     console.log(formData);
 
-    const data = {
-      profile_image: profileImageUrl,
-      business_certificate_image_url: certificateImageUrl,
-      brand_name: formData.get("brand_name"),
+    const brandFormData = {
+      profileImage: profileImageUrl,
+      businessImageUrl: certificateImageUrl,
+      brandName: formData.get("brand_name"),
       name: formData.get("name"),
       homepage: formData.get("homepage"),
-      phone_number: formData.get("phone_number"),
+      phoneNumber: formData.get("phone_number"),
       address: fullAddress,
       affiliation: formData.get("affiliation"),
       email: formData.get("email"),
       createdAt: new Date(),
       userType: "brand",
+      // loginType: "",
     };
-    console.log("User data: ", data);
+    console.log("User data: ", brandFormData);
 
-    const tada = {
+    const approve = {
       approve: false,
-      brand_name: formData.get("brand_name"),
-      created_at: new Date(),
+      brandName: formData.get("brand_name"),
+      createdAt: new Date(),
       reason: false,
     };
 
-    console.log("User tada: ", tada);
+    console.log("Brand approve: ", approve);
 
-    // Firestore에 데이터 추가
-    await setDoc(doc(fireStore, "User", uid), data);
-    await addDoc(collection(fireStore, `/User/${uid}/History`), tada);
-    // 꺽새로 바꿔서 uid 땡겨와서 추가
+    await setDoc(doc(fireStore, "User", uid), brandFormData);
+    await addDoc(collection(fireStore, `/User/${uid}/History`), approve);
 
-    return { success: true, message: "사용자가 성공적으로 추가되었습니다." };
+    return { success: true, redirect: "/" };
   } catch (error) {
     console.error("사용자 업로드 중 오류 발생:", error);
     return { success: false, message: "사용자 추가 실패" };
