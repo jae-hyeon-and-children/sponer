@@ -1,17 +1,27 @@
 "use client";
 
 import Image from "next/image";
-
 import { useFormState } from "react-dom";
 import createaccount from "./actions";
-
 import Input from "@/components/global/input";
 import Button from "@/components/button";
-import Header from "@/components/header";
+import Header from "@/components/global/header";
+import { useRouter } from "next/navigation";
+import useAuth from "@/libs/auth";
+import { useEffect } from "react";
 
 export default function CreateAccount() {
   const [_, dispatch] = useFormState(createaccount, null);
+  const router = useRouter();
+  const user = useAuth();
 
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
+  if (user) return null;
   return (
     <>
       <Header />
