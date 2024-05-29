@@ -6,10 +6,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { useFormState } from "react-dom";
 import ChangePassword from "./actions";
-import Header from "@/components/header";
+import Header from "@/components/global/header";
+import { useRouter } from "next/navigation";
+import { auth } from "@/config/firebase/firebase";
+import useAuth from "@/libs/auth";
+import { useEffect } from "react";
 
 export default function ChangePasswordPage() {
   const [_, dispatch] = useFormState(ChangePassword, null);
+  const router = useRouter();
+  const user = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
+  if (user) return null;
   return (
     <>
       <Header />
