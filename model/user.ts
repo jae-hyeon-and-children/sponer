@@ -1,8 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
 export interface IUser {
-  success: boolean | undefined;
-  message: string;
   address: string;
   affiliation?: string;
   approve?: boolean;
@@ -11,7 +9,6 @@ export interface IUser {
   email: string;
   nickName?: string;
   homepage?: string;
-  loginType: string;
   name: string;
   phoneNumber: string;
   profileImage: string;
