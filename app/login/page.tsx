@@ -46,7 +46,6 @@ export default function Login() {
             layout="fixed"
             width={852}
             height={814}
-            className="cursor-pointer"
           />
         </div>
         <div className="flex flex-col m-auto items-start w-[852px] h-[814px] pl-[100px] gap-2 ">
@@ -60,7 +59,7 @@ export default function Login() {
           />
           <form action={dispatch}>
             <div>
-              <div className="font-medium text-[30px] mt-2 mb-2">
+              <div className="display text-gray-900 text-[2rem] mt-2 mb-3">
                 스포너에 오신 것을 환영합니다
               </div>
               <div className="flex flex-col gap-5 mt-14">
@@ -77,24 +76,34 @@ export default function Login() {
                   required
                 />
               </div>
-              <div className="flex flex-col justify-center items-center text-center gap-2 mt-12">
+              <div className="flex flex-col justify-center items-center text-center gap-2 mt-4">
                 <div className="flex flex-col justify-center items-center text-center gap-2 mt-10">
-                  <button className="border bg-primary text-gray-100 rounded-[40px] w-[400px] h-[50px] flex justify-center items-center">
-                    <span>로그인</span>
+                  <button className="border bg-primary text-gray-100 rounded-[3.5rem] w-96 h-14 flex justify-center items-center">
+                    <span className="label-1 text-gray-100">로그인</span>
                   </button>
                   {errorMessage && (
                     <div className="text-red-500 text-center mt-2">
                       {errorMessage}
                     </div>
                   )}
-                  <div className="border text-gray-700 rounded-[40px] w-[400px] h-[50px] flex justify-center items-center mt-2">
+                  <div className="border text-gray-700 rounded-[3.5rem] w-96 h-14 flex justify-center items-center mt-2">
                     <GoogleLoginButton />
                   </div>
                 </div>
                 <div className="flex gap-3 mt-10 font-light">
-                  <Link href="/create-account">회원가입</Link>
-                  <div>/</div>
-                  <Link href="/change-password">비번찾기</Link>
+                  <Link
+                    href="/create-account"
+                    className="label-2 text-gray-600"
+                  >
+                    회원가입
+                  </Link>
+                  <div className="label-2">/</div>
+                  <Link
+                    href="/change-password"
+                    className="label-2  text-gray-600"
+                  >
+                    비번찾기
+                  </Link>
                 </div>
               </div>
             </div>
