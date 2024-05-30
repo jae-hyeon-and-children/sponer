@@ -13,5 +13,14 @@ export interface IUser {
 	phoneNumber: string;
 	profileImage: string;
 	createdAt: Timestamp;
+	updatedAt: Timestamp;
 	userType: string;
+	nickName?: string;
+}
+
+export interface IHistory {
+	approve: boolean;
+	brandName: string;
+	createdAt: Timestamp;
+	reason?: string;
 }
