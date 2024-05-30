@@ -67,7 +67,7 @@ const AddressForm = () => {
           onClick={handleAddressSearch}
           className="h-10 disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed rounded-md border border-gray-900"
         >
-          우편번호 찾기
+          <span className="paragraph-2 text-gray-800">우편번호 찾기</span>
         </button>
 
         <input
@@ -77,7 +77,7 @@ const AddressForm = () => {
           value={postcode}
           placeholder="우편번호"
           readOnly
-          className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400 gap-"
+          className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400 "
         />
       </div>
 
