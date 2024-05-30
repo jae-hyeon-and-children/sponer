@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Input from "@/components/global/input";
-import GoogleLoginButton from "./googleLogin";
+import GoogleLoginButton from "./google-login";
 import { useFormState } from "react-dom";
 import login from "./actions";
 
