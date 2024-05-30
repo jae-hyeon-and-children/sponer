@@ -58,10 +58,10 @@ export default function CreateAccount() {
           />
           <form action={dispatch}>
             <div>
-              <div className="font-medium text-[30px] mt-2 mb-2">
+              <div className="display text-gray-900 text-[30px] mt-2 mb-2">
                 스포너에 오신 것을 환영합니다
               </div>
-              <div className="flex flex-col gap-5 mt-5">
+              <div className="flex flex-col gap-5 mt-14">
                 <Input
                   name="email"
                   type="email"
@@ -81,9 +81,9 @@ export default function CreateAccount() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col justify-center items-center text-center gap-2 mt-14">
-                <button className="border bg-primary text-gray-100 rounded-[40px] w-[400px] h-[50px] flex justify-center items-center">
-                  <span>회원가입</span>
+              <div className="flex flex-col justify-center items-center text-center gap-2 mt-20">
+                <button className="border bg-primary text-gray-100 rounded-[3.5rem] w-96 h-14 flex justify-center items-center">
+                  <span className="label-1 text-gray-100">회원가입</span>
                 </button>
               </div>
             </div>
