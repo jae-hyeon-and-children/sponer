@@ -8,7 +8,7 @@ import { useFormState } from "react-dom";
 import ChangePassword from "./actions";
 import Header from "@/components/global/header";
 import { useRouter } from "next/navigation";
-import { auth } from "@/config/firebase/firebase";
+
 import useAuth from "@/libs/auth";
 import { useEffect } from "react";
 
