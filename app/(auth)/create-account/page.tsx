@@ -1,25 +1,36 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { useFormState } from "react-dom";
-import createaccount from "./actions";
 import Input from "@/components/global/input";
-
 import Header from "@/components/global/header";
-import { useRouter } from "next/navigation";
+
 import useAuth from "@/libs/auth";
 import { useEffect } from "react";
+import createaccount from "./actions";
+import { IResponse } from "@/model/responses";
+import { useFormState } from "react-dom";
+import { useRouter } from "next/navigation";
 
 export default function CreateAccount() {
-  const [_, dispatch] = useFormState(createaccount, null);
   const router = useRouter();
   const user = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
       router.push("/");
     }
   }, [user, router]);
+
+  const [currentState, dispatch] = useFormState(createaccount, null);
+
+  useEffect(() => {
+    const result: IResponse | null = currentState;
+    if (result && !result.success) {
+      setErrorMessage(result.message || "오류가 발생했습니다");
+    }
+  }, [currentState]);
 
   if (user) return null;
   return (
@@ -63,6 +74,12 @@ export default function CreateAccount() {
                   placeholder="비밀번호"
                   required
                 />
+
+                {errorMessage && (
+                  <div className="text-red-500 text-center mt-2">
+                    {errorMessage}
+                  </div>
+                )}
               </div>
               <div className="flex flex-col justify-center items-center text-center gap-2 mt-14">
                 <button className="border bg-primary text-gray-100 rounded-[40px] w-[400px] h-[50px] flex justify-center items-center">
