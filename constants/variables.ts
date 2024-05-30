@@ -60,11 +60,11 @@ export enum ContentType {
   image = "image",
 }
 
-export const ADD_USER_OPTION_PAGE = "add-user";
+export const PATH_ADD_USER = "add-user";
 
-export const USER_OPTION_STYLIST_URL = "stylist-user";
+export const PATH_STYLELIST_USER = "stylist-user";
 
-export const USER_OPTION_BRAND_URL = "brand-user";
+export const PATH_BRAND_USER = "brand-user";
 
 /**
  * Collection Name

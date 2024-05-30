@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import Header from "../../components/global/header";
 import { auth } from "@/config/firebase/firebase";
 import {
-  ADD_USER_OPTION_PAGE,
-  USER_OPTION_BRAND_URL,
-  USER_OPTION_STYLIST_URL,
+  PATH_ADD_USER,
+  PATH_BRAND_USER,
+  PATH_STYLELIST_USER,
 } from "@/constants/variables";
 
 export default function AdduserType() {
@@ -32,10 +32,10 @@ export default function AdduserType() {
   const handleNextClick = () => {
     console.log(selectedOption);
 
-    if (selectedOption === USER_OPTION_STYLIST_URL) {
-      router.push(`/${ADD_USER_OPTION_PAGE}/${USER_OPTION_STYLIST_URL}`);
-    } else if (selectedOption === USER_OPTION_BRAND_URL) {
-      router.push(`/${ADD_USER_OPTION_PAGE}/${USER_OPTION_BRAND_URL}`);
+    if (selectedOption === PATH_STYLELIST_USER) {
+      router.push(`/${PATH_ADD_USER}/${PATH_STYLELIST_USER}`);
+    } else if (selectedOption === PATH_BRAND_USER) {
+      router.push(`/${PATH_ADD_USER}/${PATH_BRAND_USER}`);
     } else {
       alert("소속을 선택하세요.");
     }
