@@ -13,7 +13,7 @@ import {
 } from "@/constants/variables";
 
 export default function AdduserType() {
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const router = useRouter();
   const uid = auth.currentUser?.uid;
