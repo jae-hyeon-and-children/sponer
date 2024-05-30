@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import Input from "@/components/global/input";
-import AddressForm from "@/components/address";
+import AddressForm from "@/components/global/address";
 import uploadbrandUser from "./actions";
 import { auth } from "@/config/firebase/firebase";
 import Header from "@/components/global/header";

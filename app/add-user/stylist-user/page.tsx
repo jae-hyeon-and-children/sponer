@@ -5,7 +5,7 @@ import { useFormState } from "react-dom";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import uploadstylistUser from "./actions";
 import Input from "@/components/global/input";
-import AddressForm from "@/components/address";
+import AddressForm from "@/components/global/address";
 import { auth } from "@/config/firebase/firebase";
 import { useRouter } from "next/navigation";
 import Header from "@/components/global/header";
