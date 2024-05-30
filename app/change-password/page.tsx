@@ -49,17 +49,25 @@ export default function ChangePasswordPage() {
           />
           <form action={dispatch}>
             <div>
-              <div className="font-medium text-[30px] mt-2 mb-2">
+              <div className="display text-gray-900 text-[30px] mt-2 mb-2">
                 비밀번호 찾기
               </div>
-              <div className="flex flex-col gap-5 mt-5">
-                <Input name="email" type="email" placeholder="Email" required />
+              <div className="flex flex-col gap-5 mt-14">
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="이메일"
+                  required
+                />
               </div>
-              <div className="flex flex-col justify-center items-center text-center gap-2 mt-14">
-                <div className="border bg-primary  text-gray-100 rounded-[40px] w-[400px] h-[50px]  ">
-                  <Button text="비밀번호 재설정 메일 받기" />
-                </div>
-                <Link className="mt-10" href="/login">
+              <div className="flex flex-col justify-center items-center text-center gap-2 mt-20">
+                <button className="border bg-primary text-gray-100 rounded-[3.5rem] w-96 h-14 flex justify-center items-center">
+                  <span className="label-1 text-gray-100">
+                    비밀번호 재설정 메일 받기
+                  </span>
+                </button>
+
+                <Link className="mt-10 label-2 text-gray-600" href="/login">
                   로그인 페이지로 이동하기 &rarr;
                 </Link>
               </div>
