@@ -9,7 +9,6 @@ import uploadbrandUser from "./actions";
 import { auth } from "@/config/firebase/firebase";
 import Header from "@/components/global/header";
 import { useRouter } from "next/navigation";
-import { IUser } from "@/model/user";
 
 export default function BrandUser() {
   const router = useRouter();
@@ -45,10 +44,10 @@ export default function BrandUser() {
   }, [uid, router]);
 
   const bindData = uploadbrandUser.bind(null, uid!);
-  const prevState = { success: undefined, message: "" };
-  const [uploadResponse, dispatch] = useFormState<IUser>(bindData, prevState);
+
+  const [uploadResponse, dispatch] = useFormState(bindData, null);
   useEffect(() => {
-    if (uploadResponse.success) {
+    if (uploadResponse && uploadResponse.success) {
       router.push("/");
     }
   }, [uploadResponse, router]);

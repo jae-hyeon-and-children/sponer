@@ -9,7 +9,6 @@ import AddressForm from "@/components/address";
 import { auth } from "@/config/firebase/firebase";
 import { useRouter } from "next/navigation";
 import Header from "@/components/global/header";
-import { IUser } from "@/model/user";
 
 export default function StylistUser() {
   const router = useRouter();
@@ -33,11 +32,11 @@ export default function StylistUser() {
   }, [uid, router]);
 
   const bindData = uploadstylistUser.bind(null, uid!);
-  const prevState = { success: undefined, message: "" };
-  const [uploadResponse, dispatch] = useFormState<IUser>(bindData, prevState);
+
+  const [uploadResponse, dispatch] = useFormState(bindData, null);
 
   useEffect(() => {
-    if (uploadResponse.success) {
+    if (uploadResponse && uploadResponse.success) {
       router.push("/");
     }
   }, [uploadResponse, router]);
