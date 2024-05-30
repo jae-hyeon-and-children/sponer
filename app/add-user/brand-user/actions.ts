@@ -3,15 +3,18 @@
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { fireStore, storage } from "@/config/firebase/firebase";
-import { IUser } from "@/model/user";
 
 export default async function uploadbrandUser(
   uid: string,
-  prevState: { success: undefined; message: "" },
+  prevState: any,
   formData: FormData
 ) {
   if (!uid) {
-    return { success: false, message: "유효하지 않은 사용자입니다." };
+    return {
+      status: 400,
+      success: false,
+      message: "유효하지 않은 사용자입니다.",
+    };
   }
   try {
     const postalCode = formData.get("postal_code");
@@ -68,8 +71,8 @@ export default async function uploadbrandUser(
       email: formData.get("email"),
       createdAt: new Date(),
       userType: "brand",
-      // loginType: "",
     };
+
     console.log("User data: ", brandFormData);
 
     const approve = {
@@ -84,9 +87,9 @@ export default async function uploadbrandUser(
     await setDoc(doc(fireStore, "User", uid), brandFormData);
     await addDoc(collection(fireStore, `/User/${uid}/History`), approve);
 
-    return { success: true, redirect: "/" };
+    return { status: 200, success: true };
   } catch (error) {
     console.error("사용자 업로드 중 오류 발생:", error);
-    return { success: false, message: "사용자 추가 실패" };
+    return { status: 400, success: false, message: "사용자 추가 실패" };
   }
 }
