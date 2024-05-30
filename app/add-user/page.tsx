@@ -11,7 +11,6 @@ import {
   USER_OPTION_BRAND_URL,
   USER_OPTION_STYLIST_URL,
 } from "@/constants/variables";
-import useAuth from "@/libs/auth";
 
 export default function AdduserType() {
   const [selectedOption, setSelectedOption] = useState("");
