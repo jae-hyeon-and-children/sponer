@@ -1,14 +1,16 @@
 "use server";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc, Timestamp } from "firebase/firestore";
 import { fireStore, storage } from "@/config/firebase/firebase";
+import { IResponse } from "@/model/responses";
+import { IBrandApprove, IUser } from "@/model/user";
 
 export default async function uploadbrandUser(
   uid: string,
   prevState: any,
   formData: FormData
-) {
+): Promise<IResponse> {
   if (!uid) {
     return {
       status: 400,
@@ -17,13 +19,13 @@ export default async function uploadbrandUser(
     };
   }
   try {
-    const postalCode = formData.get("postal_code");
-    const address = formData.get("address");
-    const detailAddress = formData.get("detail_address");
-    const extraAddress = formData.get("extra_address");
+    const postalCode = formData.get("postal_code") as string;
+    const address = formData.get("address") as string;
+    const detailAddress = formData.get("detail_address") as string;
+    const extraAddress = formData.get("extra_address") as string;
     const fullAddress = `${postalCode}, ${address}, ${detailAddress}, ${extraAddress}`;
-    const profileImageFile = formData.get("profile_photo");
-    const certificateImageFile = formData.get("business_photo");
+    const profileImageFile = formData.get("profile_photo") as File;
+    const certificateImageFile = formData.get("business_photo") as File;
 
     let profileImageUrl = "";
 
@@ -57,29 +59,29 @@ export default async function uploadbrandUser(
     console.log(profileImageUrl, certificateImageUrl);
     console.log(formData);
 
-    const brandFormData = {
+    const brandFormData: IUser = {
       profileImage: profileImageUrl,
       businessImageUrl: certificateImageUrl,
-      brandName: formData.get("brand_name"),
-      name: formData.get("name"),
-      homepage: formData.get("homepage"),
+      brandName: formData.get("brand_name") as string,
+      name: formData.get("name") as string,
+      homepage: formData.get("homepage") as string,
       phoneNumber: ((((formData.get("phoneNumber1") as string) +
         formData.get("phoneNumber2")) as string) +
         formData.get("phoneNumber3")) as string,
       address: fullAddress,
-      affiliation: formData.get("affiliation"),
-      email: formData.get("email"),
-      createdAt: new Date(),
+      affiliation: formData.get("affiliation") as string,
+      email: formData.get("email") as string,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
       userType: "brand",
     };
 
     console.log("User data: ", brandFormData);
 
-    const approve = {
+    const approve: IBrandApprove = {
       approve: false,
-      brandName: formData.get("brand_name"),
-      createdAt: new Date(),
-      reason: false,
+      brandName: formData.get("brand_name") as string,
+      createdAt: Timestamp.now(),
     };
 
     console.log("Brand approve: ", approve);

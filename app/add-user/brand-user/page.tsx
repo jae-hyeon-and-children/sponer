@@ -12,9 +12,9 @@ import { useRouter } from "next/navigation";
 
 export default function BrandUser() {
   const router = useRouter();
-  const [profilephoto, setProfilephoto] = useState("");
-  const [certificatephoto, setCertificatephoto] = useState("");
-  const [isValidSize, setIsValidSize] = useState(true);
+  const [profilephoto, setProfilephoto] = useState<string | null>(null);
+  const [certificatephoto, setCertificatephoto] = useState<string | null>(null);
+  const [isValidSize, setIsValidSize] = useState<boolean>(true);
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -56,7 +56,7 @@ export default function BrandUser() {
     <>
       <Header />
       <div className="flex flex-col items-center max-w-screen-2xl pt-60 ml-24">
-        <div>
+        <div className="w-full">
           <div className="w-[65px] f-[25px] bg-gray-700 border rounded-lg text-center text-gray-100 mb-5 mt-[120px] mr-[700px]">
             step 2
           </div>
@@ -66,34 +66,37 @@ export default function BrandUser() {
         </div>
 
         <form action={dispatch} className="flex flex-col mt-16 w-full gap-5">
-          <div className="flex justify-around mr-[350px]">
-            <p>프로필 사진 *</p>
-            <label
-              htmlFor="profile_photo"
-              className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full border-dashed cursor-pointer  bg-center bg-cover w-[200px] h-[160px]"
-              style={{
-                backgroundImage: `url(${profilephoto})`,
-              }}
-            >
-              {profilephoto === "" ? (
-                <>
-                  <PhotoIcon className="w-14" />
-                  <div className="text-neutral-400 text-sm">
-                    사진을 추가해주세요.
-                  </div>
-                </>
-              ) : null}
-              <Input
-                id="profile_photo"
-                name="profile_photo"
-                type="file"
-                required
-                multiple
-                accept="image/*"
-                className="hidden"
-                onChange={onProfileImageChange}
-              />
-            </label>
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+            <p className="w-[30%]">프로필 사진 *</p>
+            <div className="w-full">
+              <label
+                htmlFor="profile_photo"
+                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full  cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                style={{
+                  backgroundImage: profilephoto
+                    ? `url(${profilephoto})`
+                    : "none",
+                }}
+              >
+                {profilephoto === null && (
+                  <>
+                    <PhotoIcon className="w-16" />
+                    <div className="text-neutral-400 text-sm">
+                      사진을 추가해주세요.
+                    </div>
+                  </>
+                )}
+                <Input
+                  id="profile_photo"
+                  name="profile_photo"
+                  type="file"
+                  required
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onProfileImageChange}
+                />
+              </label>
+            </div>
             {!isValidSize && (
               <div className="text-red-500 text-center mt-2">
                 이미지 크기는 4MB 이하여야 합니다.
@@ -101,8 +104,8 @@ export default function BrandUser() {
             )}
           </div>
 
-          <div className="flex justify-around">
-            <p>브랜드명 *</p>
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
+            <p className="w-[30%]">브랜드명 *</p>
             <Input
               name="brand_name"
               type="text"
@@ -111,38 +114,40 @@ export default function BrandUser() {
             />
           </div>
 
-          <div className="flex justify-around">
-            <p>대표 연락처 *</p>
-            <Input
-              name="phoneNumber1"
-              type="tel"
-              placeholder="000"
-              required
-              maxLength={3}
-            />
-            <div>-</div>
-            <Input
-              name="phoneNumber2"
-              type="tel"
-              placeholder="0000"
-              required
-              maxLength={4}
-            />
-            <div>-</div>
-            <Input
-              name="phoneNumber3"
-              type="tel"
-              placeholder="0000"
-              required
-              maxLength={4}
-            />
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
+            <p className="w-[30%]">대표 연락처 *</p>
+            <div className="flex w-full gap-4 items-center">
+              <Input
+                name="phoneNumber1"
+                type="tel"
+                placeholder="000"
+                required
+                maxLength={3}
+              />
+              <div>-</div>
+              <Input
+                name="phoneNumber2"
+                type="tel"
+                placeholder="0000"
+                required
+                maxLength={4}
+              />
+              <div>-</div>
+              <Input
+                name="phoneNumber3"
+                type="tel"
+                placeholder="0000"
+                required
+                maxLength={4}
+              />
+            </div>
           </div>
-          <div className="flex justify-around">
-            <p>담당자 이름 *</p>
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
+            <p className="w-[30%]">담당자 이름 *</p>
             <Input name="name" type="text" placeholder="담당자 이름" required />
           </div>
-          <div className="flex justify-around">
-            <p>브랜드 홈페이지 *</p>
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
+            <p className="w-[30%]">브랜드 홈페이지 *</p>
             <Input
               name="homepage"
               type="text"
@@ -151,42 +156,45 @@ export default function BrandUser() {
             />
           </div>
 
-          <div className="flex justify-around">
-            <p>주소 *</p> <AddressForm />
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
+            <p className="w-[30%]">주소 *</p> <AddressForm />
           </div>
 
-          <div className="flex justify-around">
-            <p>이메일 *</p>
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
+            <p className="w-[30%]">이메일 *</p>
             <Input name="email" type="email" placeholder="example@gmail.com" />
           </div>
-          <div className="flex justify-around">
-            <p>사업자 등록증 사진 첨부 *</p>
-            <label
-              htmlFor="business_photo"
-              className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md border-dashed cursor-pointer  bg-center bg-cover w-[600px] h-[300px]"
-              style={{
-                backgroundImage: `url(${certificatephoto})`,
-              }}
-            >
-              {certificatephoto === "" ? (
-                <>
-                  <PhotoIcon className="w-14" />
-                  <div className="text-neutral-400 text-sm">
-                    사진을 추가해주세요 .
-                  </div>
-                </>
-              ) : null}
-              <Input
-                id="business_photo"
-                name="business_photo"
-                type="file"
-                placeholder="사업자 등록증 사진 첨부"
-                required
-                accept="image/*"
-                className="hidden"
-                onChange={onCertificateImageChange}
-              />
-            </label>
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
+            <p className="w-[30%]">사업자 등록증 사진 첨부 *</p>
+            <div className="w-full">
+              <label
+                htmlFor="business_photo"
+                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full  cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                style={{
+                  backgroundImage: certificatephoto
+                    ? `url(${certificatephoto})`
+                    : "none",
+                }}
+              >
+                {certificatephoto === null && (
+                  <>
+                    <PhotoIcon className="w-16" />
+                    <div className="text-neutral-400 text-sm">
+                      사진을 추가해주세요.
+                    </div>
+                  </>
+                )}
+                <Input
+                  id="business_photo"
+                  name="business_photo"
+                  type="file"
+                  required
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onCertificateImageChange}
+                />
+              </label>
+            </div>
             {!isValidSize && (
               <div className="text-red-500 text-center mt-2">
                 이미지 크기는 4MB 이하여야 합니다.
