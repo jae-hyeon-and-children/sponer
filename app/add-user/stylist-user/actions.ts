@@ -2,9 +2,6 @@
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { fireStore, storage } from "@/config/firebase/firebase";
-import { redirect } from "next/navigation";
-
-import { ProviderId, getAuth } from "firebase/auth";
 
 export default async function uploadstylistUser(
   uid: string,
@@ -40,7 +37,9 @@ export default async function uploadstylistUser(
       profileImage: imageUrl,
       name: formData.get("name"),
       nickName: formData.get("nickname"),
-      phoneNumber: formData.get("phone_number"),
+      phoneNumber: ((((formData.get("phoneNumber1") as string) +
+        formData.get("phoneNumber2")) as string) +
+        formData.get("phoneNumber3")) as string,
       address: fullAddress,
       affiliation: formData.get("affiliation"),
       email: formData.get("email"),

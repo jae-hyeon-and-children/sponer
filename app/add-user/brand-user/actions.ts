@@ -3,6 +3,7 @@
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { fireStore, storage } from "@/config/firebase/firebase";
+import { IUser } from "@/model/user";
 
 export default async function uploadbrandUser(
   uid: string,
@@ -59,7 +60,9 @@ export default async function uploadbrandUser(
       brandName: formData.get("brand_name"),
       name: formData.get("name"),
       homepage: formData.get("homepage"),
-      phoneNumber: formData.get("phone_number"),
+      phoneNumber: ((((formData.get("phoneNumber1") as string) +
+        formData.get("phoneNumber2")) as string) +
+        formData.get("phoneNumber3")) as string,
       address: fullAddress,
       affiliation: formData.get("affiliation"),
       email: formData.get("email"),
