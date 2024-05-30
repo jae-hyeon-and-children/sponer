@@ -34,7 +34,7 @@ export default function GoogleLoginButton() {
   return (
     <button
       onClick={handleGoogleLogin}
-      className="flex items-center gap-2 p-2 border bg-white text-gray-700 rounded-[40px] w-[400px] h-[50px] justify-center"
+      className="flex items-center gap-2 p-2 border bg-white text-gray-700 rounded-[3.5rem] w-96 h-14 justify-center"
     >
       <svg
         width="24"
@@ -61,7 +61,7 @@ export default function GoogleLoginButton() {
         />
       </svg>
 
-      <span>구글 계정으로 시작하기</span>
+      <span className="label-1 text-gray-700">구글 계정으로 시작하기</span>
     </button>
   );
 }
