@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import useAuth from "@/libs/auth";
-import LogOutButton from "../../app/(login)/logout/logoutbutton";
+import LogOutButton from "../logout/logoutbutton";
 
 export default function Header() {
   const user = useAuth();
