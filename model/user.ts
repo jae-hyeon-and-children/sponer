@@ -7,11 +7,19 @@ export interface IUser {
   brandName?: string;
   businessImageUrl?: string;
   email: string;
-  nickName?: string;
   homepage?: string;
   name: string;
   phoneNumber: string;
   profileImage: string;
   createdAt: Timestamp;
+  updatedAt: Timestamp;
   userType: string;
+  nickName?: string;
+}
+
+export interface IBrandApprove {
+  approve: boolean;
+  brandName: string;
+  createdAt: Timestamp;
+  reason?: string;
 }
