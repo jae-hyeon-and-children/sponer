@@ -8,20 +8,30 @@ import { useFormState } from "react-dom";
 import login from "./actions";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "@/libs/auth";
 import Header from "@/components/global/header";
+import { IResponse } from "@/model/responses";
 
 export default function Login() {
   const router = useRouter();
-  const [_, dispatch] = useFormState(login, null);
+
   const user = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
       router.push("/");
     }
   }, [user, router]);
+
+  const [currentState, dispatch] = useFormState(login, null);
+  useEffect(() => {
+    const result: IResponse | null = currentState;
+    if (result && !result.success) {
+      setErrorMessage(result.message || "오류가 발생했습니다");
+    }
+  }, [currentState]);
 
   if (user) return null;
 
@@ -72,6 +82,11 @@ export default function Login() {
                   <button className="border bg-primary text-gray-100 rounded-[40px] w-[400px] h-[50px] flex justify-center items-center">
                     <span>로그인</span>
                   </button>
+                  {errorMessage && (
+                    <div className="text-red-500 text-center mt-2">
+                      {errorMessage}
+                    </div>
+                  )}
                   <div className="border text-gray-700 rounded-[40px] w-[400px] h-[50px] flex justify-center items-center mt-2">
                     <GoogleLoginButton />
                   </div>
