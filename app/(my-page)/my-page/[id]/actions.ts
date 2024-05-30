@@ -26,9 +26,9 @@ export async function editProfile(userId: string, formData: FormData) {
 	const data = {
 		profileImage: formData.get("profileImage") as File,
 		brandName: formData.get("brandName") as string,
-		phoneNumber: ((((formData.get("phoneNumber1") as string) +
-			formData.get("phoneNumber2")) as string) +
-			formData.get("phoneNumber3")) as string,
+		phoneNumber: `${formData.get("phoneNumber1")}-${formData.get(
+			"phoneNumber2"
+		)}-${formData.get("phoneNumber3")}`,
 		name: formData.get("name") as string,
 		homepage: formData.get("homepage") as string,
 		address: `${formData.get("postal_code")}, ${formData.get(
