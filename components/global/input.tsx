@@ -23,12 +23,12 @@ export default function Input({
   };
   // console.log(rest);
   return (
-    <div className="flex flex-col gap-2 relative">
+    <div className="flex flex-col gap-2 relative w-full">
       <input
         onChange={onChange}
         maxLength={count ? count : 30}
         name={name}
-        className="bg-transparent rounded-md w-full h-12 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+        className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
         {...rest}
       />
       <div className="font-semibold  h-full absolute right-1 flex items-center">
