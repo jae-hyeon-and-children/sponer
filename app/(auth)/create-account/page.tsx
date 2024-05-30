@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useFormState } from "react-dom";
 import createaccount from "./actions";
 import Input from "@/components/global/input";
-import Button from "@/components/button";
+
 import Header from "@/components/global/header";
 import { useRouter } from "next/navigation";
 import useAuth from "@/libs/auth";
@@ -51,18 +51,23 @@ export default function CreateAccount() {
                 스포너에 오신 것을 환영합니다
               </div>
               <div className="flex flex-col gap-5 mt-5">
-                <Input name="email" type="email" placeholder="Email" required />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="이메일"
+                  required
+                />
                 <Input
                   name="password"
                   type="password"
-                  placeholder="Password"
+                  placeholder="비밀번호"
                   required
                 />
               </div>
               <div className="flex flex-col justify-center items-center text-center gap-2 mt-14">
-                <div className="border bg-primary  text-gray-100 rounded-[40px] w-[400px] h-[50px]  ">
-                  <Button text="회원가입" />
-                </div>
+                <button className="border bg-primary text-gray-100 rounded-[40px] w-[400px] h-[50px] flex justify-center items-center">
+                  <span>회원가입</span>
+                </button>
               </div>
             </div>
           </form>
