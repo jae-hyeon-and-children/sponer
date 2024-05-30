@@ -16,7 +16,7 @@ export default function StylistUser() {
   const [profilephoto, setProfilephoto] = useState("");
   const [isValidSize, setIsValidSize] = useState(true);
 
-  const onImageChange = (event: any) => {
+  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
@@ -56,11 +56,11 @@ export default function StylistUser() {
         </div>
 
         <form action={dispatch} className="flex flex-col mt-16 w-[70%] gap-5">
-          <div className="flex justify-between mr-[350px]">
+          <div className="lex justify-between mr-[350px] items-center">
             <p>프로필 사진 *</p>
             <label
               htmlFor="photo"
-              className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full border-dashed cursor-pointer bg-center bg-cover w-[200px] h-[160px]"
+              className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full  cursor-pointer bg-center bg-cover w-[200px] h-[160px]"
               style={{ backgroundImage: `url(${profilephoto})` }}
             >
               {profilephoto === "" ? (
@@ -88,27 +88,44 @@ export default function StylistUser() {
             )}
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <p>이름 *</p>
             <Input name="name" type="text" placeholder="이름" required />
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <p>닉네임 *</p>
             <Input name="nickname" type="text" placeholder="닉네임" required />
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <p>연락처 *</p>
             <Input
-              name="phone_number"
+              name="phoneNumber1"
               type="tel"
-              placeholder="000-0000-0000"
+              placeholder="000"
               required
+              maxLength={3}
+            />
+            <div>-</div>
+            <Input
+              name="phoneNumber2"
+              type="tel"
+              placeholder="0000"
+              required
+              maxLength={4}
+            />
+            <div>-</div>
+            <Input
+              name="phoneNumber3"
+              type="tel"
+              placeholder="0000"
+              required
+              maxLength={4}
             />
           </div>
           <div className="flex justify-between">
             <p>주소 *</p> <AddressForm />
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <p>소속 *</p>
             <Input
               name="affiliation"
@@ -116,13 +133,13 @@ export default function StylistUser() {
               placeholder="ex) 프리랜서, 회사, 방송국 소속 등"
             />
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <p>이메일 *</p>
             <Input name="email" type="email" placeholder="example@gmail.com" />
           </div>
           <div className="flex justify-center mt-10">
             <button
-              className="border bg-gray-500 text-gray-100 rounded-[40px] w-[200px] h-[50px]"
+              className="border bg-primary text-gray-100 rounded-[40px] w-[200px] h-[50px]"
               type="submit"
             >
               신청하기

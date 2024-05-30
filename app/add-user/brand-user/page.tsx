@@ -17,7 +17,7 @@ export default function BrandUser() {
   const [certificatephoto, setCertificatephoto] = useState("");
   const [isValidSize, setIsValidSize] = useState(true);
 
-  const onProfileImageChange = (event: any) => {
+  const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
@@ -26,7 +26,9 @@ export default function BrandUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
-  const onCertificateImageChange = (event: any) => {
+  const onCertificateImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
@@ -113,10 +115,27 @@ export default function BrandUser() {
           <div className="flex justify-around">
             <p>대표 연락처 *</p>
             <Input
-              name="phone_number"
+              name="phoneNumber1"
               type="tel"
-              placeholder="000-0000-0000"
+              placeholder="000"
               required
+              maxLength={3}
+            />
+            <div>-</div>
+            <Input
+              name="phoneNumber2"
+              type="tel"
+              placeholder="0000"
+              required
+              maxLength={4}
+            />
+            <div>-</div>
+            <Input
+              name="phoneNumber3"
+              type="tel"
+              placeholder="0000"
+              required
+              maxLength={4}
             />
           </div>
           <div className="flex justify-around">
@@ -177,7 +196,7 @@ export default function BrandUser() {
           </div>
           <div className="flex justify-center mt-10">
             <button
-              className="border bg-gray-500 text-gray-100 rounded-[40px] w-[200px] h-[50px]"
+              className="border bg-primary text-gray-100 rounded-[40px] w-[200px] h-[50px]"
               type="submit"
             >
               신청하기
