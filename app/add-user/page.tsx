@@ -57,42 +57,61 @@ export default function AdduserType() {
         </div>
 
         <div className="flex flex-col m-auto items-start w-[852px] h-[814px] pl-[100px]">
-          <div className="w-[65px] f-[25px] bg-gray-900 border rounded-lg text-center text-gray-100 mb-5  mt-[120px] ">
-            step 1
+          <div className="w-full">
+            <div className="caption w-[4rem] f-[1.5rem] bg-gray-700 border rounded-[3.5rem] text-center text-gray-100 mb-5  mt-[7.5rem] ">
+              step 1
+            </div>
           </div>
-          <div className="font-medium text-[30px]">소속을 선택해 주세요</div>
+          <div className="display text-gray-900 text-[2rem]">
+            소속을 선택해 주세요
+          </div>
           <div
-            className={`w-[500px] h-[170px] border mt-10 rounded-lg cursor-pointer ${
-              selectedOption === "stylist-user"
+            className={`w-[29rem] h-[10.5rem] border mt-10 rounded-lg cursor-pointer ${
+              selectedOption === PATH_STYLELIST_USER
                 ? "bg-primary text-gray-100"
-                : ""
+                : "text-gray-800"
             }`}
-            onClick={() => handleSelection("stylist-user")}
+            onClick={() => handleSelection(PATH_STYLELIST_USER)}
           >
-            <div className="p-4 font-semibold">스타일리스트</div>
-            <div className="p-4 font-light">
+            <div className="p-4 heading-2">스타일리스트</div>
+            <div
+              className={`p-4 paragraph-2 ${
+                selectedOption === PATH_STYLELIST_USER
+                  ? "text-gray-50"
+                  : "text-gray-400"
+              }`}
+            >
               공간의 제약 없이 브랜드와 직접적인 메시지를 주고 받을 수 있으며
               일정을 조율할 수 있습니다.
             </div>
           </div>
           <div
-            className={`w-[500px] h-[170px] border mt-10 rounded-lg cursor-pointer ${
-              selectedOption === "brand-user" ? "bg-primary text-gray-100" : ""
+            className={`w-[29rem] h-[10.5rem] border mt-10 rounded-lg cursor-pointer ${
+              selectedOption === PATH_BRAND_USER
+                ? "bg-primary text-gray-50"
+                : "text-gray-800"
             }`}
-            onClick={() => handleSelection("brand-user")}
+            onClick={() => handleSelection(PATH_BRAND_USER)}
           >
-            <div className="p-4 font-semibold">브랜드</div>
-            <div className="p-4 font-light">
+            <div className="p-4 heading-2">브랜드</div>
+            <div
+              className={`p-4 paragraph-2 ${
+                selectedOption === PATH_BRAND_USER
+                  ? "text-gray-50"
+                  : "text-gray-400"
+              }`}
+            >
               브랜드는 획기적인 가격과 공간의 제약없이 제품을 업로드 할 수
               있습니다.
             </div>
           </div>
+
           <div className="flex flex-col items-center mt-10">
             <button
-              className="border bg-primary  text-gray-100 rounded-[40px] w-[200px] h-[50px]"
+              className="border bg-primary rounded-[3.5rem] w-96 h-14 flex justify-center items-center"
               onClick={handleNextClick}
             >
-              다음으로
+              <span className="label-1 text-gray-100">다음으로</span>
             </button>
           </div>
         </div>
