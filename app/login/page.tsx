@@ -38,27 +38,26 @@ export default function Login() {
   return (
     <>
       <Header />
-      <div className="flex justify-center max-w-screen-2xl pt-60">
-        <div className="flex flex-col justify-around">
-          <Image
-            src="/ggobok222.png"
-            alt="Logo"
-            layout="fixed"
-            width={852}
-            height={814}
-          />
-        </div>
-        <div className="flex flex-col m-auto items-start w-[852px] h-[814px] pl-[100px] gap-2 ">
-          <Image
-            src="/sponer_Logo.png"
-            alt="Logo"
-            layout="fixed"
-            width={100}
-            height={40}
-            className=" items-center mt-20"
-          />
-          <form action={dispatch}>
-            <div>
+      <div className="flex flex-col items-center pt-60 px-4">
+        <div className="flex flex-col md:flex-row max-w-screen-2xl w-full">
+          <div className="flex flex-col justify-center items-center md:w-1/2">
+            <Image
+              src="/ggobok222.png"
+              alt="Logo"
+              width={852}
+              height={814}
+              className="hidden md:block"
+            />
+          </div>
+          <div className="flex flex-col m-auto items-start w-full md:w-1/2 h-[814px] p-4 md:pl-[100px] gap-2">
+            <Image
+              src="/sponer_Logo.png"
+              alt="Logo"
+              width={100}
+              height={40}
+              className="items-center mt-20"
+            />
+            <form action={dispatch} className="w-full">
               <div className="display text-gray-900 text-[2rem] mt-2 mb-3">
                 스포너에 오신 것을 환영합니다
               </div>
@@ -100,14 +99,14 @@ export default function Login() {
                   <div className="label-2">/</div>
                   <Link
                     href="/change-password"
-                    className="label-2  text-gray-600"
+                    className="label-2 text-gray-600"
                   >
                     비번찾기
                   </Link>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </>
