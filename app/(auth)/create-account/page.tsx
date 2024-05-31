@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Input from "@/components/global/input";
 import Header from "@/components/global/header";
-
 import useAuth from "@/libs/auth";
-import { useEffect } from "react";
 import createaccount from "./actions";
 import { IResponse } from "@/model/responses";
 import { useFormState } from "react-dom";
@@ -33,32 +31,31 @@ export default function CreateAccount() {
   }, [currentState]);
 
   if (user) return null;
+
   return (
     <>
       <Header />
-      <div className="flex justify-center max-w-screen-2xl pt-60">
-        <div className="flex flex-col justify-around">
-          <Image
-            src="/ggobok222.png"
-            alt="Logo"
-            layout="fixed"
-            width={852}
-            height={814}
-            className="cursor-pointer"
-          />
-        </div>
-        <div className="flex flex-col m-auto items-start w-[852px] h-[814px] pl-[100px] gap-2 ">
-          <Image
-            src="/sponer_Logo.png"
-            alt="Logo"
-            layout="fixed"
-            width={100}
-            height={40}
-            className="cursor-pointer items-center mt-20"
-          />
-          <form action={dispatch}>
-            <div>
-              <div className="display text-gray-900 text-[30px] mt-2 mb-2">
+      <div className="flex flex-col items-center pt-60 px-4">
+        <div className="flex flex-col md:flex-row max-w-screen-2xl w-full">
+          <div className="flex flex-col justify-center items-center md:w-1/2">
+            <Image
+              src="/ggobok222.png"
+              alt="Logo"
+              width={852}
+              height={814}
+              className="hidden md:block"
+            />
+          </div>
+          <div className="flex flex-col m-auto items-start w-full md:w-1/2 h-[814px] p-4 md:pl-[100px] gap-2">
+            <Image
+              src="/sponer_Logo.png"
+              alt="Logo"
+              width={100}
+              height={40}
+              className="items-center mt-20"
+            />
+            <form action={dispatch} className="w-full">
+              <div className="display text-gray-900 text-[2rem] mt-2 mb-3">
                 스포너에 오신 것을 환영합니다
               </div>
               <div className="flex flex-col gap-5 mt-14">
@@ -74,7 +71,6 @@ export default function CreateAccount() {
                   placeholder="비밀번호"
                   required
                 />
-
                 {errorMessage && (
                   <div className="text-red-500 text-center mt-2">
                     {errorMessage}
@@ -86,8 +82,8 @@ export default function CreateAccount() {
                   <span className="label-1 text-gray-100">회원가입</span>
                 </button>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </>
