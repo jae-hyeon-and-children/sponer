@@ -15,6 +15,7 @@ import IcArrowLeft from "@/public/icons/ic_arrow_left.png";
 import IcArrowRight from "@/public/icons/ic_arrow_right.png";
 import { getBrand } from "@/libs/api/brand";
 import { IUser } from "@/model/user";
+import useAuth from "@/libs/auth";
 
 interface ProductDetailParams {
   params: {
@@ -23,11 +24,14 @@ interface ProductDetailParams {
 }
 
 export default function Product({ params: { id } }: ProductDetailParams) {
+  const user = useAuth();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<IProduct | null>(null);
   const [brand, setBrand] = useState<IUser | null>(null);
   const imageListRef = useRef<HTMLUListElement>(null);
   const [imageCurrIndex, setImageCurrIndex] = useState(1);
+
+  console.log(user);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -96,7 +100,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
           <section className="relative flex items-center justify-center lg:flex-1 mt-16 lg:mt-60">
             <ul
               ref={imageListRef}
-              className="scrollbar-hide h-[40rem] lg:h-fit flex flex-row lg:flex-col gap-4 lg:gap-52 items-center overflow-x-scroll snap-x snap-mandatory"
+              className="scrollbar-hide h-[40rem] lg:h-fit flex flex-row lg:flex-col gap-4 lg:gap-52 items-center overflow-x-scroll overflow-y-hidden snap-x snap-mandatory"
             >
               {product!.productImages.map((value, index) => (
                 <Image
@@ -164,7 +168,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
             <div className="mb-4 flex flex-wrap gap-3 items-center">
               <div className="w-5 h-5 rounded-full bg-slate-500 overflow-hidden">
                 <Image
-                  src={brand?.profileImage!}
+                  src={brand?.profileImage ?? ""}
                   alt="IcArrowLeft"
                   width={20}
                   height={20}
@@ -211,11 +215,13 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                 사이즈 가이드
               </button>
             </div>
-            <Link href={`/chats`}>
-              <button className="label-1 text-white mt-20 p-4 bg-primary rounded-full w-full lg:max-w-60">
-                브랜드에게 연락하기
-              </button>
-            </Link>
+            {user.user && (
+              <Link href={`/chats`}>
+                <button className="label-1 text-white mt-20 p-4 bg-primary rounded-full w-full lg:max-w-60">
+                  브랜드에게 연락하기
+                </button>
+              </Link>
+            )}
           </section>
         </div>
       </main>
