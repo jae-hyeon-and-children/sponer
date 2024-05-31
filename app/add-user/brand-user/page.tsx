@@ -142,10 +142,12 @@ export default function BrandUser() {
               />
             </div>
           </div>
+
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
             <span className="w-[30%] label-1 text-gray-900">담당자 이름 *</span>
             <Input name="name" type="text" placeholder="담당자 이름" required />
           </div>
+
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
             <span className="w-[30%] label-1 text-gray-900">
               브랜드 홈페이지 *
@@ -160,7 +162,7 @@ export default function BrandUser() {
 
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
             <span className="w-[30%] label-1 text-gray-900">주소 *</span>
-            <span>
+            <span className="h-fit flex  w-full">
               <AddressForm />
             </span>
           </div>
@@ -169,14 +171,16 @@ export default function BrandUser() {
             <span className="w-[30%] label-1 text-gray-900">이메일 *</span>
             <Input name="email" type="email" placeholder="example@gmail.com" />
           </div>
+
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
             <span className="w-[30%] label-1 text-gray-900">
               사업자 등록증 사진 첨부 *
             </span>
+
             <div className="w-full">
               <label
                 htmlFor="business_photo"
-                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full  cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-s-md  cursor-pointer bg-center bg-cover w-[50Rem] h-[20rem] shrink-0"
                 style={{
                   backgroundImage: certificatephoto
                     ? `url(${certificatephoto})`
@@ -208,6 +212,7 @@ export default function BrandUser() {
               </div>
             )}
           </div>
+
           <div className="flex justify-center mt-10">
             <button
               className="border bg-primary rounded-[3.5rem] w-96 h-14 flex justify-center items-center"
