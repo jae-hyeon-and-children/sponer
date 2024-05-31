@@ -97,10 +97,12 @@ export default function StylistUser() {
             <span className="w-[30%] label-1 text-gray-900">이름 *</span>
             <Input name="name" type="text" placeholder="이름" required />
           </div>
+
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
             <span className="w-[30%] label-1 text-gray-900">닉네임 *</span>
             <Input name="nickname" type="text" placeholder="닉네임" required />
           </div>
+
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
             <span className="w-[30%] label-1 text-gray-900">연락처 *</span>
             <div className="flex w-full gap-4 items-center">
@@ -129,12 +131,14 @@ export default function StylistUser() {
               />
             </div>
           </div>
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+
+          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row ">
             <span className="w-[30%] label-1 text-gray-900">주소 *</span>
-            <span className="w-[36rem]">
+            <span className="h-fit flex  w-full">
               <AddressForm />
             </span>
           </div>
+
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
             <span className="w-[30%] label-1 text-gray-900">소속 *</span>
             <Input
@@ -143,10 +147,12 @@ export default function StylistUser() {
               placeholder="ex) 프리랜서, 회사, 방송국 소속 등"
             />
           </div>
+
           <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
             <span className="w-[30%] label-1 text-gray-900">이메일 *</span>
             <Input name="email" type="email" placeholder="example@gmail.com" />
           </div>
+
           <div className="flex justify-center mt-10">
             <button
               className="border bg-primary  rounded-[3.5rem] w-96 h-14 flex justify-center items-center"
