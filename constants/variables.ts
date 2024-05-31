@@ -67,6 +67,7 @@ export enum ContentType {
 export const COLLECTION_NAME_CHAT = "Chat";
 export const COLLECTION_NAME_MESSAGE = "Message";
 export const COLLECTION_NAME_PRODUCT = "Product";
+export const COLLECTION_NAME_USER = "User";
 
 /**
  * Storage Reference Name
