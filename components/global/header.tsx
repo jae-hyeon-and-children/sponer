@@ -1,20 +1,12 @@
-import { useEffect, useState } from "react";
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@/config/firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import SignOutButton from "./logoutbutton";
+import useAuth from "@/libs/auth";
+import LogOutButton from "../logout/logoutbutton";
 
 export default function Header() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      setUser(authUser);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
+  const user = useAuth();
 
   return (
     <div className="">
@@ -40,17 +32,11 @@ export default function Header() {
               My Page
             </Link>
             {user ? (
-              <SignOutButton />
+              <LogOutButton />
             ) : (
               <>
                 <Link href="/login" className="text-black hover:text-gray-300">
                   로그인
-                </Link>
-                <Link
-                  href="/create-account"
-                  className="text-black hover:text-gray-300"
-                >
-                  회원가입
                 </Link>
               </>
             )}

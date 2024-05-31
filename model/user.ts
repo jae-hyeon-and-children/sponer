@@ -8,7 +8,6 @@ export interface IUser {
 	businessImageUrl?: string;
 	email: string;
 	homepage?: string;
-	loginType: string;
 	name: string;
 	phoneNumber: string;
 	profileImage: string;
@@ -18,7 +17,7 @@ export interface IUser {
 	nickName?: string;
 }
 
-export interface IHistory {
+export interface IBrandApprove {
 	approve: boolean;
 	brandName: string;
 	createdAt: Timestamp;

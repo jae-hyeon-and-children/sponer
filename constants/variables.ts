@@ -59,6 +59,13 @@ export enum ContentType {
 	text = "text",
 	image = "image",
 }
+
+export const PATH_ADD_USER = "add-user";
+
+export const PATH_STYLELIST_USER = "stylist-user";
+
+export const PATH_BRAND_USER = "brand-user";
+
 /**
  * Collection Name
  */

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
-import DaumPostcodeScript from "../app/api/juso-api";
+import DaumPostcodeScript from "../../app/api/juso-api";
 
 declare global {
   interface Window {
@@ -68,7 +67,7 @@ const AddressForm = () => {
           onClick={handleAddressSearch}
           className="h-10 disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed rounded-md border border-gray-900"
         >
-          우편번호 찾기
+          <span className="paragraph-2 text-gray-800">우편번호 찾기</span>
         </button>
 
         <input
@@ -78,7 +77,7 @@ const AddressForm = () => {
           value={postcode}
           placeholder="우편번호"
           readOnly
-          className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400 gap-"
+          className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400 "
         />
       </div>
 
@@ -122,34 +121,3 @@ const AddressForm = () => {
 };
 
 export default AddressForm;
-
-// Daum 우편번호 API를 사용하여 주소 검색을 처리하는 함수를 정의합니다.
-// 전역 window 객체에 'daum'이 존재하는지 확인합니다.
-// 새로운 Daum 우편번호 API 인스턴스를 생성합니다.
-// 주소 검색이 완료되면 실행될 콜백 함수를 정의합니다.
-// 주소와 참고항목을 저장할 변수를 초기화합니다.
-// 선택된 주소 유형에 따라 주소를 설정합니다.
-// 도로명 주소가 있는 경우 사용합니다.
-// 도로명 주소가 없는 경우 사용합니다.
-// 도로명 주소인 경우 참고항목을 추가합니다.
-// 우편번호, 주소를 설정하고 상세주소 입력 필드에 포커스를 줍니다.
-// JSX를 반환합니다.
-{
-  /* Daum 우편번호 스크립트를 로드합니다. */
-}
-{
-  /* 주소 검색 버튼 */
-}
-{
-  /* 우편번호 입력 필드 */
-}
-{
-  /* 주소 입력 필드 */
-}
-{
-  /* 상세주소 입력 필드 */
-}
-{
-  /* 참고항목 입력 필드 */
-}
-// AddressForm 컴포넌트를 내보냅니다.
