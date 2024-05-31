@@ -73,22 +73,20 @@ export default function Products({
             <ul className="flex whitespace-nowrap w-full overflow-x-scroll scrollbar-hide">
               {Object.entries(PRODUCT_CATEGORIES_WITH_ALL).map(
                 ([key, value], index) => (
-                  <>
-                    <Link
-                      key={index}
-                      href={`/products/${key}`}
-                      className="flex [&:not(:last-child)]:after:content-['/'] after:text-gray-200 after:label-1 after:mx-3 lg:after:mx-5"
-                    >
-                      <li
-                        className={`
+                  <Link
+                    key={index}
+                    href={`/products/${key}`}
+                    className="flex [&:not(:last-child)]:after:content-['/'] after:text-gray-200 after:label-1 after:mx-3 lg:after:mx-5"
+                  >
+                    <li
+                      className={`
                         label-2 ${
                           key === category ? "text-primary" : "text-gray-300"
                         } `}
-                      >
-                        {value}
-                      </li>
-                    </Link>
-                  </>
+                    >
+                      {value}
+                    </li>
+                  </Link>
                 )
               )}
             </ul>
