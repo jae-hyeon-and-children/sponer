@@ -1,7 +1,7 @@
 import { PRODUCT_STYLES, PRODUCT_TYPES_WITH_ALL } from "@/constants/variables";
 import { showFilterModalState } from "@/recoil/atoms";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 export default function FilterModal() {
   //const [search, setSearch] = useState("");
@@ -9,24 +9,31 @@ export default function FilterModal() {
   // const handleChange = (e) => setSearch(e.target.value);
   //const typeChange = (e: SelectChangeEvent) => setType(e.target.value);
   // const clickSearch = async () => {};
-  const showFilterModal = useRecoilValue(showFilterModalState);
+  const [showFilterModal, setShowFilterModal] =
+    useRecoilState(showFilterModalState);
+
+  const closeFilterModal = () => setShowFilterModal(false);
 
   return (
     <section
-      className={`bg-gray-700/30 w-screen h-screen fixed backdrop-blur-sm flex justify-end ${
+      className={`w-screen h-screen fixed flex justify-end ${
         !showFilterModal && "hidden"
       }`}
     >
+      <div
+        onClick={closeFilterModal}
+        className="bg-gray-700/30 w-full h-full backdrop-blur-sm"
+      ></div>
       <form className="bg-white h-full w-96 max-w-[90%] flex flex-col pt-10">
         <div className="px-6 flex-1 flex flex-col gap-6">
           <div>
             <h1 className="heading-3 text-gray-800 mb-3">Type</h1>
-            <ul className="flex flex-wrap gap-4">
+            <ul className="flex flex-wrap gap-x-6 gap-y-2">
               {Object.entries(PRODUCT_TYPES_WITH_ALL).map(
                 ([key, value], index) => (
                   <li
                     key={index}
-                    className="label-2 text-gray-400 flex flex-wrap items-center gap-1"
+                    className="label-2 text-gray-400 flex flex-wrap items-center gap-2"
                   >
                     <input
                       type="radio"
@@ -43,11 +50,11 @@ export default function FilterModal() {
           </div>
           <div>
             <h1 className="heading-3 text-gray-800 mb-3">Style</h1>
-            <ul className="flex flex-wrap gap-x-4 gap-y-2">
+            <ul className="flex flex-wrap gap-x-6 gap-y-2">
               {Object.entries(PRODUCT_STYLES).map(([key, value], index) => (
                 <li
                   key={index}
-                  className="label-2 text-gray-400 flex flex-wrap items-center gap-1"
+                  className="label-2 text-gray-400 flex flex-wrap items-center gap-2"
                 >
                   <input type="checkbox" name="style" id={key} value={key} />
                   <label htmlFor={key}>{value}</label>
