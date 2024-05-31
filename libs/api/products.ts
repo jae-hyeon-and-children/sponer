@@ -25,7 +25,6 @@ export async function getProducts(
   console.log(category, type, style, keyword);
   if (category !== "all")
     queries.push(where("productCategory", "==", category));
-
   if (type) queries.push(where("genderCategory", "==", type));
   if (style) queries.push(where("styleCategory", "array-contains-any", style));
   if (keyword) {
