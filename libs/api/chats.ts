@@ -19,6 +19,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
@@ -58,13 +59,18 @@ export async function sendMessage(
   };
 
   try {
-    const docRef = await addDoc(
+    await addDoc(
       collection(
         fireStore,
         `${COLLECTION_NAME_CHAT}/${chatRoomId}/${COLLECTION_NAME_MESSAGE}`
       ),
       data
     );
+
+    await updateDoc(doc(fireStore, COLLECTION_NAME_CHAT, chatRoomId), {
+      lastMessage: contentType === ContentType.text ? content : "이미지",
+      updatedAt: Timestamp.fromDate(new Date()),
+    });
 
     return { status: 200, success: true };
   } catch (error) {

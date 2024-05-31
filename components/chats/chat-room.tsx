@@ -34,7 +34,7 @@ export default function ChatRoom({
       <div className="flex flex-col gap-1 flex-1 overflow-hidden">
         <div className="flex justify-between items-baseline gap-2">
           <h2
-            className={`heading-3 ${
+            className={`heading-3 truncate ${
               isSelected ? "text-gray-100" : "text-gray-500"
             } `}
           >

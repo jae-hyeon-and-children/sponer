@@ -1,4 +1,5 @@
-import { IChatRoom } from "@/model/chat-room";
+import { IChatRoom, IChatUser } from "@/model/chat-room";
+import { IProduct } from "@/model/product";
 import { atom } from "recoil";
 
 export const showFilterModalState = atom<boolean>({
@@ -11,8 +12,13 @@ export const chatRoomIdState = atom<string | null>({
   default: null,
 });
 
-export const chatRoomState = atom<IChatRoom | null>({
-  key: "chatRoomState",
+export const chatRoomUserState = atom<IChatUser | null>({
+  key: "chatRoomUserState",
+  default: null,
+});
+
+export const chatRoomProductState = atom<IProduct | null>({
+  key: "chatRoomProductState",
   default: null,
 });
 
