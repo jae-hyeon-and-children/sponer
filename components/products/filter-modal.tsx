@@ -1,14 +1,13 @@
 import { PRODUCT_STYLES, PRODUCT_TYPES_WITH_ALL } from "@/constants/variables";
-import { showFilterModalState } from "@/recoil/atoms";
+import {
+  typeFilterCategoryState,
+  showFilterModalState,
+  styleFilterCategoryState,
+} from "@/recoil/atoms";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 export default function FilterModal() {
-  //const [search, setSearch] = useState("");
-  //const [type, setType] = useState("");
-  // const handleChange = (e) => setSearch(e.target.value);
-  //const typeChange = (e: SelectChangeEvent) => setType(e.target.value);
-  // const clickSearch = async () => {};
   const [showFilterModal, setShowFilterModal] =
     useRecoilState(showFilterModalState);
 
@@ -33,16 +32,21 @@ export default function FilterModal() {
                 ([key, value], index) => (
                   <li
                     key={index}
-                    className="label-2 text-gray-400 flex flex-wrap items-center gap-2"
+                    className="cursor-pointer flex flex-wrap items-center gap-2"
                   >
                     <input
                       type="radio"
                       name="type"
                       id={key}
                       value={key}
-                      className="w-3 h-3 bg-gray-100 border-gray-300 focus:ring-primary focus:ring-1 "
+                      className="cursor-pointer appearance-none w-4 h-4 rounded-full bg-gray-100 border-gray-300 checked:bg-primary checked:border-gray-100 checked:border-[3px] "
                     />
-                    <label htmlFor={key}>{value}</label>
+                    <label
+                      className="cursor-pointer label-2 text-gray-400"
+                      htmlFor={key}
+                    >
+                      {value}
+                    </label>
                   </li>
                 )
               )}
@@ -54,10 +58,21 @@ export default function FilterModal() {
               {Object.entries(PRODUCT_STYLES).map(([key, value], index) => (
                 <li
                   key={index}
-                  className="label-2 text-gray-400 flex flex-wrap items-center gap-2"
+                  className="cursor-pointer flex flex-wrap items-center gap-2"
                 >
-                  <input type="checkbox" name="style" id={key} value={key} />
-                  <label htmlFor={key}>{value}</label>
+                  <input
+                    className="cursor-pointer appearance-none w-4 h-4 rounded-sm bg-gray-100 border-gray-300 checked:bg-primary "
+                    type="checkbox"
+                    name="style"
+                    id={key}
+                    value={key}
+                  />
+                  <label
+                    className="cursor-pointer label-2 text-gray-400"
+                    htmlFor={key}
+                  >
+                    {value}
+                  </label>
                 </li>
               ))}
             </ul>
