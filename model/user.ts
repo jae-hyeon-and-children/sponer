@@ -17,7 +17,7 @@ export interface IUser {
   nickName?: string;
 }
 
-export interface IBrandApprove {
+export interface IBrandApplication {
   approve: boolean;
   brandName: string;
   createdAt: Timestamp;
