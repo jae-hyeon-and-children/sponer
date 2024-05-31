@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { auth } from "@/config/firebase/firebase";
+import { User } from "firebase/auth";
 
-const useAuth = () => {
-  const [user, setUser] = useState(null);
+const useAuth = (): User | null => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      console.log("현재 로그인 유저 정보 : ", currentUser);
       if (currentUser) {
         setUser(currentUser);
       } else {
@@ -16,7 +18,7 @@ const useAuth = () => {
     return () => unsubscribe();
   }, []);
 
-  return { user };
+  return user;
 };
 
 export default useAuth;
