@@ -61,7 +61,7 @@ const AddressForm = () => {
   return (
     <div>
       <DaumPostcodeScript />
-      <div className="form-group flex flex-col gap-2">
+      <div className="form-group flex flex-col gap-2  ">
         <button
           type="button"
           onClick={handleAddressSearch}
@@ -81,7 +81,7 @@ const AddressForm = () => {
         />
       </div>
 
-      <div className="form-group my-2">
+      <div className="form-group my-2 ">
         <input
           type="text"
           id="address"
@@ -105,7 +105,7 @@ const AddressForm = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div className="form-group my-2">
         <input
           type="text"
           id="extra_address"
