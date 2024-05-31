@@ -42,7 +42,7 @@ export default function Login() {
         <div className="flex flex-col md:flex-row max-w-screen-2xl w-full">
           <div className="flex flex-col justify-center items-center md:w-1/2">
             <Image
-              src="/ggobok222.png"
+              src="/dong2.png"
               alt="Logo"
               width={852}
               height={814}
