@@ -17,7 +17,6 @@ export default function Header() {
               <Image
                 src="/sponer_Logo.png"
                 alt="Logo"
-                layout="fixed"
                 width={100}
                 height={40}
                 className="cursor-pointer items-center"
