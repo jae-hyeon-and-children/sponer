@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
 export interface IUser {
+
   address: string;
   affiliation?: string;
   approve?: boolean;
@@ -22,4 +23,5 @@ export interface IBrandApplication {
   brandName: string;
   createdAt: Timestamp;
   reason?: string;
+
 }

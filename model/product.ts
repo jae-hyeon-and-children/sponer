@@ -7,6 +7,7 @@ import {
 export interface IProduct {
   id?: string;
   createdAt: Timestamp;
+  brandId: string;
   genderCategory: string;
   height: string;
   productCategory: string;
@@ -35,6 +36,7 @@ export const ProductConverter = {
     const data = product.data();
     return {
       id,
+      brandId: data.brandId,
       createdAt: data.createdAt,
       genderCategory: data.genderCategory,
       height: data.height,
