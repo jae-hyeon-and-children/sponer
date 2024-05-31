@@ -1,6 +1,17 @@
-import { IChatRoom, IChatUser } from "@/model/chat-room";
+import { PRODUCT_TYPES_WITH_ALL } from "@/constants/variables";
+import { IChatUser } from "@/model/chat-room";
 import { IProduct } from "@/model/product";
 import { atom } from "recoil";
+
+export const typeFilterCategoryState = atom<string | null>({
+  key: "typeFilterCategoryState",
+  default: null,
+});
+
+export const styleFilterCategoryState = atom<string[]>({
+  key: "styleFilterCategoryState",
+  default: [],
+});
 
 export const showFilterModalState = atom<boolean>({
   key: "showFilterModalState",
