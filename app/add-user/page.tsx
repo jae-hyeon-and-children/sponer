@@ -107,7 +107,7 @@ export default function AdduserType() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-center w-full mt-10">
+            <div className="flex items-center justify-start w-full mt-10">
               <button
                 className="border bg-primary rounded-[3.5rem] w-96 h-14 flex justify-center items-center"
                 onClick={handleNextClick}
