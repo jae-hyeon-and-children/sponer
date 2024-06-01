@@ -2,8 +2,15 @@
 
 import { fireStore, storage } from "@/config/firebase/firebase";
 import { COLLECTION_NAME_PRODUCT } from "@/constants/variables";
+import { IProduct } from "@/model/product";
+import { IResponse } from "@/model/responses";
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import {
+	Timestamp,
+	addDoc,
+	collection,
+	getFirestore,
+} from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { redirect } from "next/navigation";
 
@@ -16,6 +23,7 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 		productStyles: otherData.getAll("selectedStyles") as string[],
 		productName: formData.get("productName") as string,
 		productHeight: formData.get("height") as string,
+		brandId: otherData.get("brandId") as string,
 	};
 
 	try {
@@ -30,7 +38,7 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 
 		// 추후에 브랜드 이름도 같이 포함되어야 함
 
-		const productData = {
+		const productData: IProduct = {
 			title: data.productName,
 			productCategory: data.productType,
 			size: data.productSize,
@@ -38,21 +46,32 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 			genderCategory: data.productGender,
 			styleCategory: data.productStyles,
 			productImages: imageUrls,
-			createdAt: new Date(),
+			createdAt: Timestamp.now(),
+			brandId: data.brandId,
 		};
 
-		const docRef = await addDoc(collection(fireStore, COLLECTION_NAME_PRODUCT), productData);
+		const docRef = await addDoc(
+			collection(fireStore, COLLECTION_NAME_PRODUCT),
+			productData
+		);
 
-		// return {
-		// 	success: true,
-		// 	message: "Product uploaded successfully..!",
-		// };
+		const response: IResponse = {
+			status: 200,
+			success: true,
+			message: "Product uploaded successfully",
+		};
+
+		return response;
 	} catch (error) {
 		console.error("Error uploading product : ", error);
-		return {
+
+		const response: IResponse = {
+			status: 400,
 			success: false,
-			message: "Failed to upload product",
+			message: "Product uploaded failed",
 		};
+
+		return response;
 	}
 	redirect("/my-page/product-list");
 }

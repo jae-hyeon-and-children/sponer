@@ -17,7 +17,8 @@ import {
 	PRODUCT_TYPES,
 } from "@/constants/variables";
 import Input from "@/components/global/input";
-import { useFormStatus } from "react-dom";
+import useAuth from "@/libs/auth";
+import { useRouter } from "next/navigation";
 
 export default function CreateProduct() {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -27,20 +28,32 @@ export default function CreateProduct() {
 	const [images, setImages] = useState<File[]>([]);
 	const [otherData, setFormData] = useState(new FormData());
 
+	const userAuth = useAuth();
+	const router = useRouter();
+
 	useEffect(() => {
-		const newFormData = new FormData();
-		images.forEach((image) => newFormData.append("images", image));
-		if (selectedType) newFormData.append("selectedType", selectedType);
-		if (selectedSize) newFormData.append("selectedSize", selectedSize);
-		if (selectedGender) newFormData.append("selectedGender", selectedGender);
-		selectedStyles.forEach((style) =>
-			newFormData.append("selectedStyles", style)
-		);
+		if (userAuth) {
+			const newFormData = new FormData();
+			images.forEach((image) => newFormData.append("images", image));
+			if (selectedType) newFormData.append("selectedType", selectedType);
+			if (selectedSize) newFormData.append("selectedSize", selectedSize);
+			if (selectedGender) newFormData.append("selectedGender", selectedGender);
+			selectedStyles.forEach((style) =>
+				newFormData.append("selectedStyles", style)
+			);
 
-		console.log(otherData);
+			newFormData.append("brandId", userAuth.uid);
 
-		setFormData(newFormData);
-	}, [selectedType, selectedSize, selectedGender, selectedStyles, images]);
+			setFormData(newFormData);
+		}
+	}, [
+		selectedType,
+		selectedSize,
+		selectedGender,
+		selectedStyles,
+		images,
+		userAuth,
+	]);
 
 	const selectType = (item: string) => setSelectedType(item);
 	const selectSize = (item: string) => setSelectedSize(item);
@@ -85,7 +98,18 @@ export default function CreateProduct() {
 		event.stopPropagation();
 	};
 
-	const updateProductWithList = uploadProduct.bind(null, otherData);
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const formData = new FormData(event.currentTarget);
+		const result: IResponse = await uploadProduct(otherData, formData);
+
+		if (result.success) {
+			alert(result.message);
+			router.push("/my-page/product-list");
+		} else {
+			alert(result.message);
+		}
+	};
 
 	return (
 		<>
@@ -94,11 +118,7 @@ export default function CreateProduct() {
 			</div>
 			<div className=" h-screen flex flex-col justify-start items-start px-[9.5rem] pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 등록</div>
-				<form
-					className="w-full flex flex-col mt-16"
-					// onSubmit={handleUploadProduct}
-					action={updateProductWithList}
-				>
+				<form className="w-full flex flex-col mt-16" onSubmit={handleSubmit}>
 					<div className="w-full">
 						<div className="label-1 flex justify-between w-full mb-4">
 							<span>상품 이미지(최대 5장)*</span>
@@ -172,7 +192,7 @@ export default function CreateProduct() {
 							<span className="text-gray-400">사이즈 가이드 </span>
 						</div>
 						<ProductLabel
-							list={PRODUCT_SIZE} // size 추가 필요
+							list={PRODUCT_SIZE}
 							selectedItems={selectedSize ? [selectedSize] : []}
 							onSelect={selectSize}
 						/>
@@ -181,7 +201,6 @@ export default function CreateProduct() {
 						<div className="w-[36.625rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
 							<div>맞춤 키 *</div>
 							<select
-								// 수정 필요
 								name="height"
 								className="text-gray-800 p-3 rounded-md focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none"
 							>
