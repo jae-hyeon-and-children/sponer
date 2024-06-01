@@ -2,9 +2,10 @@
 
 import ChatRoom from "@/components/chats/chat-room";
 
-import { fireStore } from "@/config/firebase/firebase";
+import { auth, fireStore } from "@/config/firebase/firebase";
 import { COLLECTION_NAME_CHAT } from "@/constants/variables";
 import { getProduct } from "@/libs/api/product";
+import useAuth from "@/libs/hook/useAuth";
 import { timeStampToDate } from "@/libs/utils/date";
 import { ChatRoomConverter, IChatRoom } from "@/model/chat-room";
 import {
@@ -20,56 +21,68 @@ import {
   where,
 } from "firebase/firestore";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 
 export default function ChatRoomList() {
-  const userId = "123";
+  const [uid, setUid] = useState<string | null>(null);
   const chatRoomId = useRecoilValue(chatRoomIdState);
   const setChatRoomUser = useSetRecoilState(chatRoomUserState);
   const setChatRoomProduct = useSetRecoilState(chatRoomProductState);
   const [chatRooms, setChatRooms] = useState<IChatRoom[]>([]);
+  const router = useRouter();
 
   const getOtherUser = (chatRoom: IChatRoom) =>
-    chatRoom.users.find((user) => user.id !== userId);
+    chatRoom.users.find((user) => user.id !== uid);
 
   useEffect(() => {
-    const unSubscribeChatRooms = onSnapshot(
-      query(
-        collection(fireStore, COLLECTION_NAME_CHAT),
-        where("userIds", "array-contains", userId),
-        orderBy("updatedAt", "desc")
-      ),
-      (snapshot) => {
-        const convertedChatRooms = snapshot.docs.map((chatRoom) =>
-          ChatRoomConverter.fromFirestore(chatRoom)
-        );
+    auth.onAuthStateChanged((currentUser) => {
+      console.log(currentUser);
+      currentUser ? setUid(currentUser.uid) : setUid(null);
 
-        const selectedChatRoom = convertedChatRooms.find(
-          (chatRoom) => chatRoom.id == chatRoomId
-        );
+      if (!currentUser) {
+        router.push(`/login`);
+        return;
+      } else {
+        const unSubscribeChatRooms = onSnapshot(
+          query(
+            collection(fireStore, COLLECTION_NAME_CHAT),
+            where("userIds", "array-contains", uid),
+            orderBy("updatedAt", "desc")
+          ),
+          (snapshot) => {
+            const convertedChatRooms = snapshot.docs.map((chatRoom) =>
+              ChatRoomConverter.fromFirestore(chatRoom)
+            );
 
-        if (selectedChatRoom) {
-          const otherUser = getOtherUser(selectedChatRoom);
-          setChatRoomUser(otherUser!);
+            const selectedChatRoom = convertedChatRooms.find(
+              (chatRoom) => chatRoom.id == chatRoomId
+            );
 
-          const fetchProduct = async () => {
-            if (selectedChatRoom.productId) {
-              const res = await getProduct(selectedChatRoom.productId);
-              setChatRoomProduct(res.data ?? null);
+            if (selectedChatRoom) {
+              const otherUser = getOtherUser(selectedChatRoom);
+              setChatRoomUser(otherUser!);
+
+              const fetchProduct = async () => {
+                if (selectedChatRoom.productId) {
+                  const res = await getProduct(selectedChatRoom.productId);
+                  if (res.status === 404) setChatRoomProduct(null);
+                  setChatRoomProduct(res.data ?? null);
+                }
+              };
+
+              fetchProduct();
             }
-          };
-
-          fetchProduct();
-        }
-        setChatRooms(convertedChatRooms);
+            setChatRooms(convertedChatRooms);
+          }
+        );
+        return () => {
+          unSubscribeChatRooms();
+        };
       }
-    );
-
-    return () => {
-      unSubscribeChatRooms();
-    };
-  }, [chatRoomId, setChatRoomProduct, setChatRoomUser]);
+    });
+  }, [chatRoomId, router, setChatRoomProduct, setChatRoomUser, uid]);
 
   return (
     <ul className="flex flex-col gap-4">

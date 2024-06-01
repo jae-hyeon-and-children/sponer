@@ -23,10 +23,6 @@ import {
 } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
-export async function fetchChatRooms() {}
-
-export async function fetchChatRoom() {}
-
 export async function fetchMessages(id: string) {
   try {
     const messagesSnapshot = onSnapshot(
@@ -47,12 +43,13 @@ export async function fetchMessages(id: string) {
 }
 
 export async function sendMessage(
+  senderId: string,
   chatRoomId: string,
   content: string,
   contentType: ContentType
 ) {
   const data: IMessage = {
-    senderId: "test1",
+    senderId,
     content,
     contentType,
     createdAt: Timestamp.fromDate(new Date()),
