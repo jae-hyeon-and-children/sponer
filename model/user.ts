@@ -1,6 +1,7 @@
 import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export interface IUser {
+  id: string;
   address: string;
   affiliation?: string;
   approve?: boolean;
@@ -27,8 +28,10 @@ export interface IHistory {
 
 export const UserConverter = {
   fromFirestore: (user: QueryDocumentSnapshot): IUser => {
+    const id = user.id;
     const data = user.data();
     return {
+      id,
       address: data.address,
       affiliation: data.affiliation,
       approve: data.approve,

@@ -5,6 +5,7 @@ import {
   PRODUCT_SIZE,
   PRODUCT_STYLES,
   PRODUCT_TYPES,
+  UserType,
 } from "@/constants/variables";
 import { getProduct } from "@/libs/api/product";
 import { IProduct } from "@/model/product";
@@ -13,9 +14,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import IcArrowLeft from "@/public/icons/ic_arrow_left.png";
 import IcArrowRight from "@/public/icons/ic_arrow_right.png";
-import { getBrand } from "@/libs/api/brand";
+
 import { IUser } from "@/model/user";
-import useAuth from "@/libs/auth";
+import { useRouter } from "next/navigation";
+import useAuth from "@/libs/hook/useAuth";
+import { createChatRoom } from "@/libs/api/chat-room";
+import { getUser } from "@/libs/api/user";
+import Header from "@/components/header";
 
 interface ProductDetailParams {
   params: {
@@ -24,30 +29,44 @@ interface ProductDetailParams {
 }
 
 export default function Product({ params: { id } }: ProductDetailParams) {
-  const user = useAuth();
+  const userId = useAuth()?.uid;
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<IProduct | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [brand, setBrand] = useState<IUser | null>(null);
   const imageListRef = useRef<HTMLUListElement>(null);
   const [imageCurrIndex, setImageCurrIndex] = useState(1);
-
-  console.log(user);
+  const router = useRouter();
 
   useEffect(() => {
+    async function fetchUser() {
+      if (userId) {
+        const userResponse = await getUser(userId!);
+        if (userResponse.success) {
+          setUser(userResponse.data!);
+        } else {
+          console.log(userResponse.message);
+        }
+      }
+    }
+
     async function fetchProduct() {
       const productResponse = await getProduct(id);
 
       if (productResponse.success) {
         setProduct(productResponse.data!);
-        const brandResponse = await getBrand(productResponse.data!.brandId);
+        const brandResponse = await getUser(productResponse.data!.brandId);
         if (brandResponse.success) {
           setBrand(brandResponse.data!);
         }
+      } else {
+        console.log(productResponse.message);
       }
     }
+    fetchUser();
     fetchProduct();
     setLoading(false);
-  }, [id]);
+  }, [id, user, userId]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -91,10 +110,16 @@ export default function Product({ params: { id } }: ProductDetailParams) {
     }
   };
 
+  const handleContact = async (event: React.FormEvent) => {
+    const response = await createChatRoom(brand!, user!, id);
+    router.push(`/chats/${response!.data}`);
+  };
+
   if (loading || !product) return <div>로딩 중</div>;
 
   return (
     <>
+      <Header />
       <main className="flex flex-col items-center px-4">
         <div className="max-w-screen-sm lg:max-w-screen-2xl flex gap-x-36 w-full flex-col lg:flex-row">
           <section className="relative flex items-center justify-center lg:flex-1 mt-16 lg:mt-60">
@@ -215,12 +240,13 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                 사이즈 가이드
               </button>
             </div>
-            {user.user && (
-              <Link href={`/chats`}>
-                <button className="label-1 text-white mt-20 p-4 bg-primary rounded-full w-full lg:max-w-60">
-                  브랜드에게 연락하기
-                </button>
-              </Link>
+            {user && user.userType === UserType.stylelist && (
+              <button
+                onClick={handleContact}
+                className="label-1 text-white mt-20 p-4 bg-primary rounded-full w-full lg:max-w-60"
+              >
+                브랜드에게 연락하기
+              </button>
             )}
           </section>
         </div>

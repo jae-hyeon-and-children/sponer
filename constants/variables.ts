@@ -60,6 +60,12 @@ export enum ContentType {
   image = "image",
 }
 
+export enum UserType {
+  stylelist = "stylelist",
+  brand = "brand",
+  admin = "admin",
+}
+
 /**
  * Collection Name
  */
