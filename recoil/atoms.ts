@@ -3,9 +3,9 @@ import { IChatUser } from "@/model/chat-room";
 import { IProduct } from "@/model/product";
 import { atom } from "recoil";
 
-export const typeFilterCategoryState = atom<string | null>({
+export const typeFilterCategoryState = atom<string>({
   key: "typeFilterCategoryState",
-  default: null,
+  default: "all",
 });
 
 export const styleFilterCategoryState = atom<string[]>({

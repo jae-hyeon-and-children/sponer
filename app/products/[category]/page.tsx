@@ -2,6 +2,7 @@
 
 import EmptyView from "@/components/global/empty-view";
 import Footer from "@/components/global/footer";
+import Header from "@/components/header";
 
 import FilterModal from "@/components/products/filter-modal";
 import ProductItem from "@/components/products/product-item";
@@ -92,10 +93,9 @@ export default function Products({
     setStyleFilterCategory([]);
   };
 
-  if (loading) return <div>로딩 중</div>;
-
   return (
     <>
+      <Header />
       <FilterModal />
       <main className="flex flex-col items-center px-4 ">
         <div className="max-w-screen-sm pt-16 lg:max-w-screen-2xl lg:pt-60 flex flex-col items-center w-full">
@@ -153,24 +153,41 @@ export default function Products({
               ></div>
             </button>
           </section>
-          <section className="w-full">
-            {products.length === 0 ? (
-              <EmptyView text="해당 상품이 없습니다" />
-            ) : (
-              <ul className=" w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-20 w-">
-                {products.map((value, index) => (
-                  <Link key={index} href={`/product/${value.id}`}>
-                    <ProductItem
-                      imageUrl={value.productImages[0]}
-                      title={value.title}
-                      size={value.size}
-                      height={value.height}
-                    />
-                  </Link>
-                ))}
-              </ul>
-            )}
-          </section>
+          {loading ? (
+            <ul>
+              <li className="flex flex-col gap-6 items-center">
+                <div className="w-full h-[40rem] object-cover"></div>
+                <div className="flex flex-col items-center">
+                  <div className="label-2 text-gray-500 mb-1 w-20 h-5"></div>
+                  <div className="heading-3  text-gray-900 mb-1 w-20 h-5"></div>
+                  <div className="flex gap-1 items-center">
+                    <div className="caption  text-gray-500 w-20 h-5"></div>
+                    <div className="caption  text-gray-200">/</div>
+                    <div className="caption  text-gray-500 w-20 h-5"></div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          ) : (
+            <section className="w-full">
+              {products.length === 0 ? (
+                <EmptyView text="해당 상품이 없습니다" />
+              ) : (
+                <ul className=" w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-20 w-">
+                  {products.map((value, index) => (
+                    <Link key={index} href={`/product/${value.id}`}>
+                      <ProductItem
+                        imageUrl={value.productImages[0]}
+                        title={value.title}
+                        size={value.size}
+                        height={value.height}
+                      />
+                    </Link>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
         </div>
       </main>
       <Footer />
