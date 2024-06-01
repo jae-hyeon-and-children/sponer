@@ -13,6 +13,11 @@ export const styleFilterCategoryState = atom<string[]>({
   default: [],
 });
 
+export const showDefaultModalState = atom<boolean>({
+  key: "showDefaultModalState",
+  default: false,
+});
+
 export const showFilterModalState = atom<boolean>({
   key: "showFilterModalState",
   default: false,

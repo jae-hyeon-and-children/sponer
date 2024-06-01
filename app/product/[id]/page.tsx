@@ -21,6 +21,12 @@ import useAuth from "@/libs/hook/useAuth";
 import { createChatRoom } from "@/libs/api/chat-room";
 import { getUser } from "@/libs/api/user";
 import Header from "@/components/header";
+import Modal from "@/components/global/modal";
+import SizeTable from "@/components/global/size-table";
+import { getSizeTable } from "@/libs/utils/table";
+import { ISizeTable } from "@/constants/type-table";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { showDefaultModalState } from "@/recoil/atoms";
 
 interface ProductDetailParams {
   params: {
@@ -30,6 +36,7 @@ interface ProductDetailParams {
 
 export default function Product({ params: { id } }: ProductDetailParams) {
   const userId = useAuth()?.uid;
+  const setShowModal = useSetRecoilState(showDefaultModalState);
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<IProduct | null>(null);
   const [user, setUser] = useState<IUser | null>(null);
@@ -37,6 +44,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
   const imageListRef = useRef<HTMLUListElement>(null);
   const [imageCurrIndex, setImageCurrIndex] = useState(1);
   const router = useRouter();
+  const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -55,6 +63,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
 
       if (productResponse.success) {
         setProduct(productResponse.data!);
+        setSizeTable(getSizeTable(productResponse.data!.productCategory));
         const brandResponse = await getUser(productResponse.data!.brandId);
         if (brandResponse.success) {
           setBrand(brandResponse.data!);
@@ -115,11 +124,23 @@ export default function Product({ params: { id } }: ProductDetailParams) {
     router.push(`/chats/${response!.data}`);
   };
 
+  const handleShowModal = () => setShowModal(true);
+
   if (loading || !product) return <div>로딩 중</div>;
 
   return (
     <>
       <Header />
+
+      <Modal>
+        {sizeTable && (
+          <SizeTable
+            tableHeader={sizeTable!.header}
+            tableBody={sizeTable!.body}
+          />
+        )}
+      </Modal>
+
       <main className="flex flex-col items-center px-4">
         <div className="max-w-screen-sm lg:max-w-screen-2xl flex gap-x-36 w-full flex-col lg:flex-row">
           <section className="relative flex items-center justify-center lg:flex-1 mt-16 lg:mt-60">
@@ -236,9 +257,14 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                   </ul>
                 </div>
               </div>
-              <button className="label-3 text-gray-400 mt-8">
-                사이즈 가이드
-              </button>
+              {sizeTable && (
+                <button
+                  onClick={handleShowModal}
+                  className="label-3 text-gray-400 mt-8 underline"
+                >
+                  사이즈 가이드
+                </button>
+              )}
             </div>
             {user && user.userType === UserType.stylelist && (
               <button
