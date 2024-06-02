@@ -4,7 +4,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, doc, setDoc, Timestamp } from "firebase/firestore";
 import { fireStore, storage } from "@/config/firebase/firebase";
 import { IResponse } from "@/model/responses";
-import { IBrandApprove, IUser } from "@/model/user";
+import { IBrandApplication, IUser } from "@/model/user";
 
 export default async function uploadbrandUser(
   uid: string,
@@ -78,7 +78,7 @@ export default async function uploadbrandUser(
 
     console.log("User data: ", brandFormData);
 
-    const approve: IBrandApprove = {
+    const approve: IBrandApplication = {
       approve: false,
       brandName: formData.get("brand_name") as string,
       createdAt: Timestamp.now(),

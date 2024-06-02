@@ -44,23 +44,28 @@ export default function StylistUser() {
   return (
     <>
       <Header />
-      <div className="flex flex-col items-center max-w-screen-2xl pt-60 ml-24">
-        <div className="w-full">
-          <div className="caption w-[4rem] f-[1.5rem] bg-gray-700 border rounded-[3.5rem] text-center text-gray-100 mb-5  mt-[7.5rem]">
-            step 2
-          </div>
-          <div className="display text-gray-900  w-[15.5rem] h-[3.2rem]">
-            프로필에 필요한 정보를 입력해 주세요
+      <div className="flex flex-col items-center h-screen  px-4 pt-40 ">
+        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center ">
+          <div className="w-full mb-5">
+            <div className="caption w-16  bg-gray-700 border rounded-full text-gray-100 text-center">
+              step 2
+            </div>
+            <div className="display text-gray-900 w-[15.5rem] h-[3.2rem]">
+              프로필에 필요한 정보를 입력해 주세요
+            </div>
           </div>
         </div>
 
-        <form action={dispatch} className="flex flex-col mt-16 w-full gap-5">
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+        <form
+          action={dispatch}
+          className="flex flex-col items-center mt-16 w-full gap-7"
+        >
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <p className="w-[30%] label-1 text-gray-900">프로필 사진 *</p>
-            <div className="w-full">
+            <div className="w-full flex justify-center">
               <label
                 htmlFor="photo"
-                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full  cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
                 style={{
                   backgroundImage: profilephoto
                     ? `url(${profilephoto})`
@@ -93,15 +98,17 @@ export default function StylistUser() {
             )}
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <span className="w-[30%] label-1 text-gray-900">이름 *</span>
             <Input name="name" type="text" placeholder="이름" required />
           </div>
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <span className="w-[30%] label-1 text-gray-900">닉네임 *</span>
             <Input name="nickname" type="text" placeholder="닉네임" required />
           </div>
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <span className="w-[30%] label-1 text-gray-900">연락처 *</span>
             <div className="flex w-full gap-4 items-center">
               <Input
@@ -129,13 +136,15 @@ export default function StylistUser() {
               />
             </div>
           </div>
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <span className="w-[30%] label-1 text-gray-900">주소 *</span>
-            <span className="w-[36rem]">
+            <div className="w-full flex justify-center">
               <AddressForm />
-            </span>
+            </div>
           </div>
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <span className="w-[30%] label-1 text-gray-900">소속 *</span>
             <Input
               name="affiliation"
@@ -143,13 +152,15 @@ export default function StylistUser() {
               placeholder="ex) 프리랜서, 회사, 방송국 소속 등"
             />
           </div>
-          <div className="flex lg:items-center w-full flex-col lg:justify-between lg:flex-row">
+
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <span className="w-[30%] label-1 text-gray-900">이메일 *</span>
             <Input name="email" type="email" placeholder="example@gmail.com" />
           </div>
+
           <div className="flex justify-center mt-10">
             <button
-              className="border bg-primary  rounded-[3.5rem] w-96 h-14 flex justify-center items-center"
+              className="border bg-primary rounded-full w-96 h-14 flex justify-center items-center"
               type="submit"
             >
               <span className="label-1 text-gray-100">신청하기</span>
