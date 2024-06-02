@@ -40,16 +40,7 @@ export default function Login() {
       <Header />
       <div className="flex flex-col items-center h-screen px-4 ">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-          <div className="flex flex-col justify-center items-center md:w-1/2">
-            <Image
-              src="/dong2.png"
-              alt="Logo"
-              width={852}
-              height={814}
-              className="hidden md:block"
-            />
-          </div>
-          <div className="flex flex-col items-start w-full md:w-1/2  md:pl-24 gap-2">
+          <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
             <Image
               src="/sponer_Logo.png"
               alt="Logo"
