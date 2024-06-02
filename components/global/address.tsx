@@ -61,7 +61,7 @@ const AddressForm = () => {
   return (
     <div className=" form-group flex flex-col gap-2   w-full ">
       <DaumPostcodeScript />
-      <div className=" form-group flex flex-col gap-2  ">
+      <div className=" form-group flex flex-col gap-4  ">
         <button
           type="button"
           onClick={handleAddressSearch}
