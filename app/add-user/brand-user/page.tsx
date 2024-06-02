@@ -58,10 +58,10 @@ export default function BrandUser() {
       <div className="flex flex-col items-center h-screen px-4 pt-40 ">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
           <div className="w-full mb-5">
-            <div className="caption w-16 bg-gray-700 border rounded-full text-gray-100 text-center">
+            <div className="caption w-16 bg-gray-700 border rounded-full text-gray-100 text-center ">
               step 2
             </div>
-            <div className="display text-gray-900 w-[15.5rem] h-[3.2rem]">
+            <div className="display text-gray-900 w-[15.5rem]">
               프로필에 필요한 정보를 입력해 주세요
             </div>
           </div>
