@@ -43,31 +43,22 @@ export default function AdduserType() {
   return (
     <>
       <Header />
-      <div className="flex flex-col items-center h-screen  px-4 ">
+      <div className="flex flex-col justify-center items-center h-screen px-4 ">
         {/* 기억이 안나서 일단 헤더와 컨텐츠 사이에 간격을 만들어 줌 */}
-        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center ">
-          <div className="flex flex-col justify-center items-center md:w-1/2">
-            <Image
-              src="/ggobok222.png"
-              alt="Logo"
-              width={852}
-              height={814}
-              className="hidden md:block "
-            />
-          </div>
-          <div className="flex flex-col items-start w-full md:w-1/2  md:pl-24 gap-2">
+        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+          <div className="flex flex-col items-start  w-full md:w-[50%] gap-2">
             <div className="w-full mb-5">
               <div className="caption w-16  bg-gray-700 border rounded-full text-gray-100 text-center">
                 step 1
               </div>
             </div>
-            <div className="display text-gray-900 text-[2rem] mb-10 text-center md:text-left">
+            <div className="display text-gray-900 text-[2rem] mb-10 text-start md:text-left">
               소속을 선택해 주세요
             </div>
-            <div className="flex justify-center lg:justify-start w-full">
-              <div className="flex flex-col items-center lg:items-start w-full">
+            <div className="flex justify-center lg:justify-center w-full">
+              <div className="flex flex-col items-center lg:items-center w-full">
                 <div
-                  className={`w-[29rem] h-[10.5rem] border mt-2 rounded-lg cursor-pointer ${
+                  className={`w-full h-full border mt-2 rounded-lg cursor-pointer ${
                     selectedOption === PATH_STYLELIST_USER
                       ? "bg-primary text-gray-100"
                       : "text-gray-800"
@@ -83,11 +74,17 @@ export default function AdduserType() {
                     }`}
                   >
                     공간의 제약 없이 브랜드와 직접적인 메시지를 주고 받을 수
-                    있으며 일정을 조율할 수 있습니다.
+                    있으며 일정을 조율할 수 있습니다.공간의 제약 없이 브랜드와
+                    직접적인 메시지를 주고 받을 수 있으며 일정을 조율할 수
+                    있습니다.공간의 제약 없이 브랜드와 직접적인 메시지를 주고
+                    받을 수 있으며 일정을 조율할 수 있습니다.공간의 제약 없이
+                    브랜드와 직접적인 메시지를 주고 받을 수 있으며 일정을 조율할
+                    수 있습니다.공간의 제약 없이 브랜드와 직접적인 메시지를 주고
+                    받을 수 있으며 일정을 조율할 수 있습니다.
                   </div>
                 </div>
                 <div
-                  className={`w-[29rem] h-[10.5rem] border mt-10 rounded-lg cursor-pointer ${
+                  className={`w-full h-full border mt-10 rounded-lg cursor-pointer ${
                     selectedOption === PATH_BRAND_USER
                       ? "bg-primary text-gray-50"
                       : "text-gray-800"
@@ -103,12 +100,18 @@ export default function AdduserType() {
                     }`}
                   >
                     브랜드는 획기적인 가격과 공간의 제약 없이 제품을 업로드할 수
-                    있습니다.
+                    있습니다.브랜드는 획기적인 가격과 공간의 제약 없이 제품을
+                    업로드할 수 있습니다.브랜드는 획기적인 가격과 공간의 제약
+                    없이 제품을 업로드할 수 있습니다.브랜드는 획기적인 가격과
+                    공간의 제약 없이 제품을 업로드할 수 있습니다.브랜드는
+                    획기적인 가격과 공간의 제약 없이 제품을 업로드할 수
+                    있습니다.브랜드는 획기적인 가격과 공간의 제약 없이 제품을
+                    업로드할 수 있습니다.
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-start w-full mt-10">
+            <div className="flex items-center justify-center w-full mt-10">
               <button
                 className="border bg-primary rounded-full w-96 h-14 flex justify-center items-center"
                 onClick={handleNextClick}
