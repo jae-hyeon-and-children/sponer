@@ -1,16 +1,25 @@
 "use server";
 
-import { fireStore, storage } from "@/config/firebase/firebase";
+import { auth, fireStore, storage } from "@/config/firebase/firebase";
 import { COLLECTION_NAME_USER } from "@/constants/variables";
 import { urlToBase64 } from "@/libs/utils/format";
+import { IResponse } from "@/model/responses";
 import { IUser } from "@/model/user";
+import {
+	deleteUser as deleteAuthUser,
+	deleteUser,
+	getAuth,
+} from "firebase/auth";
 import {
 	Timestamp,
 	addDoc,
 	collection,
+	deleteDoc,
 	doc,
 	getDoc,
+	getDocs,
 	updateDoc,
+	writeBatch,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { redirect } from "next/navigation";
@@ -26,9 +35,9 @@ export async function editProfile(userId: string, formData: FormData) {
 	const data = {
 		profileImage: formData.get("profileImage") as File,
 		brandName: formData.get("brandName") as string,
-		phoneNumber: `${formData.get("phoneNumber1")}-${formData.get(
-			"phoneNumber2"
-		)}-${formData.get("phoneNumber3")}`,
+		phoneNumber: ((((formData.get("phoneNumber1") as string) +
+			formData.get("phoneNumber2")) as string) +
+			formData.get("phoneNumber3")) as string,
 		name: formData.get("name") as string,
 		homepage: formData.get("homepage") as string,
 		address: `${formData.get("postal_code")}, ${formData.get(
@@ -37,6 +46,8 @@ export async function editProfile(userId: string, formData: FormData) {
 		email: formData.get("email") as string,
 		businessImageUrl: formData.get("businessImageUrl") as File,
 	};
+
+	console.log(data.profileImage);
 
 	try {
 		const prevUserRef = doc(fireStore, COLLECTION_NAME_USER, userId);
@@ -133,5 +144,78 @@ export async function getUserById(userId: string): Promise<IUser | null> {
 	} catch (error) {
 		console.error("Error fetching document:", error);
 		return null;
+	}
+}
+
+export async function isUserTypeBrand(userId: string): Promise<boolean> {
+	"use server";
+	if (!userId) return false;
+
+	try {
+		const userRef = doc(fireStore, "User", userId);
+		const userDoc = await getDoc(userRef);
+
+		if (userDoc.exists()) {
+			const userData = userDoc.data();
+			return userData.userType === "brand";
+		} else {
+			return false;
+		}
+	} catch (error) {
+		return false;
+	}
+}
+
+async function deleteCollection(docRef: any, collectionName: string) {
+	const collectionRef = collection(docRef, collectionName);
+	const snapshot = await getDocs(collectionRef);
+
+	const batch = writeBatch(fireStore);
+	snapshot.docs.forEach((doc) => {
+		batch.delete(doc.ref);
+	});
+
+	await batch.commit();
+}
+
+export async function deleteUserData(uid: string) {
+	try {
+		const userDocRef = doc(fireStore, COLLECTION_NAME_USER, uid);
+
+		// Delete the History collection
+		await deleteCollection(userDocRef, "History");
+
+		// Delete the User document
+		await deleteDoc(userDocRef);
+
+		// Delete the user from Firebase Authentication
+		const auth = getAuth();
+		const user = auth.currentUser;
+
+		if (user) {
+			deleteUser(user)
+				.then(() => {
+					// User deleted.
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+
+		const response: IResponse = {
+			status: 200,
+			success: true,
+			message: "User Data Deleted",
+		};
+
+		return response;
+	} catch (error) {
+		const response: IResponse = {
+			status: 400,
+			success: false,
+			message: "User Data Deleted Failed",
+		};
+
+		return response;
 	}
 }
