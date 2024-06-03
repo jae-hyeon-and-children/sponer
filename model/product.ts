@@ -1,6 +1,11 @@
 import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 
-export interface IProduct {
+interface AlgoliaProp {
+  objectID?: string;
+  [key: string]: any;
+}
+
+export interface IProduct extends AlgoliaProp {
   id?: string;
   createdAt: Timestamp;
   brandId: string;

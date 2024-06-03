@@ -110,7 +110,7 @@ export default function MessageForm() {
         <button
           type="submit"
           disabled={!message.trim() && !file}
-          className="disabled:bg-slate-100 shrink-0 bg-primary w-7 h-7 p-1 rounded-full flex justify-center items-center"
+          className=" shrink-0 bg-gray-100 w-7 h-7 p-1 rounded-full flex justify-center items-center"
         >
           <Image
             src={IcSend}
