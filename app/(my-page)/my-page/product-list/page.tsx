@@ -40,7 +40,7 @@ export default function ProductList() {
 				<ProductSideBar />
 				<div className="w-full mt-20">
 					<div className="w-full h-52 bg-primary px-4 md:px-36">
-						<div className="w-full flex justify-between pt-36">
+						<div className="w-full flex justify-between pt-36 max-w-screen-xl">
 							<div className="display text-gray-100">상품 관리</div>
 							<Link href={"/my-page/product"}>
 								<button className="label-1 text-primary bg-white py-2 px-4 rounded-3xl">
@@ -49,7 +49,7 @@ export default function ProductList() {
 							</Link>
 						</div>
 					</div>
-					<div className="grid grid-cols-3 md:grid-cols-4 w-fit max-w-screen-2xl gap-6 px-4 md:pl-36 mt-20 ">
+					<div className="grid grid-cols-3 md:grid-cols-4 w-fit max-w-screen-xl gap-6 px-4 md:pl-36 mt-20 ">
 						{products.map((product) => (
 							<Link
 								href={`/my-page/product/${product.id}`}
@@ -58,7 +58,7 @@ export default function ProductList() {
 							>
 								<Image
 									src={product.productImages[0]}
-									width={220}
+									width={1000}
 									height={260}
 									quality={50}
 									priority
