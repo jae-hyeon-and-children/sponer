@@ -1,8 +1,4 @@
-import {
-  DocumentSnapshot,
-  QueryDocumentSnapshot,
-  Timestamp,
-} from "firebase/firestore";
+import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export interface IProduct {
   id?: string;
@@ -18,19 +14,6 @@ export interface IProduct {
 }
 
 export const ProductConverter = {
-  toFirestore: (product: IProduct) => {
-    return {
-      createdAt: product.createdAt,
-      genderCategory: product.genderCategory,
-      height: product.height,
-      productCategory: product.productCategory,
-      productImages: product.productImages,
-      size: product.size,
-      styleCategory: product.styleCategory,
-      title: product.title,
-    };
-  },
-
   fromFirestore: (product: QueryDocumentSnapshot): IProduct => {
     const id = product.id;
     const data = product.data();

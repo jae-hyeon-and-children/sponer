@@ -1,5 +1,22 @@
-import { IChatRoom } from "@/model/chat-room";
+import { PRODUCT_TYPES_WITH_ALL } from "@/constants/variables";
+import { IChatUser } from "@/model/chat-room";
+import { IProduct } from "@/model/product";
 import { atom } from "recoil";
+
+export const typeFilterCategoryState = atom<string>({
+  key: "typeFilterCategoryState",
+  default: "all",
+});
+
+export const styleFilterCategoryState = atom<string[]>({
+  key: "styleFilterCategoryState",
+  default: [],
+});
+
+export const showDefaultModalState = atom<boolean>({
+  key: "showDefaultModalState",
+  default: false,
+});
 
 export const showFilterModalState = atom<boolean>({
   key: "showFilterModalState",
@@ -11,8 +28,13 @@ export const chatRoomIdState = atom<string | null>({
   default: null,
 });
 
-export const chatRoomState = atom<IChatRoom | null>({
-  key: "chatRoomState",
+export const chatRoomUserState = atom<IChatUser | null>({
+  key: "chatRoomUserState",
+  default: null,
+});
+
+export const chatRoomProductState = atom<IProduct | null>({
+  key: "chatRoomProductState",
   default: null,
 });
 
