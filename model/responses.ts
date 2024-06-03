@@ -1,4 +1,4 @@
-export interface IResponse<T> {
+export interface IResponse<T = void> {
   status: number;
   success: boolean;
   message?: string;
