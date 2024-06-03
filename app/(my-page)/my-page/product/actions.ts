@@ -73,5 +73,4 @@ export async function uploadProduct(otherData: any, formData: FormData) {
 
 		return response;
 	}
-	redirect("/my-page/product-list");
 }
