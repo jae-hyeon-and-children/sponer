@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import DaumPostcodeScript from "../../app/api/juso-api";
+import DaumPostcodeScript from "../../libs/api/juso-api";
 
 declare global {
   interface Window {
