@@ -9,9 +9,9 @@ export default function Dropdown() {
 	};
 
 	return (
-		<div className="w-full border-2 border-gray-200 mb-4  paragraph-1">
+		<div className="w-full border-2 border-gray-200 mb-4 paragraph-1 rounded-xl overflow-hidden">
 			<div
-				className="w-full h-16 bg-white p-4 cursor-pointer flex justify-between items-center rounded-xl "
+				className="w-full h-16 bg-white p-4 cursor-pointer flex justify-between items-center"
 				onClick={toggleDropdown}
 			>
 				<span className="font-bold text-gray-800 py-5 px-8">
