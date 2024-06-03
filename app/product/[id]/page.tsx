@@ -20,7 +20,6 @@ import { useRouter } from "next/navigation";
 import useAuth from "@/libs/hook/useAuth";
 import { createChatRoom } from "@/libs/api/chat-room";
 import { getUser } from "@/libs/api/user";
-import Header from "@/components/header";
 import Modal from "@/components/global/modal";
 import SizeTable from "@/components/global/size-table";
 import { getSizeTable } from "@/libs/utils/table";
@@ -28,6 +27,7 @@ import { ISizeTable } from "@/constants/type-table";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { showDefaultModalState } from "@/recoil/atoms";
 import EmptyView from "@/components/global/empty-view";
+import Header from "@/components/global/header";
 
 interface ProductDetailParams {
   params: {

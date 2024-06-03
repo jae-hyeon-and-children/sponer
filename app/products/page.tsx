@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/components/global/footer";
-import Header from "@/components/header";
+import Header from "@/components/global/header";
 import FilterSideBar from "@/components/products/filter-side-bar";
 import ProductHits from "@/components/products/product-hits";
 import ProductSearchBox from "@/components/products/product-search-box";
