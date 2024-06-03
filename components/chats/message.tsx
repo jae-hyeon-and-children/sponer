@@ -7,6 +7,7 @@ interface MessageProps {
   contentType: ContentType;
   createdAt: Date;
   senderId: string;
+  userId: string;
 }
 
 export default function Message({
@@ -14,17 +15,18 @@ export default function Message({
   contentType,
   createdAt,
   senderId,
+  userId,
 }: MessageProps) {
   return (
     <li
       className={`flex items-end gap-3 ${
-        senderId === "test1" ? "flex-row-reverse" : "flex--row"
+        senderId === userId ? "flex-row-reverse" : "flex--row"
       }`}
     >
       {contentType === ContentType.text && (
         <div
           className={`paragraph-1 ${
-            senderId === "test1"
+            senderId === userId
               ? "text-gray-50 bg-gray-800"
               : "text-gray-800 bg-gray-100"
           } rounded-lg py-4 px-6  max-w-md`}
@@ -35,11 +37,11 @@ export default function Message({
       {contentType === ContentType.image && (
         <Image
           src={content}
-          alt="df"
+          alt="이미지"
           width={100}
           height={100}
           className={` ${
-            senderId === "test1" ? "bg-gray-800" : "bg-gray-100"
+            senderId === userId ? "bg-gray-800" : "bg-gray-100"
           } rounded-lg p-6 w-full max-w-md`}
         />
       )}

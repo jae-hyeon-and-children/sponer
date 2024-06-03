@@ -21,21 +21,15 @@ export async function getProducts(
   keyword?: string
 ): Promise<IResponse<IProduct[]>> {
   const queries = [];
-  console.log("???");
-  console.log(category, type, style, keyword);
   if (category !== "all")
     queries.push(where("productCategory", "==", category));
+  if (type && type !== "all") queries.push(where("genderCategory", "==", type));
+  if (style && style.length > 0)
+    queries.push(where("styleCategory", "array-contains-any", style));
 
-  if (type) queries.push(where("genderCategory", "==", type));
-  if (style) queries.push(where("styleCategory", "array-contains-any", style));
-  if (keyword) {
-    queries.push(where("title", ">=", keyword));
-    queries.push(where("title", "<=", keyword + "\uf8ff"));
-  }
+  console.log(category, type, style, keyword);
   console.log(queries);
   try {
-    console.log("헤헤");
-
     const productsDocSnap = await getDocs(
       query(
         collection(fireStore, COLLECTION_NAME_PRODUCT),
@@ -49,6 +43,7 @@ export async function getProducts(
     for (const product of productsDocSnap.docs) {
       const convertedProduct = ProductConverter.fromFirestore(product);
       products.push(convertedProduct);
+      console.log(convertedProduct);
     }
 
     return { status: 200, success: true, data: products };

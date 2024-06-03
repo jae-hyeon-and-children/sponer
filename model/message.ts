@@ -1,9 +1,5 @@
 import { ContentType } from "@/constants/variables";
-import {
-  DocumentSnapshot,
-  QueryDocumentSnapshot,
-  Timestamp,
-} from "firebase/firestore";
+import { DocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export interface IMessage {
   id?: string;

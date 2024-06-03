@@ -1,6 +1,6 @@
 import Message from "./message";
 
-import { fireStore } from "@/config/firebase/firebase";
+import { auth, fireStore } from "@/config/firebase/firebase";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -14,11 +14,15 @@ import { useRecoilValue } from "recoil";
 import { chatRoomIdState } from "@/recoil/atoms";
 
 export default function MessageList() {
+  const [uid, setUid] = useState<string | null>(null);
   const chatRoomId = useRecoilValue(chatRoomIdState);
   const [messages, setMessages] = useState<IMessage[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    auth.onAuthStateChanged((currentUser) => {
+      currentUser ? setUid(currentUser.uid) : setUid(null);
+    });
     const unSubscribe = onSnapshot(
       query(
         collection(
@@ -47,6 +51,7 @@ export default function MessageList() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
   return (
     <ul className="px-6 py-4 flex-1 flex flex-col gap-5 justify-end ">
       {messages.map((value, index) => (
@@ -56,6 +61,7 @@ export default function MessageList() {
           contentType={value.contentType}
           createdAt={timeStampToDate(value.createdAt)}
           senderId={value.senderId}
+          userId={uid!}
         />
       ))}
       <div ref={messagesEndRef} />
