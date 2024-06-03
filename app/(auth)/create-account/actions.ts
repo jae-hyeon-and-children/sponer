@@ -3,7 +3,11 @@ import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 import { IResponse } from "@/model/responses";
 
-export default async function createaccount(
+import { IUser } from "@/model/user";
+import { createChatRoom } from "@/libs/api/chat-room";
+import { Timestamp } from "firebase/firestore";
+
+export default async function createAccount(
   prevState: any,
   formData: FormData
 ): Promise<IResponse> {
@@ -19,6 +23,7 @@ export default async function createaccount(
   }
 
   try {
+    // 회원가입 처리
     const createUser = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -26,6 +31,44 @@ export default async function createaccount(
     );
 
     await updateProfile(createUser.user, {});
+
+    // 어드민 정보 설정
+    const admin: IUser = {
+      id: "sponer@gmail.com",
+      name: "관리자임 ㅋ 진짜임",
+      profileImage: "/path/to/admin/profileImage.png",
+      email: "admin@example.com",
+      address: "Admin Address",
+      phoneNumber: "010-0000-0000",
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+      userType: "admin",
+    };
+
+    // 새로 생성된 사용자 정보 설정
+    const newUser: IUser = {
+      id: createUser.user.uid,
+      name: createUser.user.displayName || email,
+      profileImage:
+        createUser.user.photoURL || "/path/to/default/profileImage.png",
+      email: email,
+      address: "",
+      phoneNumber: "",
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+      userType: "",
+    };
+
+    // 채팅방 생성 호출
+    const chatRoomResponse = await createChatRoom(admin, newUser, "");
+
+    if (!chatRoomResponse.success) {
+      return {
+        status: 500,
+        success: false,
+        message: `Error while creating chatroom: ${chatRoomResponse.message}`,
+      };
+    }
 
     return {
       status: 200,
@@ -37,7 +80,8 @@ export default async function createaccount(
       return {
         status: 500,
         success: false,
-        message: "올바른 형식이 아닙니다. 비밀번호는 최소6자이상 이여야 합니다",
+        message:
+          "올바른 형식이 아닙니다. 비밀번호는 최소 6자 이상이어야 합니다.",
       };
     }
     return {
