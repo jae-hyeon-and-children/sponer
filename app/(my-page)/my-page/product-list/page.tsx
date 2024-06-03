@@ -38,9 +38,9 @@ export default function ProductList() {
 		<>
 			<main className="w-full h-screen flex">
 				<ProductSideBar />
-				<div className="w-full">
-					<div className="w-full h-[10rem] bg-primary mt-[5.25rem] flex justify-center relative">
-						<div className="h-fit flex w-5/6 justify-between absolute bottom-8">
+				<div className="w-full mt-20">
+					<div className="w-full h-52 bg-primary px-4 md:px-36">
+						<div className="w-full flex justify-between pt-36">
 							<div className="display text-gray-100">상품 관리</div>
 							<Link href={"/my-page/product"}>
 								<button className="label-1 text-primary bg-white py-2 px-4 rounded-3xl">
@@ -49,11 +49,11 @@ export default function ProductList() {
 							</Link>
 						</div>
 					</div>
-					<div className="grid grid-cols-4 w-[952px] max-w-screen-2xl gap-6 ">
+					<div className="grid grid-cols-3 md:grid-cols-4 w-fit max-w-screen-2xl gap-6 px-4 md:pl-36 mt-20 ">
 						{products.map((product) => (
 							<Link
 								href={`/my-page/product/${product.id}`}
-								className="h-[22.5rem]"
+								className="h-fit"
 								key={product.id}
 							>
 								<Image
@@ -68,16 +68,18 @@ export default function ProductList() {
 								/>
 								<div className="pt-5 h-fit w-full flex flex-col">
 									<span className="heading-2 text-gray-700 pb-3">
-										{product.title}
+										{product.title.length > 17
+											? product.title.substring(0, 17) + "..."
+											: product.title}
 									</span>
 									<span className=" caption-1 text-gray-500 pb-1.5">
 										<span>{`${product.size.toUpperCase()} / ${
 											product.height
 										} / ${product.genderCategory}`}</span>
 									</span>
-									<span className=" caption-1 text-gray-500 w-full flex gap-2">
+									<span className=" caption-1 text-gray-500 w-full flex gap-x-2 gap-y-1 flex-wrap">
 										{product.styleCategory.map((style: string) => (
-											<span key={style}>{PRODUCT_STYLES[style]}</span>
+											<span key={style}>{style}</span>
 										))}
 									</span>
 								</div>
