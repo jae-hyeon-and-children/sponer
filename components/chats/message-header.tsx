@@ -1,28 +1,40 @@
 import {
   chatRoomIdState,
   chatRoomUserState,
-  showProductsState,
+  showChatRoomListState,
+  showProductSectionState,
 } from "@/recoil/atoms";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import IcMenu from "@/public/icons/ic_menu.png";
 
 export default function MessageHeader() {
   const [loading, setLoading] = useState(true);
   const chatRoomUser = useRecoilValue(chatRoomUserState);
-  const setShowProducts = useSetRecoilState(showProductsState);
-
+  const setShowProductSection = useSetRecoilState(showProductSectionState);
+  const setShowChatRoomList = useSetRecoilState(showChatRoomListState);
   useEffect(() => {
     if (chatRoomUser) setLoading(false);
   }, [chatRoomUser]);
 
-  const handleShowProducts = () => setShowProducts((prev) => !prev);
+  const handleShowProducts = () => setShowProductSection((prev) => !prev);
+  const handleShowChatList = () => setShowChatRoomList((prev) => !prev);
 
   if (loading) return <Skeleton />;
 
   return (
     <div className="sticky top-0 bg-white border-b border-b-gray-200 flex justify-between items-center py-3 px-5">
       <div className="flex gap-4 items-center">
+        <button onClick={handleShowChatList}>
+          <Image
+            src={IcMenu}
+            width={24}
+            height={24}
+            alt={"메뉴"}
+            className="w-5 h-5 md:hidden block"
+          />
+        </button>
         <Image
           src={chatRoomUser!.profileImage}
           width={24}

@@ -38,8 +38,9 @@ export default function Message({
         <Image
           src={content}
           alt="이미지"
-          width={100}
-          height={100}
+          width={400}
+          height={400}
+          quality={100}
           className={` ${
             senderId === userId ? "bg-gray-800" : "bg-gray-100"
           } rounded-lg p-6 w-full max-w-md`}
