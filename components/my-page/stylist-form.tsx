@@ -109,7 +109,7 @@ export default function StylistUserForm({
 							></Input>
 						</span>
 					</div>
-					<div className="flex flex-col md:flex-row gap-4 w-full md:w-[36rem] mt-4 md:mt-0">
+					<div className="flex flex-col md:flex-row justify-between w-full">
 						<span>대표 연락처*</span>
 						<span className="flex flex-col md:flex-row gap-4 w-full md:w-[36rem] mt-4 md:mt-0">
 							<Input
@@ -165,7 +165,11 @@ export default function StylistUserForm({
 							></Input>
 						</span>
 					</div>
-					<Button text="프로필 수정"></Button>
+					<div className="flex justify-center mt-8">
+						<div className="flex justify-center items-center border bg-primary text-gray-100 rounded-full w-96 h-14">
+							<Button text="프로필 수정"></Button>
+						</div>
+					</div>
 				</form>
 			</div>
 		</main>
