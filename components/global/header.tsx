@@ -46,18 +46,18 @@ export default function Header() {
           </div>
           <div className="flex lg:hidden space-x-4 gap-6 items-center">
             <Link href="/messages">
-              <EnvelopeIcon className="h-10 w-10 text-black hover:text-gray-300" />
+              <EnvelopeIcon className="h-6 w-6 text-black hover:text-gray-300" />
             </Link>
             <Link href="/mypage">
-              <UserCircleIcon className="h-10 w-10 text-black hover:text-gray-300" />
+              <UserCircleIcon className="h-6 w-6 text-black hover:text-gray-300" />
             </Link>
             {user ? (
               <LogOutButton>
-                <ArrowRightOnRectangleIcon className="h-10 w-10 text-black hover:text-gray-300" />
+                <ArrowRightOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
               </LogOutButton>
             ) : (
               <Link href="/login">
-                <ArrowLeftOnRectangleIcon className="h-10 w-10 text-black hover:text-gray-300" />
+                <ArrowLeftOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
               </Link>
             )}
           </div>
