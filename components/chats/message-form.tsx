@@ -11,8 +11,10 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ContentType, STORAGE_REF_CHAT_IMAGES } from "@/constants/variables";
 import { useRecoilValue } from "recoil";
 import { chatRoomIdState } from "@/recoil/atoms";
+import useAuth from "@/libs/hook/useAuth";
 
 export default function MessageForm() {
+  const uid = useAuth()?.uid;
   const chatRoomId = useRecoilValue(chatRoomIdState);
   const [message, setMessage] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
@@ -29,6 +31,7 @@ export default function MessageForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (file) {
       const storageRef = ref(
         storage,
@@ -57,11 +60,11 @@ export default function MessageForm() {
         },
         async () => {
           const imageURL = await getDownloadURL(uploadTask.snapshot.ref);
-          await sendMessage(chatRoomId!, imageURL, ContentType.image);
+          await sendMessage(uid!, chatRoomId!, imageURL, ContentType.image);
         }
       );
     } else {
-      await sendMessage(chatRoomId!, message, ContentType.text);
+      await sendMessage(uid!, chatRoomId!, message, ContentType.text);
     }
 
     setFile(null);
@@ -69,10 +72,10 @@ export default function MessageForm() {
   };
 
   return (
-    <div className="sticky bottom-0  flex items-center px-3 pb-4">
+    <div className="sticky bottom-0 flex items-center px-3 pb-4">
       <form
         onSubmit={handleSubmit}
-        className="flex gap-8 items-center w-full bg-white border-gray-200 border rounded-full py-5 px-4"
+        className=" flex gap-8 items-center w-full bg-white border-gray-200 border rounded-full py-5 px-4"
       >
         <input
           type="file"
@@ -93,7 +96,7 @@ export default function MessageForm() {
           />
         </label>
         {file ? (
-          <p className="text-gray-500 text-sm truncate mb-16">{file.name}</p>
+          <p className="text-gray-500 text-sm truncate w-full">{file.name}</p>
         ) : (
           <input
             type="text"

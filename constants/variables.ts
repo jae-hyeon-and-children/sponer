@@ -14,7 +14,7 @@ export const PRODUCT_CATEGORIES_WITH_ALL = {
 	...PRODUCT_CATEGORIES,
 };
 
-export const PRODUCT_TYPES = {
+export const PRODUCT_TYPES: Record<string, string> = {
 	women: "여자",
 	men: "남자",
 	unisex: "여남공용",
@@ -38,7 +38,7 @@ export const PRODUCT_STYLES: Record<string, string> = {
 	modern: "모던",
 };
 
-export const PRODUCT_SIZE = {
+export const PRODUCT_SIZE: Record<string, string> = {
 	xs: "XS",
 	s: "S",
 	m: "M",
@@ -61,9 +61,7 @@ export enum ContentType {
 }
 
 export const PATH_ADD_USER = "add-user";
-
 export const PATH_STYLELIST_USER = "stylist-user";
-
 export const PATH_BRAND_USER = "brand-user";
 
 /**
