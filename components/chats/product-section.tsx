@@ -4,29 +4,40 @@ import {
   PRODUCT_TYPES,
 } from "@/constants/variables";
 import { getProduct } from "@/libs/api/product";
-import { chatRoomProductState, showProductsState } from "@/recoil/atoms";
+import {
+  chatRoomProductState,
+  showDefaultModalState,
+  showProductSectionState,
+} from "@/recoil/atoms";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Image from "next/image";
+import IcClose from "@/public/icons/ic_close.png";
 import IcArrowLeft from "@/public/icons/ic_arrow_left.png";
 import IcArrowRight from "@/public/icons/ic_arrow_right.png";
 import EmptyView from "../global/empty-view";
+import Modal from "../global/modal";
+import SizeTable from "../global/size-table";
+import { ISizeTable } from "@/constants/type-table";
+import { getSizeTable } from "@/libs/utils/table";
 
 export default function ProductsSetction() {
   const [loading, setLoading] = useState(true);
   const chatRoomProduct = useRecoilValue(chatRoomProductState);
-  const showProducts = useRecoilValue(showProductsState);
   const imageListRef = useRef<HTMLUListElement>(null);
   const [imageCurrIndex, setImageCurrIndex] = useState(1);
+  const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
+  const [showProductSection, setShowProductSection] = useRecoilState(
+    showProductSectionState
+  );
 
   useEffect(() => {
-    if (chatRoomProduct) setLoading(false);
+    if (chatRoomProduct) {
+      setLoading(false);
+      setSizeTable(getSizeTable(chatRoomProduct.productCategory));
+    }
   }, [chatRoomProduct]);
-
-  if (loading) {
-    return <div className={`${!showProducts && "hidden"}`}>로딩 중</div>;
-  }
 
   const handlePrevClick = () => {
     if (imageListRef.current && imageCurrIndex > 1) {
@@ -58,14 +69,31 @@ export default function ProductsSetction() {
     }
   };
 
+  if (loading) {
+    return <div className={`${!showProductSection && "hidden"}`}>로딩 중</div>;
+  }
+
+  const handleCLose = () => setShowProductSection(false);
+
   return (
     <section
-      className={`sticky top-0 overflow-y-scroll scrollbar-hide w-96 bg-white border-l border-l-gray-100 ${
-        !showProducts && "hidden"
+      className={`fixed top-0 right-0 overflow-y-scroll scrollbar-hide w-96 h-screen bg-white border-l border-l-gray-100 ${
+        !showProductSection && "hidden"
       }`}
     >
-      <div className="px-6 py-5">
+      <Modal>
+        {sizeTable && (
+          <SizeTable
+            tableHeader={sizeTable!.header}
+            tableBody={sizeTable!.body}
+          />
+        )}
+      </Modal>
+      <div className="px-6 py-5 flex items-center justify-between">
         <h1 className="label-1 text-gray-600">상품 정보</h1>
+        <button onClick={handleCLose}>
+          <Image src={IcClose} alt="IcClose" width={20} height={20} />
+        </button>
       </div>
       {!chatRoomProduct ? (
         <EmptyView text="해당 상품이 존재하지 않습니다" />
@@ -114,7 +142,7 @@ export default function ProductsSetction() {
                   </button>
                 </div>
                 <div
-                  className={`gap-1.5 absolute bottom-0 mb-5 rounded-full flex lg:hidden items-center`}
+                  className={`gap-1.5 absolute bottom-0 mb-5 rounded-full flex items-center`}
                 >
                   {Array.from({
                     length: chatRoomProduct!.productImages.length,
@@ -177,9 +205,6 @@ export default function ProductsSetction() {
                   </ul>
                 </div>
               </div>
-              <button className="label-3 text-gray-400 mt-8">
-                사이즈 가이드
-              </button>
             </div>
           </section>
         </>

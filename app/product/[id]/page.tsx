@@ -20,13 +20,14 @@ import { useRouter } from "next/navigation";
 import useAuth from "@/libs/hook/useAuth";
 import { createChatRoom } from "@/libs/api/chat-room";
 import { getUser } from "@/libs/api/user";
-import Header from "@/components/header";
 import Modal from "@/components/global/modal";
 import SizeTable from "@/components/global/size-table";
 import { getSizeTable } from "@/libs/utils/table";
 import { ISizeTable } from "@/constants/type-table";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { showDefaultModalState } from "@/recoil/atoms";
+import EmptyView from "@/components/global/empty-view";
+import Header from "@/components/global/header";
 
 interface ProductDetailParams {
   params: {
@@ -75,7 +76,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
     fetchUser();
     fetchProduct();
     setLoading(false);
-  }, [id, user, userId]);
+  }, [id, userId]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -126,8 +127,8 @@ export default function Product({ params: { id } }: ProductDetailParams) {
 
   const handleShowModal = () => setShowModal(true);
 
-  if (loading || !product) return <div>로딩 중</div>;
-
+  if (loading) return <EmptyView text="로딩 중" />;
+  if (!product) return <EmptyView text="상품이 존재하지 않습니다." />;
   return (
     <>
       <Header />
@@ -149,14 +150,18 @@ export default function Product({ params: { id } }: ProductDetailParams) {
               className="scrollbar-hide h-[40rem] lg:h-fit flex flex-row lg:flex-col gap-4 lg:gap-52 items-center overflow-x-scroll overflow-y-hidden snap-x snap-mandatory"
             >
               {product!.productImages.map((value, index) => (
-                <Image
+                <div
                   key={index}
-                  src={value}
-                  width={465}
-                  height={500}
-                  alt={"상품 이미지"}
-                  className="w-full object-cover snap-center "
-                />
+                  className="w-full h-full bg-slate-400 shrink-0"
+                >
+                  <Image
+                    src={value}
+                    width={465}
+                    height={500}
+                    alt={"상품 이미지"}
+                    className="w-full h-full object-cover snap-center "
+                  />
+                </div>
               ))}
             </ul>
             {product!.productImages.length > 1 && (

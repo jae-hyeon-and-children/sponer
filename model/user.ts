@@ -1,7 +1,7 @@
 import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export interface IUser {
-	id: string;
+	id?: string;
 	address: string;
 	affiliation?: string;
 	approve?: boolean;
@@ -38,7 +38,7 @@ export const UserConverter = {
 			businessImageUrl: data.businessImageUrl,
 			email: data.email,
 			homepage: data.homepage,
-			loginType: data.loginType,
+
 			name: data.name,
 			phoneNumber: data.phoneNumber,
 			profileImage: data.profileImage,

@@ -39,4 +39,7 @@
   .caption {
     @apply font-normal text-[0.813rem] leading-[140%];
   }
+  .caption-2 {
+    @apply font-normal text-[0.5rem] leading-[140%];
+  }
 }

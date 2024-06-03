@@ -43,7 +43,6 @@ export async function getProducts(
     for (const product of productsDocSnap.docs) {
       const convertedProduct = ProductConverter.fromFirestore(product);
       products.push(convertedProduct);
-      console.log(convertedProduct);
     }
 
     return { status: 200, success: true, data: products };

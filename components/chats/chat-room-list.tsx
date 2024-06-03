@@ -23,7 +23,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 
 export default function ChatRoomList() {
   const [uid, setUid] = useState<string | null>(null);
@@ -56,9 +56,13 @@ export default function ChatRoomList() {
               ChatRoomConverter.fromFirestore(chatRoom)
             );
 
-            const selectedChatRoom = convertedChatRooms.find(
+            let selectedChatRoom = convertedChatRooms.find(
               (chatRoom) => chatRoom.id == chatRoomId
             );
+
+            if (selectedChatRoom === undefined) {
+              selectedChatRoom = convertedChatRooms[0];
+            }
 
             if (selectedChatRoom) {
               const otherUser = getOtherUser(selectedChatRoom);
