@@ -35,29 +35,18 @@ export default function ChangePasswordPage() {
   return (
     <>
       <Header />
-      <div className="flex flex-col items-center pt-60 px-4">
-        <div className="flex flex-col md:flex-row max-w-screen-2xl w-full">
-          <div className="flex flex-col justify-center items-center md:w-1/2">
-            <Image
-              src="/ggobok222.png"
-              alt="Logo"
-              width={852}
-              height={814}
-              className="hidden md:block"
-            />
-          </div>
-          <div className="flex flex-col m-auto items-start w-full md:w-1/2 h-[814px] p-4 md:pl-[100px] gap-2">
+      <div className="flex flex-col items-center h-screen px-4 ">
+        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+          <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
             <Image
               src="/sponer_Logo.png"
               alt="Logo"
               width={100}
               height={40}
-              className="items-center mt-20"
+              className="items-center "
             />
             <form action={dispatch} className="w-full">
-              <div className="text-gray-900 text-[2rem] mt-2 mb-3">
-                비밀번호 찾기
-              </div>
+              <div className="text-gray-900 text-[2rem] ">비밀번호 찾기</div>
               <div className="flex flex-col gap-5 mt-14">
                 <Input
                   name="email"
@@ -66,13 +55,13 @@ export default function ChangePasswordPage() {
                   required
                 />
                 {errorMessage && (
-                  <div className="text-red-500 text-center mt-2">
+                  <div className="text-state-red text-center mt-2">
                     {errorMessage}
                   </div>
                 )}
               </div>
               <div className="flex flex-col justify-center items-center text-center gap-2 mt-20">
-                <button className="border bg-primary text-gray-100 rounded-[3.5rem] w-96 h-14 flex justify-center items-center">
+                <button className="border bg-primary text-gray-100 rounded-full w-96 h-14 flex justify-center items-center">
                   <span className="label-1 text-gray-100">
                     비밀번호 재설정 메일 받기
                   </span>

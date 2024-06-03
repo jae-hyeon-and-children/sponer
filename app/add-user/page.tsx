@@ -43,30 +43,22 @@ export default function AdduserType() {
   return (
     <>
       <Header />
-      <div className="flex items-center pt-60 px-4">
-        <div className="flex flex-col md:flex-row max-w-screen-2xl w-full">
-          <div className="flex flex-col justify-center items-center md:w-1/2">
-            <Image
-              src="/ggobok222.png"
-              alt="Logo"
-              width={852}
-              height={814}
-              className="hidden md:block"
-            />
-          </div>
-          <div className="flex flex-col items-start justify-center md:w-1/2 h-[814px] p-4 md:pl-[100px] gap-2">
+      <div className="flex flex-col justify-center items-center h-screen px-4 ">
+        {/* 기억이 안나서 일단 헤더와 컨텐츠 사이에 간격을 만들어 줌 */}
+        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+          <div className="flex flex-col items-start  w-full md:w-[50%] gap-2">
             <div className="w-full mb-5">
-              <div className="caption w-[4rem] f-[1.5rem] bg-gray-700 border rounded-[3.5rem] text-gray-100 text-center">
+              <div className="caption w-16  bg-gray-700 border rounded-full text-gray-100 text-center">
                 step 1
               </div>
             </div>
-            <div className="display text-gray-900 text-[2rem] mb-10 text-center md:text-left">
+            <div className="display text-gray-900 text-[2rem] mb-10 text-start md:text-left">
               소속을 선택해 주세요
             </div>
-            <div className="flex justify-center lg:justify-start w-full">
-              <div className="flex flex-col items-center lg:items-start w-full">
+            <div className="flex justify-center lg:justify-center w-full">
+              <div className="flex flex-col items-center lg:items-center w-full">
                 <div
-                  className={`w-[29rem] h-[10.5rem] border mt-2 rounded-lg cursor-pointer ${
+                  className={`w-full h-full border mt-2 rounded-lg cursor-pointer ${
                     selectedOption === PATH_STYLELIST_USER
                       ? "bg-primary text-gray-100"
                       : "text-gray-800"
@@ -86,7 +78,7 @@ export default function AdduserType() {
                   </div>
                 </div>
                 <div
-                  className={`w-[29rem] h-[10.5rem] border mt-10 rounded-lg cursor-pointer ${
+                  className={`w-full h-full border mt-10 rounded-lg cursor-pointer ${
                     selectedOption === PATH_BRAND_USER
                       ? "bg-primary text-gray-50"
                       : "text-gray-800"
@@ -107,9 +99,9 @@ export default function AdduserType() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-start w-full mt-10">
+            <div className="flex items-center justify-center w-full mt-10">
               <button
-                className="border bg-primary rounded-[3.5rem] w-96 h-14 flex justify-center items-center"
+                className="border bg-primary rounded-full w-96 h-14 flex justify-center items-center"
                 onClick={handleNextClick}
               >
                 <span className="label-1 text-gray-100">다음으로</span>

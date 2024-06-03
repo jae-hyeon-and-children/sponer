@@ -4,6 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import useAuth from "@/libs/auth";
 import LogOutButton from "../logout/logoutbutton";
+import {
+  ArrowLeftOnRectangleIcon,
+  ArrowRightOnRectangleIcon,
+  EnvelopeIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 
 export default function Header() {
   const user = useAuth();
@@ -19,11 +25,11 @@ export default function Header() {
                 alt="Logo"
                 width={100}
                 height={40}
-                className="cursor-pointer items-center"
+                className="cursor-pointer"
               />
             </Link>
           </div>
-          <div className="flex space-x-4 gap-12">
+          <div className="hidden lg:flex space-x-4 gap-12">
             <Link href="/messages" className="text-black hover:text-gray-300">
               Messages
             </Link>
@@ -33,11 +39,26 @@ export default function Header() {
             {user ? (
               <LogOutButton />
             ) : (
-              <>
-                <Link href="/login" className="text-black hover:text-gray-300">
-                  로그인
-                </Link>
-              </>
+              <Link href="/login" className="text-black hover:text-gray-300">
+                로그인
+              </Link>
+            )}
+          </div>
+          <div className="flex lg:hidden space-x-4 gap-6 items-center">
+            <Link href="/messages">
+              <EnvelopeIcon className="h-6 w-6 text-black hover:text-gray-300" />
+            </Link>
+            <Link href="/mypage">
+              <UserCircleIcon className="h-6 w-6 text-black hover:text-gray-300" />
+            </Link>
+            {user ? (
+              <LogOutButton>
+                <ArrowRightOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
+              </LogOutButton>
+            ) : (
+              <Link href="/login">
+                <ArrowLeftOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
+              </Link>
             )}
           </div>
         </div>

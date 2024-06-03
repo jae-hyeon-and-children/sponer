@@ -38,14 +38,14 @@ export async function createChatRoom(
 ): Promise<IResponse<string>> {
   const data: IChatRoom = {
     users: [
-      { id: brand.id, name: brand.name, profileImage: brand.profileImage },
+      { id: brand.id!, name: brand.name, profileImage: brand.profileImage },
       {
-        id: stylelist.id,
+        id: stylelist.id!,
         name: stylelist.nickName ?? stylelist.name,
         profileImage: stylelist.profileImage,
       },
     ],
-    userIds: [brand.id, stylelist.id],
+    userIds: [brand.id!, stylelist.id!],
     lastMessage: "아직 메세지가 없습니다",
     updatedAt: Timestamp.now(),
     createdAt: Timestamp.now(),

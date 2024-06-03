@@ -39,7 +39,7 @@ export default async function login(
       }
     });
     // if (!auth.currentUser?.emailVerified) {
-    //   return { success: false, message: "이메일이 확인되지 않았습니다." };
+    //   return {status: 400, success: false, message: "이메일이 확인되지 않았습니다." };
     // }
 
     await updateProfile(loginUser.user, {});

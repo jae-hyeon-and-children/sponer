@@ -59,62 +59,64 @@ const AddressForm = () => {
   };
 
   return (
-    <div>
+    <div className=" form-group flex flex-col gap-2   w-full ">
       <DaumPostcodeScript />
-      <div className="form-group flex flex-col gap-2  ">
+      <div className=" form-group flex flex-col gap-4  ">
         <button
           type="button"
           onClick={handleAddressSearch}
-          className="h-10 disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed rounded-md border border-gray-900"
+          className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none  focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border border-black placeholder:text-neutral-400"
         >
           <span className="paragraph-2 text-gray-800">우편번호 찾기</span>
         </button>
 
-        <input
-          type="text"
-          id="postal_code"
-          name="postal_code"
-          value={postcode}
-          placeholder="우편번호"
-          readOnly
-          className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400 "
-        />
-      </div>
+        <div className="form-group my-2">
+          <input
+            type="text"
+            id="postal_code"
+            name="postal_code"
+            value={postcode}
+            placeholder="우편번호"
+            readOnly
+            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+          />
+        </div>
 
-      <div className="form-group my-2 ">
-        <input
-          type="text"
-          id="address"
-          name="address"
-          value={address}
-          placeholder="주소"
-          readOnly
-          className="bg-transparent rounded-md w-[600px] h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
-        />
-      </div>
+        <div className="form-group my-2 ">
+          <input
+            type="text"
+            id="address"
+            name="address"
+            value={address}
+            placeholder="주소"
+            readOnly
+            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+          />
+        </div>
 
-      <div className="form-group my-2">
-        <input
-          type="text"
-          id="detail_address"
-          name="detail_address"
-          value={detailAddress}
-          onChange={(e) => setDetailAddress(e.target.value)}
-          placeholder="상세주소"
-          className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
-        />
-      </div>
+        <div className="form-group my-2">
+          <input
+            type="text"
+            id="detail_address"
+            name="detail_address"
+            value={detailAddress}
+            onChange={(e) => setDetailAddress(e.target.value)}
+            placeholder="상세주소"
+            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+          />
+        </div>
 
-      <div className="form-group my-2">
-        <input
-          type="text"
-          id="extra_address"
-          name="extra_address"
-          value={extraAddress}
-          placeholder="참고항목"
-          readOnly
-          className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
-        />
+        <div className="form-group my-2">
+          <input
+            type="text"
+            id="extra_address"
+            name="extra_address"
+            value={extraAddress}
+            placeholder="참고항목"
+            readOnly
+            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,24 +1,28 @@
 "use client";
 
-import { auth } from "@/config/firebase/firebase";
 import { signOut } from "firebase/auth";
+import { auth } from "@/config/firebase/firebase";
+import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-const LogOutButton = () => {
-  const router = useRouter();
+interface LogOutButtonProps {
+  children?: ReactNode;
+}
 
-  const handleLogOut = async () => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        localStorage.removeItem("currentUser");
-      }
-    });
-    await signOut(auth);
-    console.log("User signed out", auth.currentUser);
-    router.push("/login");
+export default function LogOutButton({ children }: LogOutButtonProps) {
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push("/login");
+    } catch (error) {
+      console.error("Error logging out: ", error);
+    }
   };
 
-  return <button onClick={handleLogOut}>로그아웃</button>;
-};
-
-export default LogOutButton;
+  return (
+    <button onClick={handleLogout} className="text-black hover:text-gray-300">
+      {children ? children : "로그아웃"}
+    </button>
+  );
+}
