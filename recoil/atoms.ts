@@ -3,23 +3,18 @@ import { IChatUser } from "@/model/chat-room";
 import { IProduct } from "@/model/product";
 import { atom } from "recoil";
 
-export const typeFilterCategoryState = atom<string>({
-  key: "typeFilterCategoryState",
-  default: "all",
-});
-
-export const styleFilterCategoryState = atom<string[]>({
-  key: "styleFilterCategoryState",
-  default: [],
-});
-
 export const showDefaultModalState = atom<boolean>({
   key: "showDefaultModalState",
   default: false,
 });
 
-export const showFilterModalState = atom<boolean>({
-  key: "showFilterModalState",
+export const showChatRoomListState = atom<boolean>({
+  key: "showChatRoomListState",
+  default: false,
+});
+
+export const showProductSectionState = atom<boolean>({
+  key: "showProductSectionState",
   default: false,
 });
 
@@ -36,9 +31,4 @@ export const chatRoomUserState = atom<IChatUser | null>({
 export const chatRoomProductState = atom<IProduct | null>({
   key: "chatRoomProductState",
   default: null,
-});
-
-export const showProductsState = atom<boolean>({
-  key: "showProductsState",
-  default: false,
 });
