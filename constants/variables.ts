@@ -60,11 +60,21 @@ export enum ContentType {
   image = "image",
 }
 
+
 export enum UserType {
   stylelist = "stylelist",
   brand = "brand",
   admin = "admin",
 }
+
+/**
+ * Path
+ */
+
+export const PATH_ADD_USER = "add-user";
+export const PATH_STYLELIST_USER = "stylist-user";
+export const PATH_BRAND_USER = "brand-user";
+
 
 /**
  * Collection Name
