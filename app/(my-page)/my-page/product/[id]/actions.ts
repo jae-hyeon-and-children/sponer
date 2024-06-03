@@ -1,13 +1,13 @@
 "use server";
 
 import { fireStore, storage } from "@/config/firebase/firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { redirect } from "next/navigation";
 import { urlToBase64 } from "@/libs/utils/format";
 import { IProduct } from "@/model/product";
 import { COLLECTION_NAME_PRODUCT } from "@/constants/variables";
-
+import { IResponse } from "@/model/responses";
 
 export async function getProductById(
 	productId: string
@@ -86,12 +86,47 @@ export async function updateProduct(otherData: any, formData: FormData) {
 
 		const docRef = doc(fireStore, COLLECTION_NAME_PRODUCT, data.productId);
 		await updateDoc(docRef, productData);
+
+		const response: IResponse = {
+			status: 200,
+			success: true,
+			message: "Product updated successfully",
+		};
+
+		return response;
 	} catch (error) {
 		console.error("Error updating product: ", error);
-		return {
+		const response: IResponse = {
+			status: 400,
 			success: false,
-			message: "Failed to update product",
+			message: "Product updated failed",
 		};
+
+		return response;
 	}
-	redirect("/my-page/product-list");
+	// redirect("/my-page/product-list");
+}
+
+export async function deleteProduct(productId: any) {
+	console.log(productId);
+
+	try {
+		const productRef = doc(fireStore, "Product", productId);
+		await deleteDoc(productRef);
+		const response: IResponse = {
+			status: 200,
+			success: true,
+			message: "Product delete successfully",
+		};
+
+		return response;
+	} catch (error) {
+		const response: IResponse = {
+			status: 400,
+			success: false,
+			message: "Product delete failed",
+		};
+
+		return response;
+	}
 }

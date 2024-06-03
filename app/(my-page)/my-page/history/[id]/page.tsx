@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { IHistory } from "@/model/user";
+import { IBrandApplication } from "@/model/user";
 import { getHistoryById } from "./actions";
 import { ProductSideBar } from "@/components/my-page/side-bar";
 import { getFullDate } from "@/libs/utils/date";
@@ -10,7 +10,7 @@ export default async function EditProfile({
 }: {
 	params: { id: string };
 }) {
-	const history: IHistory[] = await getHistoryById(params.id);
+	const history: IBrandApplication[] = await getHistoryById(params.id);
 	const latestHistory = history[0];
 
 	let latestStatus = "신청 완료";
@@ -28,16 +28,14 @@ export default async function EditProfile({
 	}
 
 	return (
-		<main className="flex h-screen max-w-screen-2xl  text-gray-900 label-1">
+		<main className="flex h-screen text-gray-900 label-1">
 			<ProductSideBar />
-			<div className="w-full">
-				<div className="w-full h-[10rem] bg-primary mt-[5.25rem] flex justify-center relative">
-					<div className="h-fit flex w-5/6 justify-between absolute bottom-8">
-						<div className="display text-gray-100">브랜드 신청 이력</div>
-					</div>
+			<div className="w-full mt-20">
+				<div className="w-full h-52 bg-primary pl-4 md:pl-36">
+					<div className="display text-gray-100 pt-36">브랜드 신청 이력</div>
 				</div>
 				<StatusStep status={latestStatus.toString()} />
-				<ul className="flex flex-col w-full gap-4 p-12">
+				<ul className="flex flex-col w-full gap-4 p-4 md:px-36 max-w-screen-xl">
 					<li className="grid grid-cols-4 text-center border-b-2 border-black">
 						<p>신청일</p>
 						<p>브랜드명</p>
@@ -51,7 +49,13 @@ export default async function EditProfile({
 						>
 							<p>{getFullDate(history.createdAt)}</p>
 							<p>{history.brandName}</p>
-							<p>{history.approve.toString()}</p>
+							<p>
+								{history.reason
+									? "승인 거절"
+									: history.approve.toString() === "true"
+									? "승인 완료"
+									: "승인 대기"}
+							</p>
 							{history.reason && <p>{history.reason}</p>}
 						</li>
 					))}
