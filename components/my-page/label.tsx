@@ -16,16 +16,16 @@ export const ProductLabel: React.FC<ProductLabelProps> = ({
 	onSelect,
 }) => {
 	return (
-		<div className="flex gap-[0.75rem]">
+		<div className="flex gap-[0.75rem] flex-wrap">
 			{Object.entries(list).map(([key, value]) => (
 				<div
 					className={`text-gray-400 border border-gray-200 py-2 px-4 rounded-3xl cursor-pointer ${
-						selectedItems.includes(key)
+						selectedItems.includes(value)
 							? "bg-primary text-gray-100"
 							: "bg-white"
 					}`}
-					key={key}
-					onClick={() => onSelect(key)}
+					key={value}
+					onClick={() => onSelect(value)}
 				>
 					{value}
 				</div>

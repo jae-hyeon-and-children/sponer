@@ -27,10 +27,11 @@ export default function StylistUser() {
   const uid = auth.currentUser?.uid;
   useEffect(() => {
     if (!uid) {
+      console.log("리다이렉트 전이다");
       router.push("/login");
+      console.log("리다이렉트 후다");
     }
   }, [uid, router]);
-
   const bindData = uploadstylistUser.bind(null, uid!);
 
   const [uploadResponse, dispatch] = useFormState(bindData, null);

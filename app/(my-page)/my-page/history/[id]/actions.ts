@@ -3,7 +3,7 @@
 import { fireStore, storage } from "@/config/firebase/firebase";
 import { COLLECTION_NAME_USER } from "@/constants/variables";
 import { urlToBase64 } from "@/libs/utils/format";
-import { IHistory, IUser } from "@/model/user";
+import { IBrandApplication, IUser } from "@/model/user";
 import {
 	DocumentData,
 	Timestamp,
@@ -12,18 +12,23 @@ import {
 	doc,
 	getDoc,
 	getDocs,
+	orderBy,
+	query,
 	updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { redirect } from "next/navigation";
 
-export async function getHistoryById(userId: string): Promise<IHistory[]> {
+export async function getHistoryById(
+	userId: string
+): Promise<IBrandApplication[]> {
 	try {
 		const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
 		const historyRef = collection(userRef, "History");
-		const querySnapshot = await getDocs(historyRef);
 
-		const historyData: IHistory[] = querySnapshot.docs.map((doc) => {
+		// 쿼리를 사용하여 createdAt 기준으로 정렬
+		const q = query(historyRef, orderBy("createdAt", "desc"));
+		const querySnapshot = await getDocs(q);
+
+		const historyData: IBrandApplication[] = querySnapshot.docs.map((doc) => {
 			const data = doc.data() as DocumentData;
 
 			const createdAt = data.createdAt;
@@ -42,7 +47,7 @@ export async function getHistoryById(userId: string): Promise<IHistory[]> {
 				brandName: data.brandName,
 				createdAt: timestamp,
 				reason: data.reason,
-			} as IHistory;
+			} as IBrandApplication;
 		});
 
 		return historyData;

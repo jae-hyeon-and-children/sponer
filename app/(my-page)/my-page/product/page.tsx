@@ -17,7 +17,10 @@ import {
 	PRODUCT_TYPES,
 } from "@/constants/variables";
 import Input from "@/components/global/input";
-import { useFormStatus } from "react-dom";
+import useAuth from "@/libs/auth";
+import { useRouter } from "next/navigation";
+import { IResponse } from "@/model/responses";
+import Modal from "@/components/global/modal";
 
 export default function CreateProduct() {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -27,20 +30,32 @@ export default function CreateProduct() {
 	const [images, setImages] = useState<File[]>([]);
 	const [otherData, setFormData] = useState(new FormData());
 
+	const userAuth = useAuth();
+	const router = useRouter();
+
 	useEffect(() => {
-		const newFormData = new FormData();
-		images.forEach((image) => newFormData.append("images", image));
-		if (selectedType) newFormData.append("selectedType", selectedType);
-		if (selectedSize) newFormData.append("selectedSize", selectedSize);
-		if (selectedGender) newFormData.append("selectedGender", selectedGender);
-		selectedStyles.forEach((style) =>
-			newFormData.append("selectedStyles", style)
-		);
+		if (userAuth) {
+			const newFormData = new FormData();
+			images.forEach((image) => newFormData.append("images", image));
+			if (selectedType) newFormData.append("selectedType", selectedType);
+			if (selectedSize) newFormData.append("selectedSize", selectedSize);
+			if (selectedGender) newFormData.append("selectedGender", selectedGender);
+			selectedStyles.forEach((style) =>
+				newFormData.append("selectedStyles", style)
+			);
 
-		console.log(otherData);
+			newFormData.append("brandId", userAuth.uid);
 
-		setFormData(newFormData);
-	}, [selectedType, selectedSize, selectedGender, selectedStyles, images]);
+			setFormData(newFormData);
+		}
+	}, [
+		selectedType,
+		selectedSize,
+		selectedGender,
+		selectedStyles,
+		images,
+		userAuth,
+	]);
 
 	const selectType = (item: string) => setSelectedType(item);
 	const selectSize = (item: string) => setSelectedSize(item);
@@ -85,24 +100,37 @@ export default function CreateProduct() {
 		event.stopPropagation();
 	};
 
-	const updateProductWithList = uploadProduct.bind(null, otherData);
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const formData = new FormData(event.currentTarget);
+		const result: IResponse = await uploadProduct(otherData, formData);
+
+		if (result.success) {
+			<Modal>
+				<p>상품 등록 성공</p>
+			</Modal>;
+			router.push("/my-page/product-list");
+		} else {
+			return (
+				<Modal>
+					<p>상품 등록 실패</p>
+				</Modal>
+			);
+		}
+	};
 
 	return (
 		<>
-			<div className="w-full h-[84px] bg-gray-300 flex justify-center items-center display fixed top-0 z-20">
-				임시 Header
-			</div>
-			<div className=" h-screen flex flex-col justify-start items-start px-[9.5rem] pt-60 max-w-screen-2xl">
+			<div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 등록</div>
 				<form
-					className="w-full flex flex-col mt-16"
-					// onSubmit={handleUploadProduct}
-					action={updateProductWithList}
+					className="w-full flex flex-col mt-16 max-w-screen-xl"
+					onSubmit={handleSubmit}
 				>
 					<div className="w-full">
-						<div className="label-1 flex justify-between w-full mb-4">
+						<div className="label-1 flex flex-col justify-between w-full mb-4 lg:flex-row">
 							<span>상품 이미지(최대 5장)*</span>
-							<span className="text-gray-400">
+							<span className="text-gray-400 md:mt-0">
 								제일 첫 번째 이미지가 상품의 대표 이미지가 됩니다. 이미지를
 								끌어당겨 순서를 바꿀 수 있습니다.
 							</span>
@@ -120,11 +148,11 @@ export default function CreateProduct() {
 							className="cursor-pointer"
 							onClick={handleLabelClick}
 						>
-							<div className="grid grid-cols-5 mt-[1rem] w-full h-[311px] gap-3">
+							<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mt-[1rem] w-full gap-3">
 								{Array.from({ length: 5 }).map((_, index) => (
 									<div
 										key={index}
-										className="relative h-full bg-gray-100 flex justify-center items-center"
+										className="relative h-[20rem] bg-gray-100 flex justify-center items-center"
 										draggable={!!images[index]}
 										onDragStart={(event) => handleDragStart(event, index)}
 										onDrop={(event) => handleDrop(event, index)}
@@ -154,7 +182,7 @@ export default function CreateProduct() {
 							</div>
 						</label>
 					</div>
-					<div className="w-[36.625rem] mt-12 label-1 flex flex-col gap-3">
+					<div className="w-full md:w-[36rem] mt-12 label-1 flex flex-col gap-3">
 						<div>상품 이름 *</div>
 						<Input name="productName" count={40} />
 					</div>
@@ -167,23 +195,22 @@ export default function CreateProduct() {
 						/>
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
-						<div className="font-bold flex gap-[0.75rem] mt-[3.75rem]">
+						<div className="font-bold flex-col md:flex-row gap-[0.75rem] mt-[3.75rem]">
 							<span>상품 사이즈 *</span>
-							<span className="text-gray-400">사이즈 가이드 </span>
+							<span className="text-gray-400 md:mt-0">사이즈 가이드 </span>
 						</div>
 						<ProductLabel
-							list={PRODUCT_SIZE} // size 추가 필요
+							list={PRODUCT_SIZE}
 							selectedItems={selectedSize ? [selectedSize] : []}
 							onSelect={selectSize}
 						/>
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
-						<div className="w-[36.625rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
+						<div className="w-full md:w-[36rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
 							<div>맞춤 키 *</div>
 							<select
-								// 수정 필요
 								name="height"
-								className="text-gray-800 p-3 rounded-md focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none"
+								className="text-gray-800  py-5 px-4  rounded-md focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none"
 							>
 								<option>사이즈를 선택하세요.</option>
 								{Object.entries(PRODUCT_HEIGHT).map(([key, value]) => (
