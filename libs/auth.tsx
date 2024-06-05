@@ -16,7 +16,8 @@ const useAuth = (): User | null => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
+  console.log("인증상태 ", auth); // 의존성 배열을 [auth]로 수정
 
   return user;
 };
