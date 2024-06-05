@@ -7,6 +7,7 @@ import { editProfile } from "@/app/(my-page)/my-page/[id]/actions";
 import { ProductSideBar } from "./side-bar";
 import AddressForm from "../global/address";
 import Button from "../global/button";
+import { IResponse } from "@/model/responses";
 
 interface BrandUserFormProps {
 	data: IUser;
@@ -17,9 +18,6 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 	const userData = data;
 	const [profileImg, setProfileImg] = useState<File | null>(null);
 	const [businessImg, setBusinessImg] = useState<File | null>(null);
-	const [phoneNum1, setPhoneNum1] = useState<string | null>(null);
-	const [phoneNum2, setPhoneNum2] = useState<string | null>(null);
-	const [phoneNum3, setPhoneNum3] = useState<string | null>(null);
 
 	useEffect(() => {
 		const convertBase64ToFile = async () => {
@@ -35,11 +33,6 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 			setProfileImg(user);
 			setBusinessImg(brand);
 		};
-
-		const phoneNum = userData.phoneNumber.split("-");
-		setPhoneNum1(phoneNum[0]);
-		setPhoneNum2(phoneNum[1]);
-		setPhoneNum3(phoneNum[2]);
 
 		convertBase64ToFile();
 	}, [data]);
@@ -62,6 +55,23 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 		event.stopPropagation();
 	};
 
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		if (!profileImg || !businessImg) {
+			const formData = new FormData(event.currentTarget);
+			const result: IResponse = await editProfile(userId, formData);
+		} else {
+			const formData = new FormData(event.currentTarget);
+			formData.delete("profileImage");
+			formData.delete("businessImageUrl");
+			formData.append("profileImage", profileImg);
+			formData.append("businessImageUrl", businessImg);
+
+			const result: IResponse = await editProfile(userId, formData);
+		}
+	};
+
 	const updateWithUserID = editProfile.bind(null, userId);
 
 	return (
@@ -73,7 +83,8 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 				</div>
 				<form
 					className="flex flex-col gap-12 p-4 pt-20 md:pl-36 w-full max-w-screen-2xl"
-					action={updateWithUserID}
+					// action={updateWithUserID}
+					onSubmit={handleSubmit}
 				>
 					<div className="flex flex-col md:flex-row justify-between w-full">
 						<span>프로필 사진*</span>
@@ -85,6 +96,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 								className="hidden"
 								onChange={handleProfileImageUpload}
 								id="profile-upload"
+								// defaultValue={profileImg}
 							></input>
 							<label
 								htmlFor="profile-upload"
@@ -178,6 +190,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 								id="business-upload"
 								className="hidden"
 								onChange={handleBusinessImageUpload}
+								// defaultValue={businessImg}
 							></input>
 							<label
 								htmlFor="business-upload"

@@ -7,6 +7,7 @@ import { editProfile } from "@/app/(my-page)/my-page/[id]/actions";
 import { ProductSideBar } from "./side-bar";
 import Button from "../global/button";
 import AddressForm from "../global/address";
+import { IResponse } from "@/model/responses";
 
 interface StylistUserFormProps {
 	data: IUser;
@@ -49,6 +50,21 @@ export default function StylistUserForm({
 		event.stopPropagation();
 	};
 
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		if (!profileImg) {
+			const formData = new FormData(event.currentTarget);
+			const result: IResponse = await editProfile(userId, formData);
+		} else {
+			const formData = new FormData(event.currentTarget);
+			formData.delete("profileImage");
+			formData.append("profileImage", profileImg);
+
+			const result: IResponse = await editProfile(userId, formData);
+		}
+	};
+
 	const updateWithUserID = editProfile.bind(null, userId);
 
 	return (
@@ -60,7 +76,8 @@ export default function StylistUserForm({
 				</div>
 				<form
 					className="flex flex-col gap-12 p-4 pt-20 md:pl-36 w-full max-w-screen-2xl"
-					action={updateWithUserID}
+					// action={updateWithUserID}
+					onSubmit={handleSubmit}
 				>
 					<div className="flex flex-col md:flex-row justify-between w-full">
 						<span>프로필 사진*</span>
