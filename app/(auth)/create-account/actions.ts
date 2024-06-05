@@ -1,3 +1,5 @@
+"use server";
+
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
@@ -35,7 +37,7 @@ export default async function createAccount(
     // 어드민 정보 설정
     const admin: IUser = {
       id: "sponer@gmail.com",
-      name: "관리자임 ㅋ 진짜임",
+      name: "",
       profileImage: "/path/to/admin/profileImage.png",
       email: "admin@example.com",
       address: "Admin Address",
