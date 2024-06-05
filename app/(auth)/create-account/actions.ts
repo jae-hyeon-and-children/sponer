@@ -1,5 +1,3 @@
-"use server";
-
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
