@@ -1,3 +1,5 @@
+"use server";
+
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { fireStore, storage } from "@/config/firebase/firebase";
