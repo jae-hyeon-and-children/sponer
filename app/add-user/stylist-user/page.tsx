@@ -9,6 +9,7 @@ import AddressForm from "@/components/global/address";
 import { auth } from "@/config/firebase/firebase";
 import { useRouter } from "next/navigation";
 import Header from "@/components/global/header";
+import useAuth from "@/libs/hook/useAuth";
 
 export default function StylistUser() {
   const router = useRouter();
@@ -24,8 +25,10 @@ export default function StylistUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
+  const user = useAuth();
   const uid = auth.currentUser?.uid;
   useEffect(() => {
+    console.log("유저인증 훅", uid);
     if (!uid) {
       console.log("리다이렉트 전이다");
       router.push("/login");
