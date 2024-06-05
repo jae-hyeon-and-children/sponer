@@ -169,7 +169,7 @@ export default function StylistUserForm({
 					<div className="flex flex-col md:flex-row justify-between w-full">
 						<span>주소*</span>
 						<span className="w-[36rem]">
-							<AddressForm />
+							<AddressForm fullAddress={userData.address} />
 						</span>
 					</div>
 					<div className="flex flex-col md:flex-row justify-between w-full">

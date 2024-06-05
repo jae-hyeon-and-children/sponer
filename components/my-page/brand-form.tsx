@@ -168,7 +168,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 					<div className="flex flex-col md:flex-row justify-between w-full">
 						<span>사업장 주소*</span>
 						<span className="w-full md:w-[36rem] mt-4 md:mt-0">
-							<AddressForm />
+							<AddressForm fullAddress={userData.address} />
 						</span>
 					</div>
 					<div className="flex flex-col md:flex-row justify-between w-full">
