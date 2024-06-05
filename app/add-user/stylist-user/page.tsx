@@ -32,6 +32,7 @@ export default function StylistUser() {
       console.log("리다이렉트 후다");
     }
   }, [uid, router]);
+
   const bindData = uploadstylistUser.bind(null, uid!);
 
   const [uploadResponse, dispatch] = useFormState(bindData, null);
@@ -59,7 +60,7 @@ export default function StylistUser() {
 
         <form
           action={dispatch}
-          className="flex flex-col items-center mt-16 w-full gap-7"
+          className="flex flex-col s items-center mt-16 w-full gap-7"
         >
           <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <p className="w-[30%] label-1 text-gray-900">프로필 사진 *</p>
@@ -101,7 +102,9 @@ export default function StylistUser() {
 
           <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
             <span className="w-[30%] label-1 text-gray-900">이름 *</span>
-            <Input name="name" type="text" placeholder="이름" required />
+            <div className="flex w-[50%] ">
+              <Input name="name" type="text" placeholder="이름" required />
+            </div>
           </div>
 
           <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
