@@ -59,18 +59,18 @@ const AddressForm = () => {
   };
 
   return (
-    <div className=" form-group flex flex-col gap-2   w-full ">
+    <div className="form-group flex flex-col gap-2 w-full items-center">
       <DaumPostcodeScript />
-      <div className=" form-group flex flex-col gap-4  ">
+      <div className="form-group flex flex-col gap-4 w-full items-center">
         <button
           type="button"
           onClick={handleAddressSearch}
-          className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none  focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border border-black placeholder:text-neutral-400"
+          className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border border-black placeholder:text-neutral-400"
         >
           <span className="paragraph-2 text-gray-800">우편번호 찾기</span>
         </button>
 
-        <div className="form-group my-2">
+        <div className="flex w-full lg:w-[60%] justify-center">
           <input
             type="text"
             id="postal_code"
@@ -82,7 +82,7 @@ const AddressForm = () => {
           />
         </div>
 
-        <div className="form-group my-2 ">
+        <div className="flex w-full lg:w-[60%] justify-center">
           <input
             type="text"
             id="address"
@@ -94,7 +94,7 @@ const AddressForm = () => {
           />
         </div>
 
-        <div className="form-group my-2">
+        <div className="flex w-full lg:w-[60%] justify-center">
           <input
             type="text"
             id="detail_address"
@@ -106,7 +106,7 @@ const AddressForm = () => {
           />
         </div>
 
-        <div className="form-group my-2">
+        <div className="flex w-full lg:w-[60%] justify-center">
           <input
             type="text"
             id="extra_address"
