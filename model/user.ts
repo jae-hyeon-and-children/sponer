@@ -1,6 +1,11 @@
 import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 
-export interface IUser {
+interface FileNameProp {
+	profileFileName?: string;
+	businessFileName?: string;
+}
+
+export interface IUser extends FileNameProp {
 	id?: string;
 	address: string;
 	affiliation?: string;
