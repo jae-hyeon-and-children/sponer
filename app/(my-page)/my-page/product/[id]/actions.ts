@@ -8,6 +8,7 @@ import { urlToBase64 } from "@/libs/utils/format";
 import { IProduct } from "@/model/product";
 import { COLLECTION_NAME_PRODUCT } from "@/constants/variables";
 import { IResponse } from "@/model/responses";
+import { getFileNameFromUrl } from "@/libs/utils/image";
 
 export async function getProductById(
 	productId: string
@@ -19,8 +20,10 @@ export async function getProductById(
 		const docSnap = await getDoc(docRef);
 
 		if (docSnap.exists()) {
-			console.log("Document data:", docSnap.data());
+			// console.log("Document data:", docSnap.data());
 			const data = docSnap.data();
+
+			// const fileName = getFileNameFromUrl(data.productImages);
 
 			if (data.productImages && Array.isArray(data.productImages)) {
 				const base64Images = await Promise.all(
@@ -30,8 +33,16 @@ export async function getProductById(
 					})
 				);
 
+				const fileNames = data.productImages.map((url) => {
+					const fileName = getFileNameFromUrl(url, "products");
+					return fileName;
+				});
+
 				data.productImages = base64Images;
+				data.fileNames = fileNames;
 			}
+
+			console.log(data);
 
 			return { id: docSnap.id, ...data } as IProduct;
 		} else {
