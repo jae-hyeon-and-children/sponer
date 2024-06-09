@@ -3,6 +3,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import RecoilWrapper from "@/recoil/recoil-wrapper";
 import Header from "@/components/global/header";
+import Footer from "@/components/global/footer";
 
 const suit = localFont({
   src: "./fonts/SUIT-Variable.woff2",
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={suit.className}>
         <Header />
         <RecoilWrapper>{children}</RecoilWrapper>
+        <Footer />
       </body>
     </html>
   );
