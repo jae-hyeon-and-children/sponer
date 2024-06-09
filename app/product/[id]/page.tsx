@@ -131,8 +131,6 @@ export default function Product({ params: { id } }: ProductDetailParams) {
   if (!product) return <EmptyView text="상품이 존재하지 않습니다." />;
   return (
     <>
-      <Header />
-
       <Modal>
         {sizeTable && (
           <SizeTable
@@ -282,7 +280,6 @@ export default function Product({ params: { id } }: ProductDetailParams) {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
