@@ -48,7 +48,6 @@ export default function StylistUser() {
 
   return (
     <>
-      <Header />
       <div className="flex flex-col items-start h-screen  px-4 pt-40 ">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center ">
           <div className="w-full mb-5">
