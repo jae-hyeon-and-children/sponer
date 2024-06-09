@@ -32,10 +32,16 @@ export default function Header() {
             </Link>
           </div>
           <div className="hidden lg:flex space-x-4 gap-12">
-            <Link href="/messages" className="text-black hover:text-gray-300">
+            <Link
+              href={`/chats/${user?.uid}`}
+              className="text-black hover:text-gray-300"
+            >
               Messages
             </Link>
-            <Link href="/mypage" className="text-black hover:text-gray-300">
+            <Link
+              href={`/my-page/${user?.uid}`}
+              className="text-black hover:text-gray-300"
+            >
               My Page
             </Link>
             {user ? (
@@ -47,10 +53,10 @@ export default function Header() {
             )}
           </div>
           <div className="flex lg:hidden space-x-4 gap-6 items-center">
-            <Link href="/messages">
+            <Link href={`/chats/${user?.uid}`}>
               <EnvelopeIcon className="h-6 w-6 text-black hover:text-gray-300" />
             </Link>
-            <Link href="/mypage">
+            <Link href={`/my-page/${user?.uid}`}>
               <UserCircleIcon className="h-6 w-6 text-black hover:text-gray-300" />
             </Link>
             {user ? (
