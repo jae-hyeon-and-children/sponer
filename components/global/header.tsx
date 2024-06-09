@@ -30,6 +30,9 @@ export default function Header() {
                 className="cursor-pointer"
               />
             </Link>
+            <div>
+              <Link href="/add-user">소속정하기</Link>
+            </div>
           </div>
           <div className="hidden lg:flex space-x-4 gap-12">
             <Link
