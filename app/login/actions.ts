@@ -24,23 +24,7 @@ export default async function login(
 
     const uid = auth.currentUser?.uid || "";
 
-    console.log("로그인 유저 UID:", uid);
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        localStorage.setItem(
-          "currentUser",
-          JSON.stringify({
-            uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-            phtoURL: user.photoURL,
-          })
-        );
-      }
-    });
-    // if (!auth.currentUser?.emailVerified) {
-    //   return {status: 400, success: false, message: "이메일이 확인되지 않았습니다." };
-    // }
+    console.log("현재 유저는? ", uid);
 
     await updateProfile(loginUser.user, {});
     return {

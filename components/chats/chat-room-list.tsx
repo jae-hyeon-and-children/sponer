@@ -60,8 +60,8 @@ export default function ChatRoomList() {
               (chatRoom) => chatRoom.id == chatRoomId
             );
 
-            if (selectedChatRoom === undefined) {
-              selectedChatRoom = convertedChatRooms[0];
+            if (selectedChatRoom === undefined && convertedChatRooms[0]) {
+              router.push(`/chats/${convertedChatRooms[0].id}`);
             }
 
             if (selectedChatRoom) {

@@ -13,7 +13,7 @@ export default function ChatRoomSection({ children }: ChatRoomSectionProps) {
     <section
       className={`${
         !showChatRoomList && "hidden"
-      }  fixed z-10 h-screen md:sticky top-0 overflow-y-scroll scrollbar-hide w-full md:w-96 bg-gray-100 px-6 py-8 border-r border-r-gray-200 md:block`}
+      }  sticky z-10 h-screen md:sticky top-0 overflow-y-scroll scrollbar-hide w-full md:w-96 bg-gray-100 px-6 py-8 border-r border-r-gray-200 md:block`}
     >
       {children}
     </section>
