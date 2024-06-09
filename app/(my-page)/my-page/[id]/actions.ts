@@ -3,6 +3,7 @@
 import { auth, fireStore, storage } from "@/config/firebase/firebase";
 import { COLLECTION_NAME_USER } from "@/constants/variables";
 import { urlToBase64 } from "@/libs/utils/format";
+import { getFileNameFromUrl } from "@/libs/utils/image";
 import { IResponse } from "@/model/responses";
 import { IUser } from "@/model/user";
 import {
@@ -47,7 +48,7 @@ export async function editProfile(userId: string, formData: FormData) {
 		businessImageUrl: formData.get("businessImageUrl") as File,
 	};
 
-	console.log(data.profileImage);
+	console.log(data.businessImageUrl);
 
 	try {
 		const prevUserRef = doc(fireStore, COLLECTION_NAME_USER, userId);
@@ -85,7 +86,7 @@ export async function editProfile(userId: string, formData: FormData) {
 				? data.businessImageUrl
 				: await uploadFile(
 						data.businessImageUrl,
-						`business_certificate_image/${data.businessImageUrl}`
+						`business_certificate_image/${data.businessImageUrl.name}`
 				  );
 
 		const userData: Partial<IUser> = {
@@ -102,16 +103,22 @@ export async function editProfile(userId: string, formData: FormData) {
 		const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
 		await updateDoc(userRef, userData);
 
-		return {
+		const response: IResponse = {
+			status: 200,
 			success: true,
 			message: "Profile updated successfully",
 		};
+
+		return response;
 	} catch (error) {
 		console.error("Error updating profile: ", error);
-		return {
+		const response: IResponse = {
+			status: 400,
 			success: false,
-			message: "Failed to update profile",
+			message: "Profile updated successfully",
 		};
+
+		return response;
 	}
 }
 
@@ -127,13 +134,26 @@ export async function getUserById(userId: string): Promise<IUser | null> {
 			const data = docSnap.data();
 
 			if (data.profileImage) {
+				const profileFileName = getFileNameFromUrl(
+					data.profileImage,
+					"profile"
+				);
 				const base64 = await urlToBase64(data.profileImage);
 				data.profileImage = `data:image/jpeg;base64,${base64}`;
+
+				data.profileFileName = profileFileName;
 			}
 
 			if (data.businessImageUrl) {
+				const businessFileName = getFileNameFromUrl(
+					data.businessImageUrl,
+					"business"
+				);
+
 				const base64 = await urlToBase64(data.businessImageUrl);
 				data.businessImageUrl = `data:image/jpeg;base64,${base64}`;
+
+				data.businessFileName = businessFileName;
 			}
 
 			return data as IUser;

@@ -4,59 +4,74 @@ import { useState } from "react";
 import DaumPostcodeScript from "../../libs/api/juso-api";
 
 declare global {
-  interface Window {
-    daum: any;
-  }
+	interface Window {
+		daum: any;
+	}
 }
 
 interface IAddr {
-  address: string;
-  zonecode: string;
+	address: string;
+	zonecode: string;
 }
-const AddressForm = () => {
-  const [postcode, setPostcode] = useState("");
-  const [address, setAddress] = useState("");
-  const [detailAddress, setDetailAddress] = useState("");
-  const [extraAddress, setExtraAddress] = useState("");
 
-  const handleAddressSearch = () => {
-    if (window.daum && window.daum.Postcode) {
-      new window.daum.Postcode({
-        oncomplete: function (data: any) {
-          let addr = "";
-          let extraAddr = "";
+interface AddressFormProps {
+	fullAddress?: string;
+}
+const AddressForm = ({ fullAddress }: AddressFormProps) => {
+	const [postcode, setPostcode] = useState("");
+	const [address, setAddress] = useState("");
+	const [detailAddress, setDetailAddress] = useState("");
+	const [extraAddress, setExtraAddress] = useState("");
 
-          if (data.userSelectedType === "R") {
-            addr = data.roadAddress;
-          } else {
-            addr = data.jibunAddress;
-          }
+	useEffect(() => {
+		if (fullAddress) {
+			const [zonecode, addr, detailAddr, extraAddr] = fullAddress.split(", ");
+			setPostcode(zonecode || "");
+			setAddress(addr || "");
+			setDetailAddress(detailAddr || "");
+			setExtraAddress(extraAddr || "");
+		}
+	}, [fullAddress]);
 
-          if (data.userSelectedType === "R") {
-            if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
-              extraAddr += data.bname;
-            }
-            if (data.buildingName !== "" && data.apartment === "Y") {
-              extraAddr +=
-                extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
-            }
-            if (extraAddr !== "") {
-              extraAddr = " (" + extraAddr + ")";
-            }
-            setExtraAddress(extraAddr);
-          } else {
-            setExtraAddress("");
-          }
+	const handleAddressSearch = () => {
+		if (window.daum && window.daum.Postcode) {
+			new window.daum.Postcode({
+				oncomplete: function (data: any) {
+					let addr = "";
+					let extraAddr = "";
 
-          setPostcode(data.zonecode);
-          setAddress(addr);
-          document.getElementById("detail_address")!.focus();
-        },
-      }).open();
-    } else {
-      console.error("Daum Postcode script is not loaded.");
-    }
-  };
+					if (data.userSelectedType === "R") {
+						addr = data.roadAddress;
+					} else {
+						addr = data.jibunAddress;
+					}
+
+					if (data.userSelectedType === "R") {
+						if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
+							extraAddr += data.bname;
+						}
+						if (data.buildingName !== "" && data.apartment === "Y") {
+							extraAddr +=
+								extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
+						}
+						if (extraAddr !== "") {
+							extraAddr = " (" + extraAddr + ")";
+						}
+						setExtraAddress(extraAddr);
+					} else {
+						setExtraAddress("");
+					}
+
+					setPostcode(data.zonecode);
+					setAddress(addr);
+					document.getElementById("detail_address")!.focus();
+				},
+			}).open();
+		} else {
+			console.error("Daum Postcode script is not loaded.");
+		}
+	};
+
 
   return (
     <div className="form-group flex flex-col gap-2 w-full items-center">

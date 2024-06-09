@@ -7,6 +7,7 @@ import { editProfile } from "@/app/(my-page)/my-page/[id]/actions";
 import { ProductSideBar } from "./side-bar";
 import AddressForm from "../global/address";
 import Button from "../global/button";
+import { IResponse } from "@/model/responses";
 
 interface BrandUserFormProps {
 	data: IUser;
@@ -17,31 +18,28 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 	const userData = data;
 	const [profileImg, setProfileImg] = useState<File | null>(null);
 	const [businessImg, setBusinessImg] = useState<File | null>(null);
-	const [phoneNum1, setPhoneNum1] = useState<string | null>(null);
-	const [phoneNum2, setPhoneNum2] = useState<string | null>(null);
-	const [phoneNum3, setPhoneNum3] = useState<string | null>(null);
 
 	useEffect(() => {
-		const convertBase64ToFile = async () => {
-			const user = base64ToFile(
-				userData.profileImage,
-				`user${Date.now()}.jpeg`
-			);
-			const brand = base64ToFile(
-				userData.businessImageUrl!,
-				`business${Date.now()}.jpeg`
-			);
+		if (data) {
+			const convertBase64ToFile = async () => {
+				const user = base64ToFile(
+					userData.profileImage,
+					userData.profileFileName!
+				);
+				const brand = base64ToFile(
+					userData.businessImageUrl!,
+					userData.businessFileName!
+				);
 
-			setProfileImg(user);
-			setBusinessImg(brand);
-		};
+				console.log(userData.profileFileName);
+				console.log(userData.businessFileName);
 
-		const phoneNum = userData.phoneNumber.split("-");
-		setPhoneNum1(phoneNum[0]);
-		setPhoneNum2(phoneNum[1]);
-		setPhoneNum3(phoneNum[2]);
+				setProfileImg(user);
+				setBusinessImg(brand);
+			};
 
-		convertBase64ToFile();
+			convertBase64ToFile();
+		}
 	}, [data]);
 
 	const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +60,25 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 		event.stopPropagation();
 	};
 
-	const updateWithUserID = editProfile.bind(null, userId);
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		if (!profileImg || !businessImg) {
+			const formData = new FormData(event.currentTarget);
+			const result: IResponse = await editProfile(userId, formData);
+		} else {
+			console.log("hey");
+			const formData = new FormData(event.currentTarget);
+			formData.delete("profileImage");
+			formData.delete("businessImageUrl");
+			formData.append("profileImage", profileImg);
+			formData.append("businessImageUrl", businessImg);
+
+			const result: IResponse = await editProfile(userId, formData);
+		}
+	};
+
+	// const updateWithUserID = editProfile.bind(null, userId);
 
 	return (
 		<main className="flex flex-col lg:flex-row h-screen text-gray-900 label-1">
@@ -73,7 +89,8 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 				</div>
 				<form
 					className="flex flex-col gap-12 p-4 pt-20 md:pl-36 w-full max-w-screen-2xl"
-					action={updateWithUserID}
+					// action={updateWithUserID}
+					onSubmit={handleSubmit}
 				>
 					<div className="flex flex-col md:flex-row justify-between w-full">
 						<span>프로필 사진*</span>
@@ -85,6 +102,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 								className="hidden"
 								onChange={handleProfileImageUpload}
 								id="profile-upload"
+								// defaultValue={profileImg}
 							></input>
 							<label
 								htmlFor="profile-upload"
@@ -156,7 +174,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 					<div className="flex flex-col md:flex-row justify-between w-full">
 						<span>사업장 주소*</span>
 						<span className="w-full md:w-[36rem] mt-4 md:mt-0">
-							<AddressForm />
+							<AddressForm fullAddress={userData.address} />
 						</span>
 					</div>
 					<div className="flex flex-col md:flex-row justify-between w-full">
@@ -178,6 +196,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 								id="business-upload"
 								className="hidden"
 								onChange={handleBusinessImageUpload}
+								// defaultValue={businessImg}
 							></input>
 							<label
 								htmlFor="business-upload"
