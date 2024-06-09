@@ -34,7 +34,6 @@ export default function ChangePasswordPage() {
 
   return (
     <>
-      <Header />
       <div className="flex flex-col items-center h-screen px-4 ">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
           <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
