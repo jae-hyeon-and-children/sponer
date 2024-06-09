@@ -248,15 +248,15 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                 <div className="flex flex-col gap-3">
                   <h4 className="label-1  text-gray-800">Types</h4>
                   <p className="label-2  text-gray-800">
-                    {PRODUCT_TYPES[product!.genderCategory]}
+                    {product!.genderCategory}
                   </p>
                 </div>
                 <div className="flex flex-col gap-3">
                   <h4 className="label-1  text-gray-800">Style</h4>
                   <ul className="flex gap-x-3 gap-y-2 flex-wrap">
                     {product!.styleCategory.map((value, index) => (
-                      <li key={index} className="label-2  text-gray-800">
-                        {PRODUCT_STYLES[value]}
+                      <li key={index} className="label-2 text-gray-800">
+                        {value}
                       </li>
                     ))}
                   </ul>
