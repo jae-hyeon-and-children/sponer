@@ -11,7 +11,6 @@ import { InstantSearch } from "react-instantsearch";
 export default function Products() {
   return (
     <>
-      <Header />
       <InstantSearch searchClient={searchClient} indexName={"Product"}>
         <main className="flex">
           <FilterSideBar />
@@ -23,7 +22,6 @@ export default function Products() {
           </div>
         </main>
       </InstantSearch>
-      <Footer />
     </>
   );
 }
