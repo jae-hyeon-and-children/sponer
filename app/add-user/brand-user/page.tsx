@@ -73,12 +73,12 @@ export default function BrandUser() {
           action={dispatch}
           className="flex flex-col items-center mt-16 w-full gap-7"
         >
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
-            <p className="w-[30%] label-1 text-gray-900">프로필 사진 *</p>
+          <div className="flex lg:items-center w-[90%] flex-col lg:flex-row lg:justify-between">
+            <span className="w-[70%] label-1 text-gray-900">프로필 사진 *</span>
             <div className="w-full flex justify-center">
               <label
                 htmlFor="profile_photo"
-                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-gray-400 rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
                 style={{
                   backgroundImage: profilephoto
                     ? `url(${profilephoto})`
@@ -111,19 +111,21 @@ export default function BrandUser() {
             )}
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between ">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">브랜드명 *</span>
-            <Input
-              name="brand_name"
-              type="text"
-              placeholder="브랜드명"
-              required
-            />
+            <div className="flex w-full lg:w-[50%]">
+              <Input
+                name="brand_name"
+                type="text"
+                placeholder="브랜드명"
+                required
+              />
+            </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between ">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">대표 연락처 *</span>
-            <div className="flex w-full gap-4 items-center">
+            <div className="flex w-full gap-4 items-center lg:w-[50%]">
               <Input
                 name="phoneNumber1"
                 type="tel"
@@ -150,44 +152,59 @@ export default function BrandUser() {
             </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between ">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">담당자 이름 *</span>
-            <Input name="name" type="text" placeholder="담당자 이름" required />
+            <div className="flex w-full lg:w-[50%]">
+              <Input
+                name="name"
+                type="text"
+                placeholder="담당자 이름"
+                required
+              />
+            </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between ">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">
               브랜드 홈페이지 *
             </span>
-            <Input
-              name="homepage"
-              type="text"
-              placeholder="https://www.yourbrand.com"
-              required
-            />
+            <div className="flex w-full lg:w-[50%]">
+              <Input
+                name="homepage"
+                type="text"
+                placeholder="https://www.yourbrand.com"
+                required
+              />
+            </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between ">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">주소 *</span>
-            <div className="w-full flex justify-center">
+            <div className="flex w-full lg:w-[50%]">
               <AddressForm />
             </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between ">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900 ">이메일 *</span>
-            <Input name="email" type="email" placeholder="example@gmail.com" />
+            <div className="flex w-full lg:w-[50%]">
+              <Input
+                name="email"
+                type="email"
+                placeholder="example@gmail.com"
+              />
+            </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between  ">
-            <span className="w-[30%] label-1 text-gray-900">
+          <div className="flex lg:items-center w-[90%] flex-col lg:flex-row lg:justify-between">
+            <span className="w-[70%] label-1 text-gray-900">
               사업자 등록증 사진 첨부 *
             </span>
 
             <div className="w-full flex justify-center">
               <label
                 htmlFor="business_photo"
-                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md cursor-pointer bg-center bg-cover w-full lg:w-[50rem] h-[20rem] shrink-0"
+                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-gray-400 rounded-md cursor-pointer bg-center bg-cover w-full lg:w-[56rem] h-[20rem] shrink-0"
                 style={{
                   backgroundImage: certificatephoto
                     ? `url(${certificatephoto})`

@@ -1,6 +1,6 @@
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
-import { fireStore, storage } from "@/config/firebase/firebase";
+import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
+import { auth, fireStore, storage } from "@/config/firebase/firebase";
 import { IResponse } from "@/model/responses";
 import { IUser } from "@/model/user";
 
@@ -17,7 +17,32 @@ export default async function uploadstylistUser(
     };
   }
 
+  const user = auth.currentUser;
+  if (!user) {
+    console.error("인증되지 않은 사용자입니다.");
+    return {
+      status: 401,
+      success: false,
+      message: "인증되지 않은 사용자입니다.",
+    };
+  }
+
   try {
+    const userDocRef = doc(fireStore, "User", uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const existingUserType = userDocSnap.data().userType;
+      if (existingUserType === "stylist" || existingUserType === "brand") {
+        console.log(`이미 ${existingUserType} 유형의 사용자입니다.`);
+        return {
+          status: 400,
+          success: false,
+          message: `이미 ${existingUserType} 유형의 사용자입니다.`,
+        };
+      }
+    }
+
     const postalCode = formData.get("postal_code") as string;
     const address = formData.get("address") as string;
     const detailAddress = formData.get("detail_address") as string;

@@ -7,16 +7,11 @@ const useAuth = (): User | null => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      console.log("현재 로그인 유저 정보 : ", currentUser);
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
+      setUser(currentUser);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 이 효과가 실행되도록 함
 
   return user;
 };

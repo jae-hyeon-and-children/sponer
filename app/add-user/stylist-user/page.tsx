@@ -9,6 +9,7 @@ import AddressForm from "@/components/global/address";
 import { auth } from "@/config/firebase/firebase";
 import { useRouter } from "next/navigation";
 import Header from "@/components/global/header";
+import useAuth from "@/libs/hook/useAuth";
 
 export default function StylistUser() {
   const router = useRouter();
@@ -24,14 +25,17 @@ export default function StylistUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
+  const user = useAuth();
   const uid = auth.currentUser?.uid;
   useEffect(() => {
+    console.log("유저인증 훅", uid);
     if (!uid) {
       console.log("리다이렉트 전이다");
       router.push("/login");
       console.log("리다이렉트 후다");
     }
   }, [uid, router]);
+
   const bindData = uploadstylistUser.bind(null, uid!);
 
   const [uploadResponse, dispatch] = useFormState(bindData, null);
@@ -45,13 +49,13 @@ export default function StylistUser() {
   return (
     <>
       <Header />
-      <div className="flex flex-col items-center h-screen  px-4 pt-40 ">
+      <div className="flex flex-col items-start h-screen  px-4 pt-40 ">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center ">
           <div className="w-full mb-5">
             <div className="caption w-16  bg-gray-700 border rounded-full text-gray-100 text-center">
               step 2
             </div>
-            <div className="display text-gray-900 w-[15.5rem] h-[3.2rem]">
+            <div className="display text-gray-900 w-[15.5rem]">
               프로필에 필요한 정보를 입력해 주세요
             </div>
           </div>
@@ -61,12 +65,12 @@ export default function StylistUser() {
           action={dispatch}
           className="flex flex-col items-center mt-16 w-full gap-7"
         >
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
-            <p className="w-[30%] label-1 text-gray-900">프로필 사진 *</p>
+          <div className="flex lg:items-center w-[90%] flex-col lg:flex-row lg:justify-between">
+            <span className="w-[70%] label-1 text-gray-900">프로필 사진 *</span>
             <div className="w-full flex justify-center">
               <label
                 htmlFor="photo"
-                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                className="border-2 border-gray-400 aspect-square flex items-center justify-center flex-col text-neutral-300  rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
                 style={{
                   backgroundImage: profilephoto
                     ? `url(${profilephoto})`
@@ -99,19 +103,28 @@ export default function StylistUser() {
             )}
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">이름 *</span>
-            <Input name="name" type="text" placeholder="이름" required />
+            <div className="flex w-full lg:w-[50%]">
+              <Input name="name" type="text" placeholder="이름" required />
+            </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">닉네임 *</span>
-            <Input name="nickname" type="text" placeholder="닉네임" required />
+            <div className="flex w-full lg:w-[50%]">
+              <Input
+                name="nickname"
+                type="text"
+                placeholder="닉네임"
+                required
+              />
+            </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">연락처 *</span>
-            <div className="flex w-full gap-4 items-center">
+            <div className="flex w-full gap-4 items-center lg:w-[50%]">
               <Input
                 name="phoneNumber1"
                 type="tel"
@@ -138,25 +151,33 @@ export default function StylistUser() {
             </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">주소 *</span>
-            <div className="w-full flex justify-center">
+            <div className="w-full lg:w-[50%]">
               <AddressForm />
             </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">소속 *</span>
-            <Input
-              name="affiliation"
-              type="text"
-              placeholder="ex) 프리랜서, 회사, 방송국 소속 등"
-            />
+            <div className="flex w-full lg:w-[50%]">
+              <Input
+                name="affiliation"
+                type="text"
+                placeholder="ex) 프리랜서, 회사, 방송국 소속 등"
+              />
+            </div>
           </div>
 
-          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-between">
+          <div className="flex lg:items-center w-full flex-col lg:flex-row lg:justify-around">
             <span className="w-[30%] label-1 text-gray-900">이메일 *</span>
-            <Input name="email" type="email" placeholder="example@gmail.com" />
+            <div className="flex w-full lg:w-[50%]">
+              <Input
+                name="email"
+                type="email"
+                placeholder="example@gmail.com"
+              />
+            </div>
           </div>
 
           <div className="flex justify-center mt-10">

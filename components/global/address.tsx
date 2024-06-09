@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import DaumPostcodeScript from "../../app/api/juso-api";
+import DaumPostcodeScript from "../../libs/api/juso-api";
 
 declare global {
   interface Window {
@@ -59,18 +59,18 @@ const AddressForm = () => {
   };
 
   return (
-    <div className=" form-group flex flex-col gap-2   w-full ">
+    <div className="form-group flex flex-col gap-2 w-full items-center">
       <DaumPostcodeScript />
-      <div className=" form-group flex flex-col gap-4  ">
+      <div className="form-group flex flex-col gap-4 w-full items-center ">
         <button
           type="button"
           onClick={handleAddressSearch}
-          className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none  focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border border-black placeholder:text-neutral-400"
+          className="bg-transparent   rounded-md w-full lg:w-full py-5 px-4 focus:outline-none focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border border-black placeholder:text-neutral-400"
         >
           <span className="paragraph-2 text-gray-800">우편번호 찾기</span>
         </button>
 
-        <div className="form-group my-2">
+        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
           <input
             type="text"
             id="postal_code"
@@ -78,11 +78,11 @@ const AddressForm = () => {
             value={postcode}
             placeholder="우편번호"
             readOnly
-            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
           />
         </div>
 
-        <div className="form-group my-2 ">
+        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
           <input
             type="text"
             id="address"
@@ -90,11 +90,11 @@ const AddressForm = () => {
             value={address}
             placeholder="주소"
             readOnly
-            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
           />
         </div>
 
-        <div className="form-group my-2">
+        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
           <input
             type="text"
             id="detail_address"
@@ -102,11 +102,11 @@ const AddressForm = () => {
             value={detailAddress}
             onChange={(e) => setDetailAddress(e.target.value)}
             placeholder="상세주소"
-            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
           />
         </div>
 
-        <div className="form-group my-2">
+        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
           <input
             type="text"
             id="extra_address"
@@ -114,12 +114,11 @@ const AddressForm = () => {
             value={extraAddress}
             placeholder="참고항목"
             readOnly
-            className="bg-transparent rounded-md w-full py-5 px-4 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border-none placeholder:text-neutral-400"
+            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
           />
         </div>
       </div>
     </div>
   );
 };
-
 export default AddressForm;
