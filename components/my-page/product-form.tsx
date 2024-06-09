@@ -43,6 +43,7 @@ export default function ProductForm(data: any) {
 	const [selectedHeight, setSelectedHeight] = useState<string | null>(null);
 	const [images, setImages] = useState<File[]>([]);
 	const [imageURLs, setImageURLs] = useState<string[]>([]);
+	const [fileNames, setFileNames] = useState<string[]>([]);
 	const [initialData, setInitialData] = useState<IProduct | null>(null);
 	const [otherData, setFormData] = useState(new FormData());
 
@@ -58,6 +59,7 @@ export default function ProductForm(data: any) {
 			setSelectedStyles(data.data.styleCategory);
 			setSelectedHeight(data.data.height);
 			setImageURLs(data.data.productImages || []);
+			setFileNames(data.data.fileNames || []);
 		}
 	}, [data]);
 
@@ -91,8 +93,9 @@ export default function ProductForm(data: any) {
 		const convertBase64ToFile = async () => {
 			if (imageURLs.length > 0) {
 				const files = imageURLs.map((url, index) =>
-					base64ToFile(url, `image${Date.now()}.jpeg`)
+					base64ToFile(url, fileNames[index])
 				);
+				console.log(files);
 				setImages(files);
 			}
 		};

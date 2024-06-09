@@ -20,21 +20,26 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 	const [businessImg, setBusinessImg] = useState<File | null>(null);
 
 	useEffect(() => {
-		const convertBase64ToFile = async () => {
-			const user = base64ToFile(
-				userData.profileImage,
-				`user${Date.now()}.jpeg`
-			);
-			const brand = base64ToFile(
-				userData.businessImageUrl!,
-				`business${Date.now()}.jpeg`
-			);
+		if (data) {
+			const convertBase64ToFile = async () => {
+				const user = base64ToFile(
+					userData.profileImage,
+					userData.profileFileName!
+				);
+				const brand = base64ToFile(
+					userData.businessImageUrl!,
+					userData.businessFileName!
+				);
 
-			setProfileImg(user);
-			setBusinessImg(brand);
-		};
+				console.log(userData.profileFileName);
+				console.log(userData.businessFileName);
 
-		convertBase64ToFile();
+				setProfileImg(user);
+				setBusinessImg(brand);
+			};
+
+			convertBase64ToFile();
+		}
 	}, [data]);
 
 	const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +67,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 			const formData = new FormData(event.currentTarget);
 			const result: IResponse = await editProfile(userId, formData);
 		} else {
+			console.log("hey");
 			const formData = new FormData(event.currentTarget);
 			formData.delete("profileImage");
 			formData.delete("businessImageUrl");
@@ -72,7 +78,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 		}
 	};
 
-	const updateWithUserID = editProfile.bind(null, userId);
+	// const updateWithUserID = editProfile.bind(null, userId);
 
 	return (
 		<main className="flex flex-col lg:flex-row h-screen text-gray-900 label-1">
