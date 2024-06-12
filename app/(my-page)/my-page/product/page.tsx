@@ -29,6 +29,7 @@ export default function CreateProduct() {
 	const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
 	const [images, setImages] = useState<File[]>([]);
 	const [otherData, setFormData] = useState(new FormData());
+	const [errors, setErrors] = useState<Record<string, string>>({});
 
 	const userAuth = useAuth();
 	const router = useRouter();
@@ -105,17 +106,16 @@ export default function CreateProduct() {
 		const formData = new FormData(event.currentTarget);
 		const result: IResponse = await uploadProduct(otherData, formData);
 
-		if (result.success) {
-			<Modal>
-				<p>상품 등록 성공</p>
-			</Modal>;
-			router.push("/my-page/product-list");
+		if (!result.success && result.errors) {
+			const newErrors: Record<string, string> = {};
+			result.errors.forEach((error: any) => {
+				if (Array.isArray(error.path) && error.path.length > 0) {
+					newErrors[error.path[0]] = error.message;
+				}
+			});
+			setErrors(newErrors);
 		} else {
-			return (
-				<Modal>
-					<p>상품 등록 실패</p>
-				</Modal>
-			);
+			router.push("/my-page/product-list");
 		}
 	};
 
@@ -181,10 +181,16 @@ export default function CreateProduct() {
 								))}
 							</div>
 						</label>
+						{errors.productImages && (
+							<span className="text-red-500">{errors.productImages}</span>
+						)}
 					</div>
 					<div className="w-full md:w-[36rem] mt-12 label-1 flex flex-col gap-3">
 						<div>상품 이름 *</div>
 						<Input name="productName" count={40} />
+						{errors.productName && (
+							<span className="text-red-500">{errors.productName}</span>
+						)}
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1 mt-[3.75rem]">
 						<div className="font-bold">상품 종류 (1개 선택) *</div>
@@ -193,6 +199,9 @@ export default function CreateProduct() {
 							selectedItems={selectedType ? [selectedType] : []}
 							onSelect={selectType}
 						/>
+						{errors.productType && (
+							<span className="text-red-500">{errors.productType}</span>
+						)}
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="font-bold flex-col md:flex-row gap-[0.75rem] mt-[3.75rem]">
@@ -204,6 +213,9 @@ export default function CreateProduct() {
 							selectedItems={selectedSize ? [selectedSize] : []}
 							onSelect={selectSize}
 						/>
+						{errors.productSize && (
+							<span className="text-red-500">{errors.productSize}</span>
+						)}
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="w-full md:w-[36rem] mt-[3rem] label-1 flex flex-col gap-[12px]">
@@ -218,6 +230,9 @@ export default function CreateProduct() {
 								))}
 							</select>
 						</div>
+						{errors.productHeight && (
+							<span className="text-red-500">{errors.productHeight}</span>
+						)}
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="font-bold flex gap-[0.75rem] mt-[3.75rem]">
@@ -228,6 +243,9 @@ export default function CreateProduct() {
 							selectedItems={selectedGender ? [selectedGender] : []}
 							onSelect={selectGender}
 						/>
+						{errors.productGender && (
+							<span className="text-red-500">{errors.productGender}</span>
+						)}
 					</div>
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="font-bold flex gap-[0.75rem] mt-[3.75rem]">
@@ -238,6 +256,9 @@ export default function CreateProduct() {
 							selectedItems={selectedStyles ? selectedStyles : []}
 							onSelect={toggleStyle}
 						/>
+						{errors.productStyles && (
+							<span className="text-red-500">{errors.productStyles}</span>
+						)}
 					</div>
 					<div className="mt-[5rem] w-full h-fit flex justify-center label-1 text-gray-100">
 						<button type="submit" className="bg-primary px-12 py-4 rounded-3xl">
