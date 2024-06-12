@@ -23,7 +23,18 @@ import {
 	writeBatch,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { redirect } from "next/navigation";
+import { z } from "zod";
+
+const profileSchema = z.object({
+	profileImage: z.instanceof(File),
+	brandName: z.string().min(1, "브랜드 이름은 필수입니다.").optional(),
+	phoneNumber: z.string().min(9, "잘못된 전화번호 형식입니다.").max(11),
+	name: z.string().min(1, "이름은 필수입니다."),
+	homepage: z.string().url().optional(),
+	address: z.string().min(1, "주소는 필수입니다."),
+	email: z.string().email("올바른 이메일 형식이 아닙니다."),
+	businessImageUrl: z.instanceof(File).optional(),
+});
 
 async function uploadFile(file: File, path: string): Promise<string> {
 	const storageRef = ref(storage, path);
@@ -32,36 +43,39 @@ async function uploadFile(file: File, path: string): Promise<string> {
 	return downloadURL;
 }
 
-export async function editProfile(userId: string, formData: FormData) {
-	const data = {
-		profileImage: formData.get("profileImage") as File,
-		brandName: formData.get("brandName") as string,
-		phoneNumber: ((((formData.get("phoneNumber1") as string) +
-			formData.get("phoneNumber2")) as string) +
-			formData.get("phoneNumber3")) as string,
-		name: formData.get("name") as string,
-		homepage: formData.get("homepage") as string,
-		address: `${formData.get("postal_code")}, ${formData.get(
-			"address"
-		)}, ${formData.get("detail_address")}, ${formData.get("extra_address")}`,
-		email: formData.get("email") as string,
-		businessImageUrl: formData.get("businessImageUrl") as File,
-	};
-
-	console.log(data.businessImageUrl);
-
+export async function editProfile(
+	userId: string,
+	formData: FormData
+): Promise<IResponse> {
 	try {
+		const data = {
+			profileImage: formData.get("profileImage"),
+			brandName: formData.get("brandName"),
+			phoneNumber: ((((formData.get("phoneNumber1") as string) +
+				formData.get("phoneNumber2")) as string) +
+				formData.get("phoneNumber3")) as string,
+			name: formData.get("name"),
+			homepage: formData.get("homepage"),
+			address: `${formData.get("postal_code")}, ${formData.get(
+				"address"
+			)}, ${formData.get("detail_address")}, ${formData.get("extra_address")}`,
+			email: formData.get("email"),
+			businessImageUrl: formData.get("businessImageUrl"),
+		};
+
+		const parsedData = profileSchema.parse(data);
+
 		const prevUserRef = doc(fireStore, COLLECTION_NAME_USER, userId);
 		const docSnap = await getDoc(prevUserRef);
 
 		if (docSnap.exists()) {
 			const existingData = docSnap.data() as IUser;
 
-			if (existingData.brandName !== data.brandName) {
+			if (existingData.brandName !== parsedData.brandName) {
 				const historyRef = collection(prevUserRef, "History");
 				const historyData = {
 					approve: false,
-					brandName: data.brandName,
+					brandName: parsedData.brandName,
 					createdAt: Timestamp.now(),
 				};
 				await addDoc(historyRef, historyData);
@@ -69,56 +83,66 @@ export async function editProfile(userId: string, formData: FormData) {
 					"Brand Name has Changed From, ",
 					existingData.brandName,
 					"to",
-					data.brandName
+					parsedData.brandName
 				);
 			}
+
+			const profileImageUrl = parsedData.profileImage
+				? await uploadFile(
+						parsedData.profileImage,
+						`profile_images/${parsedData.profileImage.name}`
+				  )
+				: existingData.profileImage;
+			const businessImageUrl = parsedData.businessImageUrl
+				? await uploadFile(
+						parsedData.businessImageUrl,
+						`business_certificate_image/${parsedData.businessImageUrl.name}`
+				  )
+				: existingData.businessImageUrl;
+
+			const userData: Partial<IUser> = {
+				profileImage: profileImageUrl || existingData.profileImage,
+				brandName: parsedData.brandName || existingData.brandName,
+				phoneNumber: parsedData.phoneNumber,
+				name: parsedData.name,
+				homepage: parsedData.homepage || existingData.homepage,
+				address: parsedData.address,
+				businessImageUrl: businessImageUrl || existingData.businessImageUrl,
+				updatedAt: Timestamp.now(),
+			};
+
+			const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
+			await updateDoc(userRef, userData);
+
+			return {
+				status: 200,
+				success: true,
+				message: "Profile updated successfully",
+			};
+		} else {
+			return {
+				status: 404,
+				success: false,
+				message: "User not found",
+			};
 		}
-
-		const profileImageUrl =
-			typeof data.profileImage === "string"
-				? data.profileImage
-				: await uploadFile(
-						data.profileImage,
-						`profile_images/${data.profileImage.name}`
-				  );
-		const businessImageUrl =
-			typeof data.businessImageUrl === "string"
-				? data.businessImageUrl
-				: await uploadFile(
-						data.businessImageUrl,
-						`business_certificate_image/${data.businessImageUrl.name}`
-				  );
-
-		const userData: Partial<IUser> = {
-			profileImage: profileImageUrl,
-			brandName: data.brandName,
-			phoneNumber: data.phoneNumber,
-			name: data.name,
-			homepage: data.homepage,
-			address: data.address,
-			businessImageUrl: businessImageUrl,
-			updatedAt: Timestamp.now(),
-		};
-
-		const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
-		await updateDoc(userRef, userData);
-
-		const response: IResponse = {
-			status: 200,
-			success: true,
-			message: "Profile updated successfully",
-		};
-
-		return response;
 	} catch (error) {
-		console.error("Error updating profile: ", error);
-		const response: IResponse = {
-			status: 400,
-			success: false,
-			message: "Profile updated successfully",
-		};
-
-		return response;
+		if (error instanceof z.ZodError) {
+			console.error("Validation Error:", error.errors);
+			return {
+				status: 400,
+				success: false,
+				message: "Validation error",
+				errors: error.errors.map((e) => ({ path: e.path, message: e.message })),
+			};
+		} else {
+			console.error("Error updating profile: ", error);
+			return {
+				status: 500,
+				success: false,
+				message: "Profile update failed",
+			};
+		}
 	}
 }
 
