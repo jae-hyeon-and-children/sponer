@@ -53,8 +53,8 @@ export default function StylistUser() {
 
   return (
     <>
-      <div className="flex flex-col items-start  px-4 pt-40 ">
-        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center ">
+      <div className="flex flex-col items-start px-4 pt-60">
+        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full justify-center ">
           <div className="w-full mb-5">
             <div className="caption w-16  bg-gray-700 border rounded-full text-gray-100 text-center">
               step 2
