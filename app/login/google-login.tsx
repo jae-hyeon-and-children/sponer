@@ -13,19 +13,10 @@ export default function GoogleLoginButton() {
       await signInWithPopup(auth, provider);
       auth.onAuthStateChanged((user) => {
         if (user) {
-          // localStorage.setItem(
-          //   "currentUser",
-          //   JSON.stringify({
-          //     uid: user.uid,
-          //     displayName: user.displayName,
-          //     email: user.email,
-          //     photoURL: user.photoURL,
-          //   })
-          // );
         }
       });
       console.log("로그인 유저 : ", auth.currentUser);
-      router.push("/");
+      router.push("/add-user");
     } catch (error) {
       console.error(error);
     }
@@ -34,7 +25,7 @@ export default function GoogleLoginButton() {
   return (
     <button
       onClick={handleGoogleLogin}
-      className="flex items-center gap-2 p-2 border bg-white text-gray-700 rounded-[3.5rem] w-96 h-14 justify-center"
+      className="flex items-center gap-2 p-2 border bg-white text-gray-700 rounded-xl w-full h-14 justify-center"
     >
       <svg
         width="24"
@@ -61,7 +52,7 @@ export default function GoogleLoginButton() {
         />
       </svg>
 
-      <span className="label-1 text-gray-700">구글 계정으로 시작하기</span>
+      <span className="label-1 text-gray-700">구글 로그인</span>
     </button>
   );
 }
