@@ -5,6 +5,7 @@ import Input from "../global/input";
 import { ProductLabel } from "./label";
 import {
 	PRODUCT_CATEGORIES,
+	PRODUCT_CATEGORIES_REVERSE,
 	PRODUCT_HEIGHT,
 	PRODUCT_SIZE,
 	PRODUCT_STYLES,
@@ -21,6 +22,9 @@ import { IResponse } from "@/model/responses";
 import Modal from "../global/modal";
 import { useRecoilState } from "recoil";
 import { showDefaultModalState } from "@/recoil/atoms";
+import { ISizeTable } from "@/constants/type-table";
+import { getSizeTable } from "@/libs/utils/table";
+import SizeTable from "../global/size-table";
 
 export const base64ToFile = (
 	base64Data: string,
@@ -52,7 +56,9 @@ export default function ProductForm(data: any) {
 	const [errors, setErrors] = useState<Record<string, string>>({});
 	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
 
-	const [modalContent, setModalContent] = useState<JSX.Element | null>(null)
+	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+
+	const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
 	const userAuth = useAuth();
 	const router = useRouter();
@@ -87,6 +93,8 @@ export default function ProductForm(data: any) {
 		}
 		if (data) newFormData.append("productId", data.data.id);
 		setFormData(newFormData);
+
+		setSizeTable(getSizeTable(PRODUCT_CATEGORIES_REVERSE[selectedType!]));
 	}, [
 		selectedType,
 		selectedSize,
@@ -160,7 +168,7 @@ export default function ProductForm(data: any) {
 	) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
- 
+
 		const productId = formData.get("productId") as string;
 		const result = await updateProduct(otherData, formData);
 
@@ -173,12 +181,8 @@ export default function ProductForm(data: any) {
 			});
 			setErrors(newErrors);
 		} else {
-			setModalContent(
-				<div>
-					상품 정보 수정 성공
-				</div>
-			)
-			setShowModal(true)
+			setModalContent(<div>상품 정보 수정 성공</div>);
+			setShowModal(true);
 		}
 	};
 
@@ -192,35 +196,32 @@ export default function ProductForm(data: any) {
 
 		if (result.success) {
 			alert(result.message);
-			setModalContent(
-				<div>
-					상품 삭제 성공
-				</div>
-			)
-			setShowModal(true)
+			setModalContent(<div>상품 삭제 성공</div>);
+			setShowModal(true);
 		} else {
-			setModalContent(
-				<div>
-					상품 삭제 실패
-				</div>
-			)
-			setShowModal(true)
+			setModalContent(<div>상품 삭제 실패</div>);
+			setShowModal(true);
 		}
 	};
 
 	const handleCloseModal = () => {
-		router.push("/my-page/product-list")
-  };
+		router.push("/my-page/product-list");
+	};
 
+	const handleShowModal = () => setShowModal(true);
 
 	if (!initialData) return <div>Loading...</div>;
 
 	return (
 		<>
-			<Modal onClose={handleCloseModal}>
-				{isShowModal && (
-					modalContent
-					)}
+			<Modal onClose={handleCloseModal}>{isShowModal && modalContent}</Modal>
+			<Modal>
+				{sizeTable && (
+					<SizeTable
+						tableHeader={sizeTable!.header}
+						tableBody={sizeTable!.body}
+					></SizeTable>
+				)}
 			</Modal>
 			<div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 수정</div>
@@ -306,7 +307,14 @@ export default function ProductForm(data: any) {
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="font-bold flex-col md:flex-row gap-[0.75rem] mt-[3.75rem]">
 							<span>상품 사이즈 *</span>
-							<span className="text-gray-400 md:mt-0">사이즈 가이드 </span>
+							{sizeTable && (
+								<span
+									onClick={handleShowModal}
+									className="label-3 text-gray-400 mt-8 underline cursor-pointer"
+								>
+									사이즈 가이드
+								</span>
+							)}
 						</div>
 						<ProductLabel
 							list={PRODUCT_SIZE} // size 추가 필요

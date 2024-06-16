@@ -11,6 +11,7 @@ import React, {
 import { uploadProduct } from "./actions";
 import {
 	PRODUCT_CATEGORIES,
+	PRODUCT_CATEGORIES_REVERSE,
 	PRODUCT_HEIGHT,
 	PRODUCT_SIZE,
 	PRODUCT_STYLES,
@@ -23,6 +24,9 @@ import { IResponse } from "@/model/responses";
 import Modal from "@/components/global/modal";
 import { showDefaultModalState } from "@/recoil/atoms";
 import { useRecoilState } from "recoil";
+import { ISizeTable } from "@/constants/type-table";
+import { getSizeTable } from "@/libs/utils/table";
+import SizeTable from "@/components/global/size-table";
 
 export default function CreateProduct() {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -36,6 +40,8 @@ export default function CreateProduct() {
 	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
 
 	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+
+	const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
 	const userAuth = useAuth();
 	const router = useRouter();
@@ -54,6 +60,8 @@ export default function CreateProduct() {
 			newFormData.append("brandId", userAuth.uid);
 
 			setFormData(newFormData);
+
+			setSizeTable(getSizeTable(PRODUCT_CATEGORIES_REVERSE[selectedType!]));
 		}
 	}, [
 		selectedType,
@@ -130,9 +138,19 @@ export default function CreateProduct() {
 		router.push("/my-page/product-list");
 	};
 
+	const handleShowModal = () => setShowModal(true);
+
 	return (
 		<>
 			<Modal onClose={handleCloseModal}>{isShowModal && modalContent}</Modal>
+			<Modal>
+				{sizeTable && (
+					<SizeTable
+						tableHeader={sizeTable!.header}
+						tableBody={sizeTable!.body}
+					></SizeTable>
+				)}
+			</Modal>
 			<div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 등록</div>
 				<form
@@ -218,7 +236,14 @@ export default function CreateProduct() {
 					<div className="w-full flex flex-col gap-[0.75rem] label-1">
 						<div className="font-bold flex-col md:flex-row gap-[0.75rem] mt-[3.75rem]">
 							<span>상품 사이즈 *</span>
-							<span className="text-gray-400 md:mt-0">사이즈 가이드 </span>
+							{sizeTable && (
+								<span
+									onClick={handleShowModal}
+									className="label-3 text-gray-400 mt-8 underline cursor-pointer"
+								>
+									사이즈 가이드
+								</span>
+							)}
 						</div>
 						<ProductLabel
 							list={PRODUCT_SIZE}
