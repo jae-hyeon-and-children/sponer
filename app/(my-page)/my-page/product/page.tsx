@@ -21,6 +21,8 @@ import useAuth from "@/libs/auth";
 import { useRouter } from "next/navigation";
 import { IResponse } from "@/model/responses";
 import Modal from "@/components/global/modal";
+import { showDefaultModalState } from "@/recoil/atoms";
+import { useRecoilState } from "recoil";
 
 export default function CreateProduct() {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -30,6 +32,10 @@ export default function CreateProduct() {
 	const [images, setImages] = useState<File[]>([]);
 	const [otherData, setFormData] = useState(new FormData());
 	const [errors, setErrors] = useState<Record<string, string>>({});
+
+	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
+
+	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
 
 	const userAuth = useAuth();
 	const router = useRouter();
@@ -115,12 +121,18 @@ export default function CreateProduct() {
 			});
 			setErrors(newErrors);
 		} else {
-			router.push("/my-page/product-list");
+			setModalContent(<div>상품 등록 성공</div>);
+			setShowModal(true);
 		}
+	};
+
+	const handleCloseModal = () => {
+		router.push("/my-page/product-list");
 	};
 
 	return (
 		<>
+			<Modal onClose={handleCloseModal}>{isShowModal && modalContent}</Modal>
 			<div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 등록</div>
 				<form
