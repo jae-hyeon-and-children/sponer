@@ -38,6 +38,7 @@ export default function CreateProduct() {
 	const [errors, setErrors] = useState<Record<string, string>>({});
 
 	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
+	const [isShowSize, setShowSize] = useState<boolean>(false);
 
 	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
 
@@ -138,19 +139,26 @@ export default function CreateProduct() {
 		router.push("/my-page/product-list");
 	};
 
-	const handleShowModal = () => setShowModal(true);
+	const handleCloseSize = () => {
+		setShowSize(false);
+	};
+
+	const handleShowModal = () => {
+		setShowModal(true);
+		setShowSize(true);
+	};
 
 	return (
 		<>
 			<Modal onClose={handleCloseModal}>{isShowModal && modalContent}</Modal>
-			<Modal>
-				{sizeTable && (
+			{sizeTable && isShowSize && (
+				<Modal onClose={handleCloseSize}>
 					<SizeTable
 						tableHeader={sizeTable!.header}
 						tableBody={sizeTable!.body}
 					></SizeTable>
-				)}
-			</Modal>
+				</Modal>
+			)}
 			<div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 등록</div>
 				<form
