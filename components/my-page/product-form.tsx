@@ -18,6 +18,9 @@ import { IProduct } from "@/model/product";
 import { useRouter } from "next/navigation";
 import useAuth from "@/libs/auth";
 import { IResponse } from "@/model/responses";
+import Modal from "../global/modal";
+import { useRecoilState } from "recoil";
+import { showDefaultModalState } from "@/recoil/atoms";
 
 export const base64ToFile = (
 	base64Data: string,
@@ -47,6 +50,9 @@ export default function ProductForm(data: any) {
 	const [initialData, setInitialData] = useState<IProduct | null>(null);
 	const [otherData, setFormData] = useState(new FormData());
 	const [errors, setErrors] = useState<Record<string, string>>({});
+	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
+
+	const [modalContent, setModalContent] = useState<JSX.Element | null>(null)
 
 	const userAuth = useAuth();
 	const router = useRouter();
@@ -154,7 +160,7 @@ export default function ProductForm(data: any) {
 	) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
-
+ 
 		const productId = formData.get("productId") as string;
 		const result = await updateProduct(otherData, formData);
 
@@ -167,7 +173,12 @@ export default function ProductForm(data: any) {
 			});
 			setErrors(newErrors);
 		} else {
-			router.push("/my-page/product-list");
+			setModalContent(
+				<div>
+					상품 정보 수정 성공
+				</div>
+			)
+			setShowModal(true)
 		}
 	};
 
@@ -181,16 +192,36 @@ export default function ProductForm(data: any) {
 
 		if (result.success) {
 			alert(result.message);
-			router.push("/my-page/product-list");
+			setModalContent(
+				<div>
+					상품 삭제 성공
+				</div>
+			)
+			setShowModal(true)
 		} else {
-			alert(result.message);
+			setModalContent(
+				<div>
+					상품 삭제 실패
+				</div>
+			)
+			setShowModal(true)
 		}
 	};
+
+	const handleCloseModal = () => {
+		router.push("/my-page/product-list")
+  };
+
 
 	if (!initialData) return <div>Loading...</div>;
 
 	return (
 		<>
+			<Modal onClose={handleCloseModal}>
+				{isShowModal && (
+					modalContent
+					)}
+			</Modal>
 			<div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
 				<div className="display">상품 정보 수정</div>
 				<form
