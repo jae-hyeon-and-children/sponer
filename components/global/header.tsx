@@ -14,22 +14,23 @@ import {
 export default function Header() {
   const user = useAuth();
 
-  // if (!user) return null;
-
   return (
     <div className="">
-      <nav className="border-b-2 p-1 fixed top-0 left-0 right-0 bg-white z-10">
+      <nav className=" p-1 fixed top-0 left-0 right-0 bg-white z-10">
         <div className="container mx-auto flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href="/">
               <Image
                 src="/sponer_Logo.png"
                 alt="Logo"
-                width={100}
-                height={40}
+                width={69}
+                height={50}
                 className="cursor-pointer"
               />
             </Link>
+            <div className="ml-4">
+              <Link href="/add-user">소속정하기</Link>
+            </div>
           </div>
           <div className="hidden lg:flex space-x-4 gap-12">
             <Link

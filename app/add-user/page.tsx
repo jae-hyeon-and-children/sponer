@@ -8,23 +8,27 @@ import { auth } from "@/config/firebase/firebase";
 import {
   PATH_ADD_USER,
   PATH_BRAND_USER,
-  PATH_STYLELIST_USER,
+  PATH_STYLIST_USER,
 } from "@/constants/variables";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function AdduserType() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [uid, setUid] = useState<string | null>(null);
 
   const router = useRouter();
-  const uid = auth.currentUser?.uid;
-
   useEffect(() => {
-    if (!uid) {
-      console.log("리다이렉트 전이다");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      } else {
+        setUid(null);
+        router.push("/login");
+      }
+    });
 
-      router.push("/login");
-      console.log("리다이렉트 후다");
-    }
-  }, [uid, router]);
+    return () => unsubscribe();
+  }, [router]);
 
   const handleSelection = (option: string) => {
     console.log(option);
@@ -34,8 +38,8 @@ export default function AdduserType() {
   const handleNextClick = () => {
     console.log(selectedOption);
 
-    if (selectedOption === PATH_STYLELIST_USER) {
-      router.push(`/${PATH_ADD_USER}/${PATH_STYLELIST_USER}`);
+    if (selectedOption === PATH_STYLIST_USER) {
+      router.push(`/${PATH_ADD_USER}/${PATH_STYLIST_USER}`);
     } else if (selectedOption === PATH_BRAND_USER) {
       router.push(`/${PATH_ADD_USER}/${PATH_BRAND_USER}`);
     } else {
@@ -45,8 +49,7 @@ export default function AdduserType() {
 
   return (
     <>
-      <Header />
-      <div className="flex flex-col justify-center items-center h-screen px-4 ">
+      <div className="flex flex-col justify-center items-center  px-4 ">
         {/* 기억이 안나서 일단 헤더와 컨텐츠 사이에 간격을 만들어 줌 */}
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
           <div className="flex flex-col items-start  w-full md:w-[50%] gap-2">
@@ -62,16 +65,16 @@ export default function AdduserType() {
               <div className="flex flex-col items-center lg:items-center w-full">
                 <div
                   className={`w-full h-full border mt-2 rounded-lg cursor-pointer ${
-                    selectedOption === PATH_STYLELIST_USER
+                    selectedOption === PATH_STYLIST_USER
                       ? "bg-primary text-gray-100"
                       : "text-gray-800"
                   }`}
-                  onClick={() => handleSelection(PATH_STYLELIST_USER)}
+                  onClick={() => handleSelection(PATH_STYLIST_USER)}
                 >
                   <div className="p-4 heading-2">스타일리스트</div>
                   <div
                     className={`p-4 paragraph-2 ${
-                      selectedOption === PATH_STYLELIST_USER
+                      selectedOption === PATH_STYLIST_USER
                         ? "text-gray-50"
                         : "text-gray-400"
                     }`}

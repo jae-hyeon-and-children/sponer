@@ -14,6 +14,7 @@ export default function CreateAccount() {
   const router = useRouter();
   const user = useAuth();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [currentState, dispatch] = useFormState(createaccount, null);
 
   useEffect(() => {
     if (user) {
@@ -21,16 +22,15 @@ export default function CreateAccount() {
     }
   }, [user, router]);
 
-  const [currentState, dispatch] = useFormState(createaccount, null);
-
   useEffect(() => {
     const result: IResponse | null = currentState;
-    if (result && !result.success) {
+    if (result && result.success) {
+      console.log(currentState);
+      router.push("/add-user");
+    } else if (result && !result.success) {
       setErrorMessage(result.message || "오류가 발생했습니다");
     }
-  }, [currentState]);
-
-  if (user) return null;
+  }, [currentState, router]);
 
   return (
     <>

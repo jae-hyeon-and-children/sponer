@@ -1,8 +1,8 @@
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
-import { redirect } from "next/navigation";
 import { IResponse } from "@/model/responses";
+// import getSession from "@/libs/session";
 
 export default async function login(
   prevState: any,
@@ -21,12 +21,12 @@ export default async function login(
 
   try {
     const loginUser = await signInWithEmailAndPassword(auth, email, password);
+    const uid = loginUser.user.uid;
 
-    const uid = auth.currentUser?.uid || "";
+    await updateProfile(loginUser.user, {});
 
     console.log("현재 유저는? ", uid);
 
-    await updateProfile(loginUser.user, {});
     return {
       status: 200,
       success: true,

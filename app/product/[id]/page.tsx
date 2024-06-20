@@ -269,7 +269,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                 </button>
               )}
             </div>
-            {user && user.userType === UserType.stylelist && (
+            {user && user.userType === UserType.stylist && (
               <button
                 onClick={handleContact}
                 className="label-1 text-white mt-20 p-4 bg-primary rounded-full w-full lg:max-w-60"

@@ -65,13 +65,13 @@ export enum ContentType {
 }
 
 export enum UserType {
-	stylelist = "stylelist",
+	stylist = "stylist",
 	brand = "brand",
 	admin = "admin",
 }
 
 export const PATH_ADD_USER = "add-user";
-export const PATH_STYLELIST_USER = "stylist-user";
+export const PATH_STYLIST_USER = "stylist-user";
 export const PATH_BRAND_USER = "brand-user";
 
 /**

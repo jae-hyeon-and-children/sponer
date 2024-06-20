@@ -9,12 +9,15 @@ import uploadbrandUser from "./actions";
 import { auth } from "@/config/firebase/firebase";
 import Header from "@/components/global/header";
 import { useRouter } from "next/navigation";
+import useAuth from "@/libs/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function BrandUser() {
   const router = useRouter();
   const [profilephoto, setProfilephoto] = useState<string | null>(null);
   const [certificatephoto, setCertificatephoto] = useState<string | null>(null);
   const [isValidSize, setIsValidSize] = useState<boolean>(true);
+  const [uid, setUid] = useState<string | null>(null);
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -36,14 +39,20 @@ export default function BrandUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
-  const uid = auth.currentUser?.uid;
+  const user = useAuth();
   useEffect(() => {
-    if (!uid) {
-      console.log("리다이렉트 전이다");
-      router.push("/login");
-      console.log("리다이렉트 후다");
-    }
-  }, [uid, router]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("체크체크체크 : ", user);
+      if (user) {
+        setUid(user.uid);
+      } else {
+        setUid(null);
+        router.push("/login");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   const bindData = uploadbrandUser.bind(null, uid!);
 
@@ -56,8 +65,8 @@ export default function BrandUser() {
 
   return (
     <>
-      <div className="flex flex-col items-center h-screen px-4 pt-40 ">
-        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+      <div className="flex flex-col items-center  px-4 pt-40 ">
+        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full justify-center">
           <div className="w-full mb-5">
             <div className="caption w-16 bg-gray-700 border rounded-full text-gray-100 text-center ">
               step 2
