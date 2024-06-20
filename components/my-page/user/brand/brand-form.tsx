@@ -7,7 +7,7 @@ import { IUser } from "@/model/user";
 import { showDefaultModalState } from "@/recoil/atoms";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { base64ToFile } from "../../product-form";
+import { base64ToFile } from "../../product/edit-product";
 import { BusinessImageUploader } from "./business-image-uploader";
 import { ProfileImageUploader } from "../common/profile-image-uploader";
 import Modal from "@/components/global/modal";

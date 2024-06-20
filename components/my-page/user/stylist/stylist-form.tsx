@@ -6,7 +6,7 @@ import { IUser } from "@/model/user";
 import { showDefaultModalState } from "@/recoil/atoms";
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useRecoilState } from "recoil";
-import { base64ToFile } from "../../product-form";
+import { base64ToFile } from "../../product/edit-product";
 import { ProductSideBar } from "../../side-bar";
 import { AddressInput } from "../common/address-input";
 import { PhoneInput } from "../common/phone-input";
