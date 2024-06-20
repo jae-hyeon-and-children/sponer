@@ -1,5 +1,5 @@
+import EditProductForm from "@/components/my-page/product/edit-product";
 import { getProductById } from "./actions";
-import ProductForm from "@/components/my-page/product-form";
 
 export default async function EditProduct({
 	params,
@@ -10,5 +10,5 @@ export default async function EditProduct({
 
 	if (!product) return;
 
-	return <ProductForm data={product} />;
+	return <EditProductForm data={product} />;
 }
