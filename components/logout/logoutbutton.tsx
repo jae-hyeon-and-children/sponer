@@ -4,7 +4,6 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
-// import getSession from "@/libs/session";
 
 interface LogOutButtonProps {
   children?: ReactNode;
@@ -12,12 +11,19 @@ interface LogOutButtonProps {
 
 export default function LogOutButton({ children }: LogOutButtonProps) {
   const router = useRouter();
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
 
-      // const session = await getSession();
-      // session.destroy();
+      const response = await fetch("/api/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("세션 삭제 중 문제가 발생했습니다.");
+      }
+
       console.log("로그아웃 성공");
       router.push("/login");
     } catch (error) {
