@@ -1,12 +1,13 @@
+"use server";
+
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
-import { auth, fireStore, storage } from "@/config/firebase/firebase";
+import { fireStore, storage } from "@/config/firebase/firebase";
 import { IResponse } from "@/model/responses";
 import { IUser } from "@/model/user";
 
-export default async function uploadstylistUser(
+export async function uploadStylistUser(
   uid: string,
-  prevState: any,
   formData: FormData
 ): Promise<IResponse> {
   if (!uid) {
@@ -17,16 +18,6 @@ export default async function uploadstylistUser(
     };
   }
 
-  const user = auth.currentUser;
-  if (!user) {
-    console.error("인증되지 않은 사용자입니다.");
-    return {
-      status: 401,
-      success: false,
-      message: "인증되지 않은 사용자입니다.",
-    };
-  }
-
   try {
     const userDocRef = doc(fireStore, "User", uid);
     const userDocSnap = await getDoc(userDocRef);
@@ -34,7 +25,6 @@ export default async function uploadstylistUser(
     if (userDocSnap.exists()) {
       const existingUserType = userDocSnap.data().userType;
       if (existingUserType === "stylist" || existingUserType === "brand") {
-        console.log(`이미 ${existingUserType} 유형의 사용자입니다.`);
         return {
           status: 400,
           success: false,
@@ -56,17 +46,15 @@ export default async function uploadstylistUser(
       const profileStorage = ref(storage, `profile_images/${imageFile.name}`);
       const snapshot = await uploadBytes(profileStorage, imageFile);
       imageUrl = await getDownloadURL(snapshot.ref);
-    } else {
-      console.log("No valid image file found.");
     }
 
     const stylistFormData: IUser = {
       profileImage: imageUrl,
       name: formData.get("name") as string,
       nickName: formData.get("nickname") as string,
-      phoneNumber: ((((formData.get("phoneNumber1") as string) +
-        formData.get("phoneNumber2")) as string) +
-        formData.get("phoneNumber3")) as string,
+      phoneNumber: `${formData.get("phoneNumber1")}-${formData.get(
+        "phoneNumber2"
+      )}-${formData.get("phoneNumber3")}`,
       address: fullAddress,
       affiliation: formData.get("affiliation") as string,
       email: formData.get("email") as string,
@@ -74,7 +62,6 @@ export default async function uploadstylistUser(
       updatedAt: Timestamp.now(),
       userType: "stylist",
     };
-    console.log("User data: ", stylistFormData);
 
     await setDoc(doc(fireStore, "User", uid), stylistFormData);
 

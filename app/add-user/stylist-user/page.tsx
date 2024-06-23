@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
-import { PhotoIcon } from "@heroicons/react/24/solid";
-import uploadstylistUser from "./actions";
+import { useRouter } from "next/navigation";
+import { auth } from "@/config/firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import Input from "@/components/global/input";
 import AddressForm from "@/components/global/address";
-import { auth } from "@/config/firebase/firebase";
-import { useRouter } from "next/navigation";
-import useAuth from "@/libs/auth";
-import { onAuthStateChanged } from "firebase/auth";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 
 export default function StylistUser() {
   const router = useRouter();
@@ -26,30 +23,41 @@ export default function StylistUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
-  const user = useAuth();
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("체크체크체크 : ", user);
-      if (user) {
-        setUid(user.uid);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setUid(user.uid);
+  //     } else {
+  //       setUid(null);
+  //       router.push("/login");
+  //     }
+  //   });
+
+  //   return () => unsubscribe();
+  // }, [router]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!uid) return;
+
+    const formData = new FormData(event.currentTarget);
+    formData.append("uid", uid);
+    try {
+      const response = await fetch("/api/upload-stylist-user", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        router.push("/");
       } else {
-        setUid(null);
-        router.push("/login");
+        console.error("Error:", result.message);
       }
-    });
-
-    return () => unsubscribe();
-  }, [router]);
-
-  const bindData = uploadstylistUser.bind(null, uid!);
-
-  const [uploadResponse, dispatch] = useFormState(bindData, null);
-
-  useEffect(() => {
-    if (uploadResponse && uploadResponse.success) {
-      router.push("/");
+    } catch (error) {
+      console.error("Error:", error);
     }
-  }, [uploadResponse, router]);
+  };
 
   return (
     <>
@@ -66,7 +74,7 @@ export default function StylistUser() {
         </div>
 
         <form
-          action={dispatch}
+          onSubmit={handleSubmit}
           className="flex flex-col items-center mt-16 w-full gap-7"
         >
           <div className="flex lg:items-center w-[90%] flex-col lg:flex-row lg:justify-between">
@@ -74,7 +82,7 @@ export default function StylistUser() {
             <div className="w-full flex justify-center">
               <label
                 htmlFor="photo"
-                className="border-2 border-gray-400 aspect-square flex items-center justify-center flex-col text-neutral-300  rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                className="box-border border border-gray-400 aspect-square flex items-center justify-center flex-col text-neutral-300 rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
                 style={{
                   backgroundImage: profilephoto
                     ? `url(${profilephoto})`
@@ -186,7 +194,7 @@ export default function StylistUser() {
 
           <div className="flex justify-center mt-10">
             <button
-              className="border bg-primary rounded-full w-96 h-14 flex justify-center items-center"
+              className="box-border border bg-primary rounded-full w-96 h-14 flex justify-center items-center"
               type="submit"
             >
               <span className="label-1 text-gray-100">신청하기</span>
