@@ -1,81 +1,127 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import Input from "@/components/global/input";
-import Header from "@/components/global/header";
-import useAuth from "@/libs/auth";
-import createaccount from "./actions";
-import { IResponse } from "@/model/responses";
-import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  getIdToken,
+} from "firebase/auth";
+import { auth } from "@/config/firebase/firebase";
 
-export default function CreateAccount() {
+export default function CreateAccountForm() {
   const router = useRouter();
-  const user = useAuth();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [currentState, dispatch] = useFormState(createaccount, null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [user, router]);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
 
-  useEffect(() => {
-    const result: IResponse | null = currentState;
-    if (result && result.success) {
-      console.log(currentState);
-      router.push("/add-user");
-    } else if (result && !result.success) {
-      setErrorMessage(result.message || "오류가 발생했습니다");
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email")?.toString() || "";
+    const password = formData.get("password")?.toString() || "";
+
+    if (!email || !password) {
+      setErrorMessage("Email과 Password가 필요합니다.");
+      setLoading(false);
+      return;
     }
-  }, [currentState, router]);
+
+    try {
+      // 회원가입
+      const createUser = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(createUser.user, { displayName: email });
+
+      // 자동 로그인 시도
+      const loginUser = await signInWithEmailAndPassword(auth, email, password);
+      const uid = loginUser.user.uid;
+      const idToken = await getIdToken(loginUser.user);
+
+      // 서버에 사용자 정보 저장 및 채팅방 생성 요청
+      const response = await fetch("/api/create-account", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          userId: createUser.user.uid,
+          email: createUser.user.email,
+          profileImage:
+            createUser.user.photoURL || "/path/to/default/profileImage.png",
+        }),
+      });
+
+      const result = await response.json();
+      setLoading(false);
+
+      if (response.ok) {
+        // 로그인 후 토큰 발급 요청
+        const loginResponse = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ uid }),
+        });
+
+        if (loginResponse.ok) {
+          // 페이지 리다이렉트
+          router.push("/add-user");
+        } else {
+          setErrorMessage("로그인 중 문제가 발생했습니다.");
+        }
+      } else {
+        setErrorMessage(result.message || "오류가 발생했습니다");
+      }
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+      setLoading(false);
+      setErrorMessage("예상치 못한 에러가 발생했습니다.");
+    }
+  };
 
   return (
-    <>
-      <div className="flex flex-col items-center h-screen px-4 ">
-        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-          <div className="flex flex-col items-start h-screen-1/2 w-full md:w-[50%] gap-2">
-            <Image
-              src="/sponer_Logo.png"
-              alt="Logo"
-              width={100}
-              height={40}
-              className="items-center"
-            />
-            <form action={dispatch} className="w-full">
-              <div className="display text-gray-900 text-[2rem]">
-                스포너에 오신 것을 환영합니다
-              </div>
-              <div className="flex flex-col gap-5 mt-14">
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="이메일"
-                  required
-                />
-                <Input
-                  name="password"
-                  type="password"
-                  placeholder="비밀번호"
-                  required
-                />
-                {errorMessage && (
-                  <div className="text-state-red text-center mt-2">
-                    {errorMessage}
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col justify-center items-center text-center gap-2 mt-20">
-                <button className="border bg-primary text-gray-100 rounded-full w-96 h-14 flex justify-center items-center">
-                  <span className="label-1 text-gray-100">회원가입</span>
-                </button>
-              </div>
-            </form>
-          </div>
+    <div className="flex flex-col items-center h-screen px-4">
+      <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+        <div className="flex flex-col items-start h-screen-1/2 w-full md:w-[50%] gap-2">
+          <form onSubmit={handleSubmit} className="w-full">
+            <div className="display text-gray-900 text-[2rem] flex justify-center">
+              스포너에 오신 것을 환영합니다
+            </div>
+            <div className="flex flex-col gap-5 mt-14">
+              <Input name="email" type="email" placeholder="이메일" required />
+              <Input
+                name="password"
+                type="password"
+                placeholder="비밀번호"
+                required
+              />
+              {errorMessage && (
+                <div className="text-state-red text-center mt-2">
+                  {errorMessage}
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col justify-center items-center text-center gap-2 mt-10">
+              <button
+                className="border bg-primary text-gray-100 rounded-xl w-full h-14 flex justify-center items-center"
+                type="submit"
+                disabled={loading}
+              >
+                <span className="label-1 text-gray-100">회원가입</span>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
