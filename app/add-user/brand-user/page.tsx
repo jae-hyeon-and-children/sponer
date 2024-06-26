@@ -1,15 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
-import { PhotoIcon } from "@heroicons/react/24/solid";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Input from "@/components/global/input";
 import AddressForm from "@/components/global/address";
-import uploadbrandUser from "./actions";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 import { auth } from "@/config/firebase/firebase";
-import Header from "@/components/global/header";
-import { useRouter } from "next/navigation";
-import useAuth from "@/libs/auth";
 import { onAuthStateChanged } from "firebase/auth";
 
 export default function BrandUser() {
@@ -39,10 +35,8 @@ export default function BrandUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
-  const user = useAuth();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("체크체크체크 : ", user);
       if (user) {
         setUid(user.uid);
       } else {
@@ -54,21 +48,35 @@ export default function BrandUser() {
     return () => unsubscribe();
   }, [router]);
 
-  const bindData = uploadbrandUser.bind(null, uid!);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!uid) return;
 
-  const [uploadResponse, dispatch] = useFormState(bindData, null);
-  useEffect(() => {
-    if (uploadResponse && uploadResponse.success) {
-      router.push("/");
+    const formData = new FormData(event.currentTarget);
+    formData.append("uid", uid);
+    try {
+      const response = await fetch("/api/upload-brand-user", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        router.push("/");
+      } else {
+        console.error("Error:", result.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
-  }, [uploadResponse, router]);
+  };
 
   return (
     <>
-      <div className="flex flex-col items-center  px-4 pt-40 ">
+      <div className="flex flex-col items-center px-4 pt-40">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full justify-center">
           <div className="w-full mb-5">
-            <div className="caption w-16 bg-gray-700 border rounded-full text-gray-100 text-center ">
+            <div className="caption w-16 bg-gray-700 border rounded-full text-gray-100 text-center">
               step 2
             </div>
             <div className="display text-gray-900 w-[15.5rem]">
@@ -78,7 +86,7 @@ export default function BrandUser() {
         </div>
 
         <form
-          action={dispatch}
+          onSubmit={handleSubmit}
           className="flex flex-col items-center mt-16 w-full gap-7"
         >
           <div className="flex lg:items-center w-[90%] flex-col lg:flex-row lg:justify-between">
@@ -86,7 +94,7 @@ export default function BrandUser() {
             <div className="w-full flex justify-center">
               <label
                 htmlFor="profile_photo"
-                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-gray-400 rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
+                className="border box-border aspect-square flex items-center justify-center flex-col text-neutral-300 border-gray-400 rounded-full cursor-pointer bg-center bg-cover w-52 h-52 shrink-0"
                 style={{
                   backgroundImage: profilephoto
                     ? `url(${profilephoto})`
@@ -200,19 +208,20 @@ export default function BrandUser() {
                 name="email"
                 type="email"
                 placeholder="example@gmail.com"
+                required
               />
             </div>
           </div>
 
           <div className="flex lg:items-center w-[90%] flex-col lg:flex-row lg:justify-between">
-            <span className="w-[70%] label-1 text-gray-900">
+            <span className="w-[70%] label-1 text-gray-900 mb-2">
               사업자 등록증 사진 첨부 *
             </span>
 
             <div className="w-full flex justify-center">
               <label
                 htmlFor="business_photo"
-                className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-gray-400 rounded-md cursor-pointer bg-center bg-cover w-full lg:w-[56rem] h-[20rem] shrink-0"
+                className="border box-border aspect-square flex items-center justify-center flex-col text-neutral-300 border-gray-400 rounded-md cursor-pointer bg-center bg-cover w-full lg:w-[56rem] h-[20rem] shrink-0"
                 style={{
                   backgroundImage: certificatephoto
                     ? `url(${certificatephoto})`
@@ -247,7 +256,7 @@ export default function BrandUser() {
 
           <div className="flex justify-center mt-10">
             <button
-              className="border bg-primary rounded-full w-96 h-14 flex justify-center items-center"
+              className="border box-border bg-primary rounded-full w-96 h-14 flex justify-center items-center"
               type="submit"
             >
               <span className="label-1 text-gray-100">신청하기</span>
