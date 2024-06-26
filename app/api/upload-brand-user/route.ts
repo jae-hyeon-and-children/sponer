@@ -1,14 +1,12 @@
-import { uploadStylistUser } from "@/app/add-user/stylist-user/actions";
+import { uploadBrandUser } from "@/app/add-user/brand-user/actions";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("Received POST request");
     const formData = await req.formData();
     const uid = formData.get("uid") as string;
 
     if (!uid) {
-      console.log("No UID in form data");
       return NextResponse.json({
         status: 400,
         success: false,
@@ -16,13 +14,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.log("Calling uploadStylistUser with UID:", uid);
-    const response = await uploadStylistUser(uid, formData);
-    console.log("Response from uploadStylistUser:", response);
-
+    const response = await uploadBrandUser(uid, formData);
     return NextResponse.json(response);
   } catch (error) {
-    console.error("Error in POST handler:", error);
+    console.error("Error:", error);
     return NextResponse.json({
       status: 500,
       success: false,
