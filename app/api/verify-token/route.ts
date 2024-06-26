@@ -1,3 +1,5 @@
+// app/api/verify-token/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import { verify, JwtPayload } from "jsonwebtoken";
 
@@ -10,15 +12,12 @@ interface DecodedToken extends JwtPayload {
 export async function POST(req: NextRequest) {
   const { token } = await req.json();
 
-  console.log(`Token from request: ${token}`);
-
   if (!token) {
     return NextResponse.json({ message: "토큰이 없습니다" }, { status: 401 });
   }
 
   try {
     const decoded = verify(token, JWT_SECRET) as DecodedToken;
-    console.log(`Decoded token: ${JSON.stringify(decoded)}`);
     return NextResponse.json({ uid: decoded.uid }, { status: 200 });
   } catch (error) {
     console.error("JWT 검증 오류:", error);
