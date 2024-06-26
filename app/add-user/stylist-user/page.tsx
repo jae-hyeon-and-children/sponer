@@ -23,18 +23,18 @@ export default function StylistUser() {
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setUid(user.uid);
-  //     } else {
-  //       setUid(null);
-  //       router.push("/login");
-  //     }
-  //   });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      } else {
+        setUid(null);
+        router.push("/login");
+      }
+    });
 
-  //   return () => unsubscribe();
-  // }, [router]);
+    return () => unsubscribe();
+  }, [router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,6 +42,8 @@ export default function StylistUser() {
 
     const formData = new FormData(event.currentTarget);
     formData.append("uid", uid);
+    console.log("FormData:", Object.fromEntries(formData.entries()));
+
     try {
       const response = await fetch("/api/upload-stylist-user", {
         method: "POST",
@@ -49,6 +51,8 @@ export default function StylistUser() {
       });
 
       const result = await response.json();
+      console.log("Response:", result);
+
       if (result.success) {
         router.push("/");
       } else {
@@ -188,6 +192,7 @@ export default function StylistUser() {
                 name="email"
                 type="email"
                 placeholder="example@gmail.com"
+                required
               />
             </div>
           </div>

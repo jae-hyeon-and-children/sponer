@@ -11,6 +11,7 @@ export async function uploadStylistUser(
   formData: FormData
 ): Promise<IResponse> {
   if (!uid) {
+    console.log("No UID provided");
     return {
       status: 400,
       success: false,
@@ -19,11 +20,13 @@ export async function uploadStylistUser(
   }
 
   try {
+    console.log("Fetching user document:", uid);
     const userDocRef = doc(fireStore, "User", uid);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists()) {
       const existingUserType = userDocSnap.data().userType;
+      console.log("Existing user type:", existingUserType);
       if (existingUserType === "stylist" || existingUserType === "brand") {
         return {
           status: 400,
@@ -43,6 +46,7 @@ export async function uploadStylistUser(
     let imageUrl = "";
 
     if (imageFile) {
+      console.log("Uploading image file:", imageFile.name);
       const profileStorage = ref(storage, `profile_images/${imageFile.name}`);
       const snapshot = await uploadBytes(profileStorage, imageFile);
       imageUrl = await getDownloadURL(snapshot.ref);
@@ -63,6 +67,7 @@ export async function uploadStylistUser(
       userType: "stylist",
     };
 
+    console.log("Setting user document:", stylistFormData);
     await setDoc(doc(fireStore, "User", uid), stylistFormData);
 
     return { status: 200, success: true, message: "사용자 추가 성공" };
