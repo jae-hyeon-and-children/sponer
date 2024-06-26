@@ -37,16 +37,11 @@ export default function ChangePasswordPage() {
       <div className="flex flex-col items-center h-screen px-4 ">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
           <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
-            <Image
-              src="/sponer_Logo.png"
-              alt="Logo"
-              width={100}
-              height={40}
-              className="items-center "
-            />
             <form action={dispatch} className="w-full">
-              <div className="text-gray-900 text-[2rem] ">비밀번호 찾기</div>
-              <div className="flex flex-col gap-5 mt-14">
+              <div className="text-gray-900 text-[2rem] flex justify-center ">
+                비밀번호 찾기
+              </div>
+              <div className="flex flex-col gap-5 mt-10">
                 <Input
                   name="email"
                   type="email"
@@ -59,8 +54,8 @@ export default function ChangePasswordPage() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col justify-center items-center text-center gap-2 mt-20">
-                <button className="border bg-primary text-gray-100 rounded-full w-96 h-14 flex justify-center items-center">
+              <div className="flex flex-col justify-center items-center text-center gap-2 mt-5">
+                <button className="border bg-primary text-gray-100 rounded-xl w-full h-14 flex justify-center items-center">
                   <span className="label-1 text-gray-100">
                     비밀번호 재설정 메일 받기
                   </span>
