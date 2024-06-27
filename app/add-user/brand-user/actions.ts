@@ -47,6 +47,10 @@ export async function uploadBrandUser(
     const fullAddress = `${postalCode}, ${address}, ${detailAddress}, ${extraAddress}`;
     const profileImageFile = formData.get("profile_photo") as File;
     const certificateImageFile = formData.get("business_photo") as File;
+    const phoneNumber = (formData.get("phoneNumber") as string).replace(
+      /-/g,
+      ""
+    );
 
     let profileImageUrl = "";
 
@@ -79,9 +83,7 @@ export async function uploadBrandUser(
       brandName: formData.get("brand_name") as string,
       name: formData.get("name") as string,
       homepage: formData.get("homepage") as string,
-      phoneNumber: `${formData.get("phoneNumber1")}-${formData.get(
-        "phoneNumber2"
-      )}-${formData.get("phoneNumber3")}`,
+      phoneNumber,
       address: fullAddress,
       affiliation: formData.get("affiliation") as string,
       email: formData.get("email") as string,
