@@ -42,6 +42,10 @@ export async function uploadStylistUser(
     const extraAddress = formData.get("extra_address") as string;
     const fullAddress = `${postalCode}, ${address}, ${detailAddress}, ${extraAddress}`;
     const imageFile = formData.get("photo") as File;
+    const phoneNumber = (formData.get("phoneNumber") as string).replace(
+      /-/g,
+      ""
+    );
 
     let imageUrl = "";
 
@@ -56,9 +60,7 @@ export async function uploadStylistUser(
       profileImage: imageUrl,
       name: formData.get("name") as string,
       nickName: formData.get("nickname") as string,
-      phoneNumber: `${formData.get("phoneNumber1")}-${formData.get(
-        "phoneNumber2"
-      )}-${formData.get("phoneNumber3")}`,
+      phoneNumber,
       address: fullAddress,
       affiliation: formData.get("affiliation") as string,
       email: formData.get("email") as string,
