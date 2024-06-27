@@ -32,3 +32,20 @@ export const chatRoomProductState = atom<IProduct | null>({
   key: "chatRoomProductState",
   default: null,
 });
+
+export type ToastType = "success" | "error";
+
+export interface ToastMessage {
+  isVisible: boolean;
+  message: string;
+  type: ToastType;
+}
+
+export const toastState = atom<ToastMessage>({
+  key: "toastState",
+  default: {
+    isVisible: false,
+    message: "",
+    type: "success",
+  },
+});
