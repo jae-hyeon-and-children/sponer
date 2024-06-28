@@ -90,7 +90,7 @@ export default function StylistUser() {
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col lg:flex-row lg:items-center ">
                   <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    프로필 사진 *
+                    프로필 사진
                   </span>
                   <div className="flex justify-center lg:w-3/4 w-full">
                     <label
@@ -104,8 +104,8 @@ export default function StylistUser() {
                     >
                       {profilephoto === null && (
                         <>
-                          <PhotoIcon className="w-16 ㅣ" />
-                          <div className="text-neutral-400 text-sm ">
+                          <PhotoIcon className="w-16 " />
+                          <div className="text-neutral-400 text-xs lg:text-lg ">
                             사진을 추가해주세요.
                           </div>
                         </>
@@ -129,8 +129,8 @@ export default function StylistUser() {
                 </div>
 
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    이름 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    이름
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -143,8 +143,8 @@ export default function StylistUser() {
                 </div>
 
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    닉네임 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    닉네임
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -157,8 +157,8 @@ export default function StylistUser() {
                 </div>
 
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    연락처 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    연락처
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -183,8 +183,8 @@ export default function StylistUser() {
               <h2 className="text-2xl font-semibold mb-4">기타 정보</h2>
               <div className="flex flex-col gap-4 w-full">
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    소속 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    소속
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -196,8 +196,8 @@ export default function StylistUser() {
                 </div>
 
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    이메일 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    이메일
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
