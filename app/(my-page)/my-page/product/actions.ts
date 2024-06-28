@@ -62,7 +62,7 @@ export async function uploadProduct(
 		const productData: IProduct = {
 			title: parsedData.productName,
 			productCategory: parsedData.productType,
-			size: parsedData.productSize,
+			size: parsedData.productSize.toLowerCase(),
 			height: parsedData.productHeight,
 			genderCategory: parsedData.productGender,
 			styleCategory: parsedData.productStyles,
