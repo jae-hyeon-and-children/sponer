@@ -53,7 +53,9 @@ export default function Login() {
       }
     } catch (error) {
       console.error("로그인 오류:", error);
-      setErrorMessage("올바른 양식이 아닙니다.");
+      setErrorMessage(
+        "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."
+      );
     }
   };
 
@@ -81,7 +83,7 @@ export default function Login() {
                   placeholder="비밀번호"
                   required
                 />
-                <div className="flex flex-col items-end my-2 mr-3">
+                <div className="flex flex-col items-end my-1 mr-3">
                   <Link
                     href="/change-password"
                     className="label-2 text-gray-600"
