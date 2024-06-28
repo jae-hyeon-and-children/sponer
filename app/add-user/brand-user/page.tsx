@@ -100,7 +100,7 @@ export default function BrandUser() {
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col lg:flex-row lg:items-center">
                   <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    프로필 사진 *
+                    프로필 사진
                   </span>
                   <div className="flex justify-center lg:w-3/4">
                     <label
@@ -115,7 +115,7 @@ export default function BrandUser() {
                       {profilephoto === null && (
                         <>
                           <PhotoIcon className="w-16" />
-                          <div className="text-neutral-400 text-sm">
+                          <div className="text-neutral-400 text-xs lg:text-lg ">
                             사진을 추가해주세요.
                           </div>
                         </>
@@ -139,8 +139,8 @@ export default function BrandUser() {
                 </div>
 
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    브랜드명 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    브랜드명
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -153,8 +153,8 @@ export default function BrandUser() {
                 </div>
 
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    담당자 이름 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    담당자 이름
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -167,8 +167,8 @@ export default function BrandUser() {
                 </div>
 
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    대표 연락처 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    대표 연락처
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -180,8 +180,8 @@ export default function BrandUser() {
                   </div>
                 </div>
                 <div className="flex lg:flex-row items-center w-full gap-2">
-                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
-                    이메일 *
+                  <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+                    이메일
                   </span>
                   <div className="lg:w-3/4 w-full">
                     <Input
@@ -203,7 +203,7 @@ export default function BrandUser() {
             </div>
             <div className="w-full mb-10">
               <div className="flex lg:flex-row items-center w-full gap-2">
-                <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900">
+                <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
                   홈페이지 주소
                 </span>
                 <div className="lg:w-3/4 w-full">
@@ -219,8 +219,8 @@ export default function BrandUser() {
             <div className="w-full mb-10">
               <h2 className="text-2xl font-semibold mb-4">사업자 등록증</h2>
               <div className="flex flex-col lg:flex-row lg:items-center">
-                <span className="lg:w-1/4 text-gray-900 mb-2">
-                  사업자 등록증 사진 첨부 *
+                <span className="lg:w-1/4 text-gray-900 mb-2 min-w-24">
+                  사업자 등록증 사진 첨부
                 </span>
                 <div className="lg:w-3/4">
                   <label
@@ -235,7 +235,7 @@ export default function BrandUser() {
                     {certificatephoto === null && (
                       <>
                         <PhotoIcon className="w-16" />
-                        <div className="text-neutral-400 text-sm">
+                        <div className="text-neutral-400 text-xs lg:text-lg ">
                           사진을 추가해주세요.
                         </div>
                       </>
