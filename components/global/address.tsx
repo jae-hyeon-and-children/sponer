@@ -73,7 +73,7 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
       <DaumPostcodeScript />
       <div className="form-group flex flex-col gap-4 w-full">
         <div className="flex lg:flex-row lg:items-center w-full gap-2">
-          <span className=" lg:w-1/4 flex items-center flex-shrink-0 whitespace-nowrap text-gray-900">
+          <span className=" lg:w-1/4 flex items-center flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
             우편번호
           </span>
           <input
@@ -90,12 +90,14 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
             onClick={handleAddressSearch}
             className="flex justify-center items-center h-12 w-[25%] lg:w-1/6 py-5 px-4 focus:outline-none focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 box-border border bg-primary placeholder:text-neutral-400 rounded-xl"
           >
-            <span className="paragraph-2 text-gray-100 ">주소 검색</span>
+            <span className="paragraph-2 text-gray-100 flex-shrink-0 whitespace-nowrap">
+              주소 검색
+            </span>
           </button>
         </div>
 
         <div className="flex lg:flex-row lg:items-center w-full gap-2">
-          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center">
+          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center min-w-24">
             기본주소
           </span>
           <input
@@ -110,7 +112,7 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
         </div>
 
         <div className="flex lg:flex-row lg:items-center w-full gap-2">
-          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center">
+          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center min-w-24">
             상세주소
           </span>
           <input
@@ -125,7 +127,7 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
         </div>
 
         <div className="flex lg:flex-row lg:items-center w-full gap-2">
-          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center">
+          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center min-w-24">
             참고항목
           </span>
           <input
