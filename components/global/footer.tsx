@@ -37,19 +37,19 @@ export default function Footer() {
               <div className="mb-10 lg:mb-0 basis-2/3">
                 <h1 className="heading-3 text-gray-200 mb-5">회사 정보</h1>
                 <ul className="flex flex-col gap-3 paragraph-1 text-gray-300">
-                  <FooterCompanyInfo title="company" content="(주) 스포너" />
+                  <FooterCompanyInfo title="company" content="스포너" />
                   <FooterCompanyInfo
                     title="제휴 및 업무 문의"
                     content="sponer@sponer.com"
                   />
-                  <FooterCompanyInfo title="연락처" content="010-xxxx-xxxx" />
+                  <FooterCompanyInfo title="연락처" content="010-4331-7797" />
                   <FooterCompanyInfo
                     title="address"
-                    content="서울시 어딘가 서울시 어딘가 서울시 어딘가 서울시 어딘가 서울시 어딘가"
+                    content="서울특별시 용산구 한강대로92길 15, 1층(갈월동)"
                   />
                   <FooterCompanyInfo
                     title="사업자등록번호"
-                    content="123-45-67890"
+                    content="306-36-36523"
                   />
                   <FooterCompanyInfo
                     title="통신판매업 신고번호"

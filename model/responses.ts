@@ -8,4 +8,5 @@ export interface IResponse {
 	success: boolean;
 	message: string;
 	errors?: ValidationError[];
+	token?: string;
 }

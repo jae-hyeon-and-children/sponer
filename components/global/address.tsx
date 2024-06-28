@@ -9,14 +9,10 @@ declare global {
   }
 }
 
-interface IAddr {
-  address: string;
-  zonecode: string;
-}
-
 interface AddressFormProps {
   fullAddress?: string;
 }
+
 const AddressForm = ({ fullAddress }: AddressFormProps) => {
   const [postcode, setPostcode] = useState("");
   const [address, setAddress] = useState("");
@@ -73,18 +69,13 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
   };
 
   return (
-    <div className="form-group flex flex-col gap-2 w-full items-center">
+    <div className="form-group  flex flex-col gap-2 w-full ">
       <DaumPostcodeScript />
-      <div className="form-group flex flex-col gap-4 w-full items-center ">
-        <button
-          type="button"
-          onClick={handleAddressSearch}
-          className="bg-transparent   rounded-md w-full lg:w-full py-5 px-4 focus:outline-none focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 border border-black placeholder:text-neutral-400"
-        >
-          <span className="paragraph-2 text-gray-800">우편번호 찾기</span>
-        </button>
-
-        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
+      <div className="form-group flex flex-col gap-4 w-full">
+        <div className="flex lg:flex-row lg:items-center w-full gap-2">
+          <span className=" lg:w-1/4 flex items-center flex-shrink-0 whitespace-nowrap text-gray-900 min-w-24">
+            우편번호
+          </span>
           <input
             type="text"
             id="postal_code"
@@ -92,23 +83,38 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
             value={postcode}
             placeholder="우편번호"
             readOnly
-            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
+            className="bg-transparent z-0 rounded-xl w-full lg:w-5/6 h-12 py-5 px-4 box-border border border-[#C6D0DC] placeholder-gray-300"
           />
+          <button
+            type="button"
+            onClick={handleAddressSearch}
+            className="flex justify-center items-center h-12 w-[25%] lg:w-1/6 py-5 px-4 focus:outline-none focus:ring-4 transition ring-neutral-200 focus:ring-orange-500 box-border border bg-primary placeholder:text-neutral-400 rounded-xl"
+          >
+            <span className="paragraph-2 text-gray-100 flex-shrink-0 whitespace-nowrap">
+              주소 검색
+            </span>
+          </button>
         </div>
 
-        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
+        <div className="flex lg:flex-row lg:items-center w-full gap-2">
+          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center min-w-24">
+            기본주소
+          </span>
           <input
             type="text"
             id="address"
             name="address"
             value={address}
-            placeholder="주소"
+            placeholder="기본주소"
             readOnly
-            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
+            className="bg-transparent z-0 rounded-xl w-full lg:w-5/6 h-12 py-5 px-4 box-border border border-[#C6D0DC] placeholder-gray-300"
           />
         </div>
 
-        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
+        <div className="flex lg:flex-row lg:items-center w-full gap-2">
+          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center min-w-24">
+            상세주소
+          </span>
           <input
             type="text"
             id="detail_address"
@@ -116,11 +122,14 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
             value={detailAddress}
             onChange={(e) => setDetailAddress(e.target.value)}
             placeholder="상세주소"
-            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
+            className="bg-transparent z-0 rounded-xl w-full lg:w-5/6 h-12 py-5 px-4 box-border border border-[#C6D0DC] placeholder-gray-300"
           />
         </div>
 
-        <div className="border-2 border-gray-400 rounded-md w-full lg:w-full">
+        <div className="flex lg:flex-row lg:items-center w-full gap-2">
+          <span className="lg:w-1/4 flex-shrink-0 whitespace-nowrap text-gray-900 flex items-center min-w-24">
+            참고항목
+          </span>
           <input
             type="text"
             id="extra_address"
@@ -128,11 +137,12 @@ const AddressForm = ({ fullAddress }: AddressFormProps) => {
             value={extraAddress}
             placeholder="참고항목"
             readOnly
-            className="bg-transparent w-full py-5 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-neutral-400"
+            className="bg-transparent z-0 rounded-xl w-full lg:w-5/6 h-12 py-5 px-4 box-border border border-[#C6D0DC] placeholder-gray-300"
           />
         </div>
       </div>
     </div>
   );
 };
+
 export default AddressForm;
