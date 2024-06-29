@@ -1,7 +1,10 @@
 "use server";
 
 import { fireStore, storage } from "@/config/firebase/firebase";
-import { COLLECTION_NAME_PRODUCT } from "@/constants/variables";
+import {
+	COLLECTION_NAME_PRODUCT,
+	COLLECTION_NAME_USER,
+} from "@/constants/variables";
 import { IProduct } from "@/model/product";
 import { IResponse } from "@/model/responses";
 import { initializeApp } from "firebase/app";
@@ -9,6 +12,8 @@ import {
 	Timestamp,
 	addDoc,
 	collection,
+	doc,
+	getDoc,
 	getFirestore,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -59,6 +64,9 @@ export async function uploadProduct(
 
 		// 추후에 브랜드 이름도 같이 포함되어야 함
 
+		const brandRef = doc(fireStore, COLLECTION_NAME_USER, parsedData.brandId);
+		const brandSnap = (await getDoc(brandRef)).data();
+
 		const productData: IProduct = {
 			title: parsedData.productName,
 			productCategory: parsedData.productType,
@@ -69,6 +77,7 @@ export async function uploadProduct(
 			productImages: imageUrls,
 			createdAt: Timestamp.now(),
 			brandId: parsedData.brandId,
+			brandName: brandSnap!.brandName,
 		};
 
 		const docRef = await addDoc(
