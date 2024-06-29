@@ -7,6 +7,7 @@ interface ProductItemProps {
   title: string;
   size: string;
   height: string;
+  brandName: string;
 }
 
 export default function ProductItem({
@@ -14,6 +15,7 @@ export default function ProductItem({
   title,
   size,
   height,
+  brandName,
 }: ProductItemProps) {
   return (
     <li className="flex flex-col gap-6 items-center">
@@ -25,7 +27,7 @@ export default function ProductItem({
         className="w-full h-96 md:h-[40rem] object-cover"
       />
       <div className="flex flex-col items-center">
-        <h2 className="label-2 text-gray-500 mb-1">오와이</h2>
+        <h2 className="label-2 text-gray-500 mb-1">{brandName}</h2>
         <h1 className="heading-3  text-gray-900 mb-1">{title}</h1>
         <div className="flex gap-1 items-center">
           <span className="caption  text-gray-500">{PRODUCT_SIZE[size]}</span>

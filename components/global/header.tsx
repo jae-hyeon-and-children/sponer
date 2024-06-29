@@ -16,7 +16,7 @@ export default function Header() {
 
   return (
     <div className="">
-      <nav className=" p-1 fixed top-0 left-0 right-0 bg-white z-10">
+      <nav className="shadow-md shadow-[#00000029] p-1 fixed top-0 left-0 right-0 bg-white z-10">
         <div className="container mx-auto flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href="/">
