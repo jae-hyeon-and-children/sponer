@@ -3,10 +3,11 @@ interface ValidationError {
 	message: string;
 }
 
-export interface IResponse {
+export interface IResponse<T = void> {
 	status: number;
 	success: boolean;
 	message: string;
 	errors?: ValidationError[];
 	token?: string;
+	data?: T;
 }
