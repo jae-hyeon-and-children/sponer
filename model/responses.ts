@@ -6,7 +6,7 @@ interface ValidationError {
 export interface IResponse<T = void> {
 	status: number;
 	success: boolean;
-	message: string;
+	message?: string;
 	errors?: ValidationError[];
 	token?: string;
 	data?: T;

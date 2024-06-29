@@ -130,7 +130,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 
 	const handleCloseModal = () => {
 		console.log("refresh");
-		router.push(`/my-page/history/${userId}`);
+		router.refresh();
 	};
 
 	return (

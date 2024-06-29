@@ -7,6 +7,7 @@ import RecoilWrapper from "@/recoil/recoil-wrapper";
 import Header from "@/components/global/header";
 import Footer from "@/components/global/footer";
 import Toast from "@/components/global/toast";
+import { usePathname } from "next/navigation";
 
 const suit = localFont({
 	src: "./fonts/SUIT-Variable.woff2",

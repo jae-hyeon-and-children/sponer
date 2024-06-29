@@ -100,21 +100,25 @@ export const ProductSideBar = () => {
 		return <SkeletonSidebar />;
 	}
 
+	if (!userAuth) {
+		return null;
+	}
+
 	return (
 		<div className="w-[15rem] border-r border-r-gray-200 flex-col sticky top-0 left-0 h-screen hidden lg:flex">
 			<div className="flex flex-col pt-40 pl-14 gap-11">
 				<div className="h-fit flex flex-col gap-6 flex-nowrap">
 					<span className="text-gray-900 heading-2">회원 정보</span>
 					{renderLink(
-						`/my-page/${userAuth!.uid}`,
+						`/my-page/${userAuth.uid}`,
 						"프로필 관리",
-						isActive(`/my-page/${userAuth!.uid}`)
+						isActive(`/my-page/${userAuth.uid}`)
 					)}
 					{isBrandUser &&
 						renderLink(
-							`/my-page/history/${userAuth!.uid}`,
+							`/my-page/history/${userAuth.uid}`,
 							"브랜드 신청 이력",
-							isActive(`/my-page/history/${userAuth!.uid}`)
+							isActive(`/my-page/history/${userAuth.uid}`)
 						)}
 					<span
 						onClick={openModal}
