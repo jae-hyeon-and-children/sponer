@@ -8,7 +8,7 @@ interface AlgoliaProp {
 export interface IProduct extends AlgoliaProp {
   id?: string;
   createdAt: Timestamp;
-  brandName: string;
+  brandName?: string;
   brandId: string;
   genderCategory: string;
   height: string;
