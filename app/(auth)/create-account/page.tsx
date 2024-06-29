@@ -10,6 +10,7 @@ import {
   getIdToken,
 } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
+import { FirebaseError } from "firebase/app";
 
 export default function CreateAccountForm() {
   const router = useRouter();
@@ -30,8 +31,14 @@ export default function CreateAccountForm() {
       return;
     }
 
+    if (password.length < 6) {
+      setErrorMessage("비밀번호는 6자리 이상이어야 합니다.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      // 회원가입
+      // 회원가입 시도
       const createUser = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -81,10 +88,20 @@ export default function CreateAccountForm() {
       } else {
         setErrorMessage(result.message || "오류가 발생했습니다");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("회원가입 오류:", error);
       setLoading(false);
-      setErrorMessage("예상치 못한 에러가 발생했습니다.");
+
+      // Firebase 에러 메시지 처리
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/email-already-in-use") {
+          setErrorMessage("이미 사용 중인 이메일입니다.");
+        } else {
+          setErrorMessage("예상치 못한 에러가 발생했습니다.");
+        }
+      } else {
+        setErrorMessage("예상치 못한 에러가 발생했습니다.");
+      }
     }
   };
 
