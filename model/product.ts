@@ -7,16 +7,16 @@ interface AlgoliaProp {
 
 export interface IProduct extends AlgoliaProp {
 	id?: string;
-	createdAt: Timestamp;
-	brandName?: string;
-	brandId: string;
-	genderCategory: string;
-	height: string;
-	productCategory: string;
-	productImages: string[];
-	size: string;
-	styleCategory: string[];
-	title: string;
+  createdAt: Timestamp;
+  brandName?: string;
+  brandId: string;
+  genderCategory: string;
+  height: string;
+  productCategory: string;
+  productImages: string[];
+  size: string;
+  styleCategory: string[];
+  title: string;
 }
 
 export const ProductConverter = {
