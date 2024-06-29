@@ -16,6 +16,7 @@ import { TextInput } from "../common/text-input";
 import { PhoneInput } from "../common/phone-input";
 import { AddressInput } from "../common/address-input";
 import { getHistoryById } from "@/app/(my-page)/my-page/history/[id]/actions";
+import { useRouter } from "next/navigation";
 
 interface BrandUserFormProps {
 	data: IUser;
@@ -23,6 +24,7 @@ interface BrandUserFormProps {
 }
 
 export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
+	const router = useRouter();
 	const userData = data;
 	const [profileImg, setProfileImg] = useState<File | null>(null);
 	const [businessImg, setBusinessImg] = useState<File | null>(null);
@@ -126,9 +128,14 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 		}
 	};
 
+	const handleCloseModal = () => {
+		console.log("refresh");
+		router.push(`/my-page/history/${userId}`);
+	};
+
 	return (
 		<>
-			<Modal>{isShowModal && modalContent}</Modal>
+			<Modal onClose={handleCloseModal}>{isShowModal && modalContent}</Modal>
 			<main className="flex flex-col lg:flex-row text-gray-900 label-1">
 				<ProductSideBar />
 				<div className="w-full mt-20">
