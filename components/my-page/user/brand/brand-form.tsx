@@ -3,7 +3,7 @@
 import { editProfile } from "@/app/(my-page)/my-page/[id]/actions";
 import Button from "@/components/global/button";
 import { IResponse } from "@/model/responses";
-import { IUser } from "@/model/user";
+import { IBrandApplication, IUser } from "@/model/user";
 import { showDefaultModalState } from "@/recoil/atoms";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -15,6 +15,7 @@ import { ProductSideBar } from "../../side-bar";
 import { TextInput } from "../common/text-input";
 import { PhoneInput } from "../common/phone-input";
 import { AddressInput } from "../common/address-input";
+import { getHistoryById } from "@/app/(my-page)/my-page/history/[id]/actions";
 
 interface BrandUserFormProps {
 	data: IUser;
@@ -27,8 +28,25 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 	const [businessImg, setBusinessImg] = useState<File | null>(null);
 	const [errors, setErrors] = useState<Record<string, string>>({});
 
+	const [isApprove, setIsApprove] = useState<boolean>(true);
+	const [history, setHistory] = useState<string>("");
+
 	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
 	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+
+	useEffect(() => {
+		const fetchApproveData = async () => {
+			const history: IBrandApplication[] = await getHistoryById(userId);
+			const latestHistory = history[0];
+
+			if (!latestHistory.approve) {
+				setIsApprove(false);
+				setHistory(latestHistory.brandName);
+			}
+		};
+
+		fetchApproveData();
+	}, []);
 
 	useEffect(() => {
 		if (data) {
@@ -127,13 +145,18 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 							onProfileImageClick={handleProfileImageClick}
 							error={errors.profileImage}
 						/>
-						<TextInput
-							label="브랜드명*"
-							name="brandName"
-							type="text"
-							defaultValue={userData.brandName!}
-							error={errors.brandName}
-						/>
+						<div>
+							<TextInput
+								label="브랜드명*"
+								name="brandName"
+								type="text"
+								defaultValue={userData.brandName!}
+								error={errors.brandName}
+							/>
+							{!isApprove && (
+								<p className="text-red-400">{`브랜드 ${history}는 승인 대기 중 입니다.`}</p>
+							)}
+						</div>
 						<PhoneInput
 							defaultValues={[
 								userData.phoneNumber.slice(0, 3),

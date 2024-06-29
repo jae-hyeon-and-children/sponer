@@ -102,7 +102,7 @@ export async function editProfile(
 
 			const userData: Partial<IUser> = {
 				profileImage: profileImageUrl || existingData.profileImage,
-				brandName: parsedData.brandName || existingData.brandName,
+				// brandName: parsedData.brandName || existingData.brandName,
 				phoneNumber: parsedData.phoneNumber,
 				name: parsedData.name,
 				homepage: parsedData.homepage || existingData.homepage,
