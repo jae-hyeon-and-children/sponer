@@ -28,7 +28,7 @@ export default function Input({
         onChange={onChange}
         maxLength={count ? count : 30}
         name={name}
-        className="bg-transparent z-0 rounded-md w-full h-16 py-5 px-4 border-2 border-gray-400  placeholder-gray-300"
+        className="bg-transparent z-0 rounded-xl w-full h-12 py-5 px-4 box-border border border-[#C6D0DC]  placeholder-gray-300"
         {...rest}
       />
       <div className="font-semibold h-full absolute right-1 flex items-center">

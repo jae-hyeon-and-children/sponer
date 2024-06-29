@@ -131,8 +131,6 @@ export default function Product({ params: { id } }: ProductDetailParams) {
   if (!product) return <EmptyView text="상품이 존재하지 않습니다." />;
   return (
     <>
-      <Header />
-
       <Modal>
         {sizeTable && (
           <SizeTable
@@ -271,7 +269,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                 </button>
               )}
             </div>
-            {user && user.userType === UserType.stylelist && (
+            {user && user.userType === UserType.stylist && (
               <button
                 onClick={handleContact}
                 className="label-1 text-white mt-20 p-4 bg-primary rounded-full w-full lg:max-w-60"
@@ -282,7 +280,6 @@ export default function Product({ params: { id } }: ProductDetailParams) {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

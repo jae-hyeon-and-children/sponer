@@ -1,19 +1,20 @@
+"use server";
+
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
-  collection,
-  addDoc,
   doc,
   setDoc,
-  Timestamp,
   getDoc,
+  Timestamp,
+  collection,
+  addDoc,
 } from "firebase/firestore";
-import { fireStore, storage, auth } from "@/config/firebase/firebase";
+import { fireStore, storage } from "@/config/firebase/firebase";
 import { IResponse } from "@/model/responses";
-import { IBrandApplication, IUser } from "@/model/user";
+import { IUser, IBrandApplication } from "@/model/user";
 
-export default async function uploadbrandUser(
+export async function uploadBrandUser(
   uid: string,
-  prevState: any,
   formData: FormData
 ): Promise<IResponse> {
   if (!uid) {
@@ -24,18 +25,6 @@ export default async function uploadbrandUser(
     };
   }
 
-  const user = auth.currentUser;
-  if (!user) {
-    console.error(
-      "ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ: No current user"
-    );
-    return {
-      status: 401,
-      success: false,
-      message: "인증되지 않은 사용자입니다.",
-    };
-  }
-
   try {
     const userDocRef = doc(fireStore, "User", uid);
     const userDocSnap = await getDoc(userDocRef);
@@ -43,7 +32,6 @@ export default async function uploadbrandUser(
     if (userDocSnap.exists()) {
       const existingUserType = userDocSnap.data().userType;
       if (existingUserType === "stylist" || existingUserType === "brand") {
-        console.log(`이미 ${existingUserType} 유형의 사용자입니다.`);
         return {
           status: 400,
           success: false,
@@ -59,6 +47,10 @@ export default async function uploadbrandUser(
     const fullAddress = `${postalCode}, ${address}, ${detailAddress}, ${extraAddress}`;
     const profileImageFile = formData.get("profile_photo") as File;
     const certificateImageFile = formData.get("business_photo") as File;
+    const phoneNumber = (formData.get("phoneNumber") as string).replace(
+      /-/g,
+      ""
+    );
 
     let profileImageUrl = "";
 
@@ -69,8 +61,6 @@ export default async function uploadbrandUser(
       );
       const snapshot = await uploadBytes(profileStorage, profileImageFile);
       profileImageUrl = await getDownloadURL(snapshot.ref);
-    } else {
-      console.log("not found : ", profileImageUrl);
     }
 
     let certificateImageUrl = "";
@@ -85,12 +75,7 @@ export default async function uploadbrandUser(
         certificateImageFile
       );
       certificateImageUrl = await getDownloadURL(brandSnapShot.ref);
-    } else {
-      console.log("not found : ", certificateImageUrl);
     }
-
-    console.log(profileImageUrl, certificateImageUrl);
-    console.log(formData);
 
     const brandFormData: IUser = {
       profileImage: profileImageUrl,
@@ -98,9 +83,7 @@ export default async function uploadbrandUser(
       brandName: formData.get("brand_name") as string,
       name: formData.get("name") as string,
       homepage: formData.get("homepage") as string,
-      phoneNumber: ((((formData.get("phoneNumber1") as string) +
-        formData.get("phoneNumber2")) as string) +
-        formData.get("phoneNumber3")) as string,
+      phoneNumber,
       address: fullAddress,
       affiliation: formData.get("affiliation") as string,
       email: formData.get("email") as string,
@@ -109,20 +92,16 @@ export default async function uploadbrandUser(
       userType: "brand",
     };
 
-    console.log("User data: ", brandFormData);
-
     const approve: IBrandApplication = {
       approve: false,
       brandName: formData.get("brand_name") as string,
       createdAt: Timestamp.now(),
     };
 
-    console.log("Brand approve: ", approve);
-
     await setDoc(doc(fireStore, "User", uid), brandFormData);
     await addDoc(collection(fireStore, `/User/${uid}/History`), approve);
 
-    return { status: 200, success: true };
+    return { status: 200, success: true, message: "사용자 추가 성공" };
   } catch (error) {
     console.error("사용자 업로드 중 오류 발생:", error);
     return { status: 400, success: false, message: "사용자 추가 실패" };

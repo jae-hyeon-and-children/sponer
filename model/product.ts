@@ -8,6 +8,7 @@ interface AlgoliaProp {
 export interface IProduct extends AlgoliaProp {
   id?: string;
   createdAt: Timestamp;
+  brandName?: string;
   brandId: string;
   genderCategory: string;
   height: string;
@@ -24,6 +25,7 @@ export const ProductConverter = {
     const data = product.data();
     return {
       id,
+      brandName: data.brandName,
       brandId: data.brandId,
       createdAt: data.createdAt,
       genderCategory: data.genderCategory,

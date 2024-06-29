@@ -1,41 +1,37 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/config/firebase/firebase";
-import { FirebaseError } from "firebase/app";
-import { IResponse } from "@/model/responses";
+"use server";
 
 import { IUser } from "@/model/user";
 import { createChatRoom } from "@/libs/api/chat-room";
 import { Timestamp } from "firebase/firestore";
+import { adminAuth } from "@/config/firebase/firebaseadmin";
 
-export default async function createAccount(
-  prevState: any,
-  formData: FormData
-): Promise<IResponse> {
-  const email = formData.get("email")?.toString() || "";
-  const password = formData.get("password")?.toString() || "";
-
-  if (!email || !password) {
-    return {
-      status: 400,
-      success: false,
-      message: "Email and password are required",
-    };
-  }
-
+export async function createAccountHandler(
+  userId: string,
+  email: string,
+  profileImage: string,
+  token: string
+): Promise<{ status: number; success: boolean; message: string }> {
   try {
-    // 회원가입 처리
-    const createUser = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    console.log("Received Token:", token);
 
-    await updateProfile(createUser.user, {});
+    if (!userId || !email || !token) {
+      return {
+        status: 400,
+        success: false,
+        message: "User ID와 Email, 토큰이 필요합니다.",
+      };
+    }
+
+    // Firebase에서 발급한 토큰 검증
+    const decodedToken = await adminAuth.verifyIdToken(token);
+    if (decodedToken.uid !== userId) {
+      throw new Error("유효하지 않은 토큰");
+    }
 
     // 어드민 정보 설정
-    const admin: IUser = {
+    const adminUser: IUser = {
       id: "sponer@gmail.com",
-      name: "",
+      name: "스포너 관리자",
       profileImage: "/path/to/admin/profileImage.png",
       email: "admin@example.com",
       address: "Admin Address",
@@ -47,10 +43,9 @@ export default async function createAccount(
 
     // 새로 생성된 사용자 정보 설정
     const newUser: IUser = {
-      id: createUser.user.uid,
-      name: createUser.user.displayName || email,
-      profileImage:
-        createUser.user.photoURL || "/path/to/default/profileImage.png",
+      id: userId,
+      name: email,
+      profileImage: profileImage,
       email: email,
       address: "",
       phoneNumber: "",
@@ -59,10 +54,12 @@ export default async function createAccount(
       userType: "",
     };
 
+    console.log("Creating chat room with admin and newUser");
     // 채팅방 생성 호출
-    const chatRoomResponse = await createChatRoom(admin, newUser, "");
+    const chatRoomResponse = await createChatRoom(adminUser, newUser, "");
 
     if (!chatRoomResponse.success) {
+      console.log("Chat room creation failed:", chatRoomResponse.message);
       return {
         status: 500,
         success: false,
@@ -70,20 +67,14 @@ export default async function createAccount(
       };
     }
 
+    console.log("Chat room created successfully");
     return {
       status: 200,
       success: true,
       message: "성공적으로 회원가입 되셨습니다.",
     };
-  } catch (e) {
-    if (e instanceof FirebaseError) {
-      return {
-        status: 500,
-        success: false,
-        message:
-          "올바른 형식이 아닙니다. 비밀번호는 최소 6자 이상이어야 합니다.",
-      };
-    }
+  } catch (error) {
+    console.error("Error:", error);
     return {
       status: 500,
       success: false,

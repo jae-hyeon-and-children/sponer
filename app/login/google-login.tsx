@@ -6,35 +6,38 @@ import { useRouter } from "next/navigation";
 
 export default function GoogleLoginButton() {
   const router = useRouter();
+  const uid = auth.currentUser?.uid;
 
   const handleGoogleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          // localStorage.setItem(
-          //   "currentUser",
-          //   JSON.stringify({
-          //     uid: user.uid,
-          //     displayName: user.displayName,
-          //     email: user.email,
-          //     photoURL: user.photoURL,
-          //   })
-          // );
-        }
-      });
-      console.log("로그인 유저 : ", auth.currentUser);
-      router.push("/");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
 
+      const response = await fetch("/api/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (response.ok) {
+        router.push("/add-user");
+      } else {
+        console.error("구글 로그인 서버 처리 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("구글 로그인 오류:", error);
+    }
+    console.log("현재 로그인 유저 uid : ", uid);
+  };
+  console.log("현재 로그인 유저 uid : ", uid);
   return (
     <button
       onClick={handleGoogleLogin}
-      className="flex items-center gap-2 p-2 border bg-white text-gray-700 rounded-[3.5rem] w-96 h-14 justify-center"
+      className="flex items-center gap-2 p-2 box-border border border-[#C6D0DC] text-gray-700 rounded-xl w-full h-12 justify-center"
     >
       <svg
         width="24"
@@ -61,7 +64,7 @@ export default function GoogleLoginButton() {
         />
       </svg>
 
-      <span className="label-1 text-gray-700">구글 계정으로 시작하기</span>
+      <span className="label-1 text-gray-700">구글 로그인</span>
     </button>
   );
 }

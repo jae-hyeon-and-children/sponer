@@ -1,49 +1,36 @@
-import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/config/firebase/firebase";
-import { FirebaseError } from "firebase/app";
-import { redirect } from "next/navigation";
+"use server";
+
+import { sign } from "jsonwebtoken";
 import { IResponse } from "@/model/responses";
+import { NextApiRequest, NextApiResponse } from "next";
+import { serialize } from "cookie";
 
-export default async function login(
-  prevState: any,
-  formData: FormData
-): Promise<IResponse> {
-  const email = formData.get("email")?.toString() || "";
-  const password = formData.get("password")?.toString() || "";
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-  if (!email || !password) {
+export async function loginHandler(uid: string): Promise<IResponse> {
+  if (!uid) {
     return {
       status: 400,
       success: false,
-      message: "Email과 Password가 필요합니다.",
+      message: "유효한 사용자 ID가 필요합니다.",
     };
   }
 
   try {
-    const loginUser = await signInWithEmailAndPassword(auth, email, password);
+    const token = sign({ uid }, JWT_SECRET, { expiresIn: "1h" });
 
-    const uid = auth.currentUser?.uid || "";
-
-    console.log("현재 유저는? ", uid);
-
-    await updateProfile(loginUser.user, {});
     return {
       status: 200,
       success: true,
-      message: "성공적으로 로그인 되셨습니다.",
+      message: "성공적으로 로그인되었습니다.",
+      token,
     };
-  } catch (e) {
-    if (e instanceof FirebaseError) {
-      return {
-        status: 400,
-        success: false,
-        message: "올바른 양식이 아닙니다.",
-      };
-    }
+  } catch (error) {
+    console.error("토큰 발급 오류:", error);
     return {
-      status: 400,
+      status: 500,
       success: false,
-      message: "알 수 없는 오류가 발생했습니다.",
+      message: "토큰 발급 중 오류가 발생했습니다.",
     };
   }
 }
