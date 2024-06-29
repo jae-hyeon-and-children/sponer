@@ -13,21 +13,50 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Modal from "./my-page-modal";
 
+const SkeletonSidebar = () => (
+	<div className="w-[15rem] border-r border-r-gray-200 flex-col sticky top-0 left-0 h-screen hidden lg:flex">
+		<div className="flex flex-col pt-40 pl-14 gap-11 animate-pulse">
+			<div className="h-fit flex flex-col gap-6 flex-nowrap">
+				<div className="bg-slate-200 w-32 h-8 rounded-xl"></div>
+				<div className="bg-slate-200 w-24 h-6 rounded-xl"></div>
+				<div className="bg-slate-200 w-24 h-6 rounded-xl"></div>
+				<div className="bg-slate-200 w-24 h-6 rounded-xl"></div>
+			</div>
+			<div className="h-fit flex flex-col gap-6 flex-nowrap">
+				<div className="bg-slate-200 w-32 h-8 rounded-xl"></div>
+				<div className="bg-slate-200 w-24 h-6 rounded-xl"></div>
+			</div>
+			<div className="h-fit flex flex-col gap-6 flex-nowrap">
+				<div className="bg-slate-200 w-32 h-8 rounded-xl"></div>
+				<div className="bg-slate-200 w-24 h-6 rounded-xl"></div>
+				<div className="bg-slate-200 w-24 h-6 rounded-xl"></div>
+			</div>
+		</div>
+	</div>
+);
+
 export const ProductSideBar = () => {
 	const userAuth = useAuth();
 	const [isBrandUser, setIsBrandUser] = useState<boolean | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(true);
 	const pathname = usePathname();
 	const router = useRouter();
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, async (userAuth) => {
+		const fetchUserType = async (userAuth: any) => {
+			const isBrand = await isUserTypeBrand(userAuth.uid);
+			setIsBrandUser(isBrand);
+			setLoading(false);
+			console.log(userAuth.uid);
+		};
+
+		const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
 			if (userAuth) {
-				const isBrand = await isUserTypeBrand(userAuth.uid);
-				setIsBrandUser(isBrand);
-				console.log(userAuth.uid);
+				fetchUserType(userAuth);
 			} else {
 				setIsBrandUser(false);
+				setLoading(false);
 			}
 		});
 
@@ -39,11 +68,9 @@ export const ProductSideBar = () => {
 			const result: IResponse = await deleteUserData(userAuth.uid);
 			setIsModalOpen(false);
 
+			alert(result.message);
 			if (result.success) {
-				alert(result.message);
 				router.push("/");
-			} else {
-				alert(result.message);
 			}
 		}
 	};
@@ -51,40 +78,44 @@ export const ProductSideBar = () => {
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
 
-	if (isBrandUser === null || userAuth === null) {
-		return null;
+	const isActive = (path: string) => pathname === path;
+
+	const renderLink = (
+		href: string,
+		text: string,
+		isActiveCondition: boolean
+	) => (
+		<Link href={href} legacyBehavior>
+			<a
+				className={`label-2 pt-2 ${
+					isActiveCondition ? "text-primary font-bold" : "text-gray-400"
+				}`}
+			>
+				{text}
+			</a>
+		</Link>
+	);
+
+	if (loading) {
+		return <SkeletonSidebar />;
 	}
 
-	const isActive = (path: string) => {
-		console.log(pathname, path);
-		console.log(pathname === path);
-		return pathname === path;
-	};
-
 	return (
-		<div className="w-[15rem] border-r border-r-gray-200  flex-col sticky top-0 left-0 h-screen hidden lg:flex">
+		<div className="w-[15rem] border-r border-r-gray-200 flex-col sticky top-0 left-0 h-screen hidden lg:flex">
 			<div className="flex flex-col pt-40 pl-14 gap-11">
-				<div className="h-fit flex flex-col gap-6  flex-nowrap">
+				<div className="h-fit flex flex-col gap-6 flex-nowrap">
 					<span className="text-gray-900 heading-2">회원 정보</span>
-					<Link href={`/my-page/${userAuth.uid}`} legacyBehavior>
-						<a
-							className={`label-2 pt-2 ${
-								isActive(`/my-page/${userAuth.uid}`)
-									? "text-primary font-bold"
-									: "text-gray-400"
-							}`}
-						>
-							프로필 관리
-						</a>
-					</Link>
-					{isBrandUser && (
-						<Link
-							href={`/my-page/history/${userAuth.uid}`}
-							className="text-gray-400 label-2 pt-2 cursor-pointer"
-						>
-							브랜드 신청 이력
-						</Link>
+					{renderLink(
+						`/my-page/${userAuth!.uid}`,
+						"프로필 관리",
+						isActive(`/my-page/${userAuth!.uid}`)
 					)}
+					{isBrandUser &&
+						renderLink(
+							`/my-page/history/${userAuth!.uid}`,
+							"브랜드 신청 이력",
+							isActive(`/my-page/history/${userAuth!.uid}`)
+						)}
 					<span
 						onClick={openModal}
 						className="text-gray-400 label-2 pt-2 cursor-pointer"
@@ -95,33 +126,21 @@ export const ProductSideBar = () => {
 				{isBrandUser && (
 					<div className="h-fit flex flex-col gap-6 flex-nowrap">
 						<span className="text-gray-900 heading-2">상품 관리</span>
-						<Link href={`/my-page/product-list`} legacyBehavior>
-							<a
-								className={` label-2 pt-2 ${
-									isActive(`/my-page/product-list`)
-										? "text-primary font-bold"
-										: "text-gray-400"
-								}`}
-							>
-								상품 관리
-							</a>
-						</Link>
+						{renderLink(
+							`/my-page/product-list`,
+							"상품 관리",
+							isActive(`/my-page/product-list`)
+						)}
 					</div>
 				)}
 				<div className="h-fit flex flex-col gap-6 flex-nowrap">
 					<span className="text-gray-900 heading-2">문의</span>
 					<span className="text-gray-400 label-2 pt-2">1:1 문의</span>
-					<Link href={`/my-page/faq`} legacyBehavior>
-						<a
-							className={`label-2 pt-2 ${
-								isActive(`/my-page/faq`)
-									? "text-primary font-bold"
-									: "text-gray-400"
-							}`}
-						>
-							FAQ 자주 묻는 질문
-						</a>
-					</Link>
+					{renderLink(
+						`/my-page/faq`,
+						"FAQ 자주 묻는 질문",
+						isActive(`/my-page/faq`)
+					)}
 				</div>
 			</div>
 			<Modal

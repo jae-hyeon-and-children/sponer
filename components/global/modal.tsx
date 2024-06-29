@@ -4,14 +4,20 @@ import IcClose from "@/public/icons/ic_close.png";
 import Image from "next/image";
 interface ModalProps {
   children: React.ReactNode;
+  onClose?: () => void;
 }
 
-export default function Modal({ children }: ModalProps) {
+export default function Modal({ children, onClose }: ModalProps) {
   const [showDefaultModal, setShowDefaultModal] = useRecoilState(
     showDefaultModalState
   );
 
-  const closeModal = () => setShowDefaultModal(false);
+  const closeModal = () => {
+    setShowDefaultModal(false)
+    if (onClose) {
+      onClose();
+    }
+  };
   return (
     <section
       className={`${

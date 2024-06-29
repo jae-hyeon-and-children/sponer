@@ -1,7 +1,7 @@
 import ProductForm from "@/components/my-page/product-form";
 import { getUserById } from "./actions";
-import BrandUserForm from "@/components/my-page/brand-form";
-import StylistUserForm from "@/components/my-page/stylist-form";
+import BrandUserForm from "@/components/my-page/user/brand/brand-form";
+import StylistUserForm from "@/components/my-page/user/stylist/stylist-form";
 
 export default async function EditProfile({
 	params,
