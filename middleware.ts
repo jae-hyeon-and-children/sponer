@@ -1,71 +1,80 @@
 import { NextRequest, NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-interface DecodedToken {
-  uid: string;
-}
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-interface Routes {
-  [key: string]: boolean;
-}
+const publicOnlyUrls = [
+  "/login",
+  "/change-password",
+  "/create-account",
+  "/my-page/faq",
+];
 
-// 공개 접근 가능 URL
-const publicOnlyUrls: Routes = {
-  "/login": true,
-  "/change-password": true,
-  "/create-account": true,
-  "/my-page/faq": true,
-};
-
-// 인증된 사용자만 접근 가능한 URL
-const authenticatedOnlyUrls: Routes = {
-  "/add-user": true,
-  "/add-user/stylist-user": true,
-  "/add-user/brand-user": true,
-  "/chats": true,
-  "/my-page": true,
-  "/my-page/product-list": true,
-  "/my-page/product": true,
-};
+const authenticatedOnlyUrls = [
+  "/add-user",
+  "/add-user/stylist-user",
+  "/add-user/brand-user",
+  "/chats",
+  "/my-page",
+  "/my-page/product-list",
+  "/my-page/product",
+];
 
 const isAuthenticatedUrl = (pathname: string): boolean => {
-  if (authenticatedOnlyUrls[pathname]) {
+  if (authenticatedOnlyUrls.includes(pathname)) {
     return true;
   }
 
-  // UID를 포함한 동적 경로 처리
   const dynamicRoutes = [
     /^\/my-page\/(?!faq|product-list|product)([^/]+)$/,
     /^\/chats\/[^/]+$/,
-    /^\/my-page\/product\/[^/]+$/, // 상품 수정 경로
+    /^\/my-page\/product\/[^/]+$/,
   ];
   return dynamicRoutes.some((regex) => regex.test(pathname));
 };
 
 export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
-  const token = request.cookies.get("token")?.value;
-  const isPublicPage = publicOnlyUrls[pathname] || false;
-  const isAuthenticatedPage = isAuthenticatedUrl(pathname);
-
-  console.log(`Request URL: ${pathname}`);
-  console.log(`Token: ${token}`);
-  console.log(`isPublicPage: ${isPublicPage}`);
-  console.log(`isAuthenticatedPage: ${isAuthenticatedPage}`);
+  const { pathname } = request.nextUrl;
+  const token = request.cookies.get("accessToken")?.value;
+  console.log("미들웨어 토큰 : ", token);
+  console.log("패스네임 : ", pathname);
 
   if (pathname.startsWith("/api")) {
     return NextResponse.next();
   }
 
+  const isPublicPage = publicOnlyUrls.includes(pathname);
+  const isAuthenticatedPage = isAuthenticatedUrl(pathname);
+
   if (!token) {
+    console.log("토큰 없음. 리다이렉트.");
     if (isAuthenticatedPage) {
-      console.log("Redirecting to /login because no token found");
-      return NextResponse.redirect(new URL("/login", request.url));
+      const redirectUrl = new URL(
+        `/login?redirect_url=${pathname}`,
+        request.url
+      );
+      return NextResponse.redirect(redirectUrl);
     }
-  } else {
-    try {
-      const verifyUrl = `${request.nextUrl.origin}/api/verify-token`;
-      console.log(`Verify URL: ${verifyUrl}`);
-      const response = await fetch(verifyUrl, {
+    return NextResponse.next();
+  }
+
+  try {
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(JWT_SECRET)
+    );
+    const { uid } = payload;
+
+    if (isPublicPage) {
+      if (pathname === "/my-page/faq") {
+        return NextResponse.next();
+      }
+      return NextResponse.redirect(new URL(`/my-page/${uid}`, request.url));
+    }
+
+    if (isAuthenticatedPage) {
+      const verifyUrl = new URL("/api/verify-token", request.url);
+      const response = await fetch(verifyUrl.toString(), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,45 +82,25 @@ export async function middleware(request: NextRequest) {
         body: JSON.stringify({ token }),
       });
 
-      console.log(`Response Status: ${response.status}`);
-
       if (!response.ok) {
         throw new Error("JWT 검증 오류");
       }
 
-      const { uid } = await response.json();
-      console.log(`User ID from token: ${uid}`);
+      const { userType } = await response.json();
 
-      if (isPublicPage) {
-        if (pathname === "/my-page/faq") {
-          return NextResponse.next();
-        }
-        console.log("Redirecting to my-page with uid");
-        return NextResponse.redirect(new URL(`/my-page/${uid}`, request.url));
+      if (
+        userType === "stylist" &&
+        (pathname.startsWith("/my-page/product-list") ||
+          pathname.startsWith("/my-page/product") ||
+          pathname.match(/^\/my-page\/product\/[^/]+$/))
+      ) {
+        return NextResponse.redirect(new URL("/", request.url));
       }
 
-      if (pathname === "/add-user") {
-        console.log("Allowing access to /add-user");
-        return NextResponse.next();
-      }
-
-      const pathUidMatch = pathname.match(
-        /^\/my-page\/(?!faq|product-list|product)([^/]+)$/
-      );
-      if (pathUidMatch) {
-        if (pathUidMatch[1] === uid) {
-          console.log("Allowing access to dynamic my-page route");
-          return NextResponse.next();
-        } else {
-          console.log(`Unauthorized access attempt to ${pathname}`);
-          return NextResponse.redirect(new URL("/login", request.url));
-        }
-      }
-
-      if (pathname.startsWith("/my-page/product/")) {
+      if (pathname.match(/^\/my-page\/product\/[^/]+$/)) {
         const productId = pathname.split("/").pop();
-        const productAccessUrl = `${request.nextUrl.origin}/api/product-access`;
-        const accessResponse = await fetch(productAccessUrl, {
+        const productAccessUrl = new URL("/api/product-access", request.url);
+        const accessResponse = await fetch(productAccessUrl.toString(), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -119,70 +108,24 @@ export async function middleware(request: NextRequest) {
           body: JSON.stringify({ token, productId }),
         });
 
-        console.log(`Product Access Response Status: ${accessResponse.status}`);
-
         if (!accessResponse.ok) {
-          throw new Error("Product access 검증 오류");
+          return NextResponse.redirect(new URL("/", request.url));
         }
-
-        const { message } = await accessResponse.json();
-        console.log(`Product Access Message: ${message}`);
       }
 
-      if (pathname === "/my-page/product") {
-        const brandAccessUrl = `${request.nextUrl.origin}/api/brand-access`;
-        const accessResponse = await fetch(brandAccessUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-
-        console.log(`Brand Access Response Status: ${accessResponse.status}`);
-
-        if (!accessResponse.ok) {
-          throw new Error("Brand access 검증 오류");
-        }
-
-        const { message } = await accessResponse.json();
-        console.log(`Brand Access Message: ${message}`);
-      }
-
-      if (pathname === "/my-page/product-list") {
-        const brandAccessUrl = `${request.nextUrl.origin}/api/brand-access`;
-        const accessResponse = await fetch(brandAccessUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-
-        console.log(`Brand Access Response Status: ${accessResponse.status}`);
-
-        if (!accessResponse.ok) {
-          throw new Error("Brand access 검증 오류");
-        }
-
-        const { message } = await accessResponse.json();
-        console.log(`Brand Access Message: ${message}`);
-      }
-
-      if (isAuthenticatedPage) {
-        console.log("Allowing access to authenticated page");
-        return NextResponse.next();
-      }
-    } catch (error) {
-      console.error("JWT 검증 오류:", error);
-      if (isAuthenticatedPage) {
-        console.log("Redirecting to /login due to JWT 검증 오류");
-        return NextResponse.redirect(new URL("/login", request.url));
-      }
+      return NextResponse.next();
+    }
+  } catch (error) {
+    console.error("JWT 검증 오류:", error);
+    if (isAuthenticatedPage) {
+      const redirectUrl = new URL(
+        `/login?redirect_url=${pathname}`,
+        request.url
+      );
+      return NextResponse.redirect(redirectUrl);
     }
   }
 
-  console.log("Allowing access to public or other pages");
   return NextResponse.next();
 }
 
