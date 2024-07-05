@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import useAuth from "@/libs/auth";
-import LogOutButton from "../logout/logoutbutton";
+import LogOutButton from "../(auth)/logout/logoutbutton";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
