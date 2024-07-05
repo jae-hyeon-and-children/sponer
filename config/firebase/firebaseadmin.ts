@@ -1,12 +1,22 @@
 import admin from "firebase-admin";
 
-// 이미 초기화된 경우 새로 초기화하지 않음
 if (!admin.apps.length) {
+  console.log("Firebase Admin SDK 초기화 시작");
+  console.log(
+    "FIREBASE_SERVICE_ACCOUNT_KEY:",
+    process.env.FIREBASE_SERVICE_ACCOUNT_KEY
+  );
+
+  const serviceAccount = JSON.parse(
+    process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string
+  );
+
   admin.initializeApp({
-    credential: admin.credential.cert(
-      JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY!)
-    ),
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`,
   });
+
+  console.log("Firebase Admin SDK 초기화 완료");
 }
 
 export const adminAuth = admin.auth();
