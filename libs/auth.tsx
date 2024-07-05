@@ -11,7 +11,7 @@ const useAuth = (): User | null => {
     });
 
     return () => unsubscribe();
-  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 이 효과가 실행되도록 함
+  }, []);
 
   return user;
 };
