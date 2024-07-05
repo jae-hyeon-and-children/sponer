@@ -37,9 +37,9 @@ export async function POST(req: NextRequest) {
       });
       const cookie = serialize("token", newToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        // secure: process.env.NODE_ENV === "production",
         maxAge: 60 * 60 * 24 * 7,
-        sameSite: "strict",
+        // sameSite: "strict",
         path: "/",
       });
       const res = NextResponse.json(response, { status: response.status });
