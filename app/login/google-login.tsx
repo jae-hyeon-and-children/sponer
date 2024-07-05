@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 export default function GoogleLoginButton() {
   const router = useRouter();
-  const uid = auth.currentUser?.uid;
 
   const handleGoogleLogin = async () => {
     try {
@@ -24,16 +23,16 @@ export default function GoogleLoginButton() {
       });
 
       if (response.ok) {
-        router.push("/add-user");
+        const data = await response.json();
+        router.push(`/my-page/${data.uid}`);
       } else {
         console.error("구글 로그인 서버 처리 중 오류가 발생했습니다.");
       }
     } catch (error) {
       console.error("구글 로그인 오류:", error);
     }
-    console.log("현재 로그인 유저 uid : ", uid);
   };
-  console.log("현재 로그인 유저 uid : ", uid);
+
   return (
     <button
       onClick={handleGoogleLogin}
