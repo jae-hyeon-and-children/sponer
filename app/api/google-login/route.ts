@@ -11,15 +11,19 @@ export async function POST(req: NextRequest) {
     const decodedToken = await adminAuth.verifyIdToken(idToken);
 
     if (!decodedToken || !decodedToken.uid) {
-      throw new Error("Invalid ID token");
+      return NextResponse.json({
+        status: 400,
+        success: false,
+        message: "Invalid ID token",
+      });
     }
 
     const uid = decodedToken.uid;
     const token = sign({ uid }, JWT_SECRET, { expiresIn: "1h" });
 
-    const cookie = serialize("token", token, {
+    const cookie = serialize("accessToken", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
       maxAge: 3600,
       path: "/",
     });
@@ -28,6 +32,7 @@ export async function POST(req: NextRequest) {
       status: 200,
       success: true,
       message: "성공적으로 로그인되었습니다.",
+      uid,
     });
     response.headers.set("Set-Cookie", cookie);
     return response;
