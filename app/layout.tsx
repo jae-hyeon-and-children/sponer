@@ -7,9 +7,10 @@ import RecoilWrapper from "@/recoil/recoil-wrapper";
 import Header from "@/components/global/header";
 import Footer from "@/components/global/footer";
 import Toast from "@/components/global/toast";
+import { usePathname } from "next/navigation";
 
 const suit = localFont({
-	src: "./fonts/SUIT-Variable.woff2",
+  src: "./fonts/SUIT-Variable.woff2",
 });
 
 // export const metadata: Metadata = {
@@ -18,33 +19,33 @@ const suit = localFont({
 // };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	const pathname = usePathname();
+  const pathname = usePathname();
 
-	if (pathname.startsWith("/chats")) {
-		return (
-			<html lang="en">
-				<body className={suit.className}>
-					<Header />
-					<RecoilWrapper>{children}</RecoilWrapper>
-				</body>
-			</html>
-		);
-	}
+  if (pathname.startsWith("/chats")) {
+    return (
+      <html lang="en">
+        <body className={suit.className}>
+          <Header />
+          <RecoilWrapper>{children}</RecoilWrapper>
+        </body>
+      </html>
+    );
+  }
 
-	return (
-		<html lang="en">
-			<body className={suit.className}>
-				<Header />
-				<RecoilWrapper>
-					{children}
-					<Toast />
-				</RecoilWrapper>
-				<Footer />
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body className={suit.className}>
+        <Header />
+        <RecoilWrapper>
+          {children}
+          <Toast />
+        </RecoilWrapper>
+        <Footer />
+      </body>
+    </html>
+  );
 }

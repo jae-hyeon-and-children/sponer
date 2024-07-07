@@ -7,7 +7,8 @@ import useAuth from "@/libs/auth";
 import Input from "@/components/global/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import GoogleLoginButton from "@/app/login/google-login";
+import GoogleLoginButton from "./google-login";
+import { setCookie } from "nookies";
 
 export default function LoginPageComponent() {
   const router = useRouter();
@@ -47,8 +48,13 @@ export default function LoginPageComponent() {
       console.log("서버 응답:", result);
 
       if (result.success) {
-        window.location.href = "/";
-        // router.push("/");
+        setCookie(null, "accessTokenClient", result.token, {
+          maxAge: 3600,
+          path: "/",
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+        });
+        router.push("/add-user");
       } else {
         setErrorMessage(result.message || "오류가 발생했습니다");
       }
@@ -63,66 +69,54 @@ export default function LoginPageComponent() {
   if (user) return null;
 
   return (
-    <>
-      <div className="flex flex-col items-center h-screen px-5">
-        <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-          <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
-            <form onSubmit={handleSubmit} method="POST" className="w-full">
-              <div className="display text-gray-900 text-[2rem] flex justify-center">
-                로그인
+    <div className="flex flex-col items-center h-screen px-5">
+      <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+        <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+          <form onSubmit={handleSubmit} method="POST" className="w-full">
+            <div className="display text-gray-900 text-[2rem] flex justify-center">
+              로그인
+            </div>
+            <div className="flex flex-col gap-3 mt-14">
+              <Input name="email" type="email" placeholder="이메일" required />
+              <Input
+                name="password"
+                type="password"
+                placeholder="비밀번호"
+                required
+              />
+              <div className="flex flex-col items-end my-1 mr-3">
+                <Link href="/change-password" className="label-2 text-gray-600">
+                  비밀번호 찾기
+                </Link>
               </div>
-              <div className="flex flex-col gap-3 mt-14">
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="이메일"
-                  required
-                />
-                <Input
-                  name="password"
-                  type="password"
-                  placeholder="비밀번호"
-                  required
-                />
-                <div className="flex flex-col items-end my-1 mr-3">
-                  <Link
-                    href="/change-password"
-                    className="label-2 text-gray-600"
-                  >
-                    비밀번호 찾기
-                  </Link>
+            </div>
+            <div className="flex flex-col justify-center items-center text-center gap-2 mt-2">
+              <button className="box-border border bg-primary text-gray-100 rounded-xl w-full h-12 flex justify-center items-center">
+                <span className="label-1 text-gray-100">로그인</span>
+              </button>
+              {errorMessage && (
+                <div className="text-red-500 text-center mt-2">
+                  {errorMessage}
                 </div>
+              )}
+              <div className="border-[#C6D0DC] text-gray-600 rounded-xl w-full h-12 flex justify-center items-center mt-2">
+                <GoogleLoginButton />
               </div>
-              <div className="flex flex-col justify-center items-center text-center gap-2 mt-2">
-                <div className="flex flex-col justify-center items-center text-center gap-2 mt-2 w-full">
-                  <button className="box-border border bg-primary text-gray-100 rounded-xl w-full h-12 flex justify-center items-center">
-                    <span className="label-1 text-gray-100">로그인</span>
-                  </button>
-                  {errorMessage && (
-                    <div className="text-red-500 text-center mt-2">
-                      {errorMessage}
-                    </div>
-                  )}
-                  <div className="border-[#C6D0DC] text-gray-600 rounded-xl w-full h-12 flex justify-center items-center mt-2">
-                    <GoogleLoginButton />
-                  </div>
-                </div>
-                <div className="flex mt-3">
-                  <div className="label-2 text-gray-600">
-                    스포너가 처음이신가요?
-                  </div>
-                  <Link
-                    href="/create-account"
-                    className="label-2 text-gray-600 border-b-2 border-b[#81878E] ml-3"
-                  >
-                    간편 가입하기
-                  </Link>
-                </div>
+            </div>
+            <div className="flex mt-3">
+              <div className="label-2 text-gray-600">
+                스포너가 처음이신가요?
               </div>
-            </form>
-          </div>
+              <Link
+                href="/create-account"
+                className="label-2 text-gray-600 border-b-2 border-b[#81878E] ml-3"
+              >
+                간편 가입하기
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

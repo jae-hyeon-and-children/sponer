@@ -1,3 +1,4 @@
+// components/global/header.tsx
 "use client";
 
 import Image from "next/image";
@@ -32,6 +33,16 @@ export default function Header() {
               <Link href="/add-user">소속정하기</Link>
             </div>
           </div>
+          <nav>
+            <ul>
+              <li>
+                <Link href="/testpage">TestPage SSR</Link>
+              </li>
+              <li>
+                <Link href="/testpage-csr">TestPage CSR</Link>
+              </li>
+            </ul>
+          </nav>
           <div className="hidden lg:flex space-x-4 gap-12">
             <Link
               href={`/chats/${user?.uid}`}

@@ -29,9 +29,9 @@ export default function AdduserPageComponent() {
     }
   };
 
-  if (!user) {
-    return null; // 유저가 없으면 로그인 페이지로 리다이렉트하기 때문에 이 부분은 실제로 렌더링되지 않습니다.
-  }
+  // if (!user) {
+  //   return null; // 유저가 없으면 로그인 페이지로 리다이렉트하기 때문에 이 부분은 실제로 렌더링되지 않습니다.
+  // }
 
   return (
     <div className="flex flex-col justify-center items-center px-4">
