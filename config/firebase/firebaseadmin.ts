@@ -1,13 +1,18 @@
-import admin from "firebase-admin";
+import { initializeApp, cert, getApps, getApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
 
-// 이미 초기화된 경우 새로 초기화하지 않음
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(
-      JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY!)
-    ),
-  });
-}
+const adminConfig = {
+  credential: cert({
+    projectId: process.env.FIREBASE_PROJECT_ID!,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+  }),
+  databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`,
+};
 
-export const adminAuth = admin.auth();
-export const adminFirestore = admin.firestore();
+// Firebase 앱 초기화
+const app = !getApps().length ? initializeApp(adminConfig) : getApp();
+
+export const adminFirestore = getFirestore(app);
+export const adminAuth = getAuth(app);

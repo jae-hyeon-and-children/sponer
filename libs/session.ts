@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 interface SessionContent {
   id?: string;
+  token?: string;
 }
 
 export default async function getSession() {
@@ -11,7 +12,7 @@ export default async function getSession() {
     cookieName: "sponer",
     password: process.env.COOKIE_PASSWORD!,
     cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
     },
   });
 }

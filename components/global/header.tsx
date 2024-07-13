@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import useAuth from "@/libs/auth";
-import LogOutButton from "../logout/logoutbutton";
+import { useSession, signOut } from "next-auth/react";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
@@ -12,7 +11,9 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function Header() {
-  const user = useAuth();
+  const { data: session, status } = useSession();
+  console.log("헤더 - 세션 상태:", status);
+  console.log("헤더 - 세션 데이터:", session);
 
   return (
     <div className="">
@@ -32,21 +33,27 @@ export default function Header() {
               <Link href="/add-user">소속정하기</Link>
             </div>
           </div>
+
           <div className="hidden lg:flex space-x-4 gap-12">
             <Link
-              href={`/chats/${user?.uid}`}
+              href={`/chats/${session?.user?.id}`}
               className="text-black hover:text-gray-300"
             >
               Messages
             </Link>
             <Link
-              href={`/my-page/${user?.uid}`}
+              href={`/my-page/${session?.user?.id}`}
               className="text-black hover:text-gray-300"
             >
               My Page
             </Link>
-            {user ? (
-              <LogOutButton />
+            {status === "authenticated" ? (
+              <button
+                onClick={() => signOut()}
+                className="text-black hover:text-gray-300"
+              >
+                로그아웃
+              </button>
             ) : (
               <Link href="/login" className="text-black hover:text-gray-300">
                 로그인
@@ -54,16 +61,16 @@ export default function Header() {
             )}
           </div>
           <div className="flex lg:hidden space-x-4 gap-6 items-center">
-            <Link href={`/chats/${user?.uid}`}>
+            <Link href={`/chats/${session?.user?.id}`}>
               <EnvelopeIcon className="h-6 w-6 text-black hover:text-gray-300" />
             </Link>
-            <Link href={`/my-page/${user?.uid}`}>
+            <Link href={`/my-page/${session?.user?.id}`}>
               <UserCircleIcon className="h-6 w-6 text-black hover:text-gray-300" />
             </Link>
-            {user ? (
-              <LogOutButton>
+            {status === "authenticated" ? (
+              <button onClick={() => signOut()} aria-label="로그아웃">
                 <ArrowRightOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
-              </LogOutButton>
+              </button>
             ) : (
               <Link href="/login">
                 <ArrowLeftOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />

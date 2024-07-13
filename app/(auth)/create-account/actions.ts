@@ -13,6 +13,8 @@ export async function createAccountHandler(
 ): Promise<{ status: number; success: boolean; message: string }> {
   try {
     console.log("Received Token:", token);
+    console.log("Received userId:", userId);
+    console.log("Received email:", email);
 
     if (!userId || !email || !token) {
       return {

@@ -1,28 +1,27 @@
-// api/firebase-token/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
-import { verify } from "jsonwebtoken";
+import { jwtVerify } from "jose";
 import { doc, getDoc } from "firebase/firestore";
 import { fireStore } from "@/config/firebase/firebase";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-interface DecodedToken {
-  uid: string;
-}
-
 export async function POST(req: NextRequest) {
   const { token } = await req.json();
 
-  if (!token) {
-    return NextResponse.json({ message: "토큰이 없습니다" }, { status: 401 });
+  if (!token || typeof token !== "string") {
+    return NextResponse.json(
+      { message: "유효한 토큰이 없습니다" },
+      { status: 401 }
+    );
   }
 
   try {
-    const decoded = verify(token, JWT_SECRET) as DecodedToken;
-    const uid = decoded.uid;
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(JWT_SECRET)
+    );
+    const uid = payload.uid as string;
 
-    // Firestore에서 userType을 가져옵니다.
     const userDocRef = doc(fireStore, "User", uid);
     const userDocSnap = await getDoc(userDocRef);
 
@@ -37,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ uid, userType }, { status: 200 });
   } catch (error) {
-    console.error("Token verification error:", error);
-    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    console.error("토큰 검증 오류:", error);
+    return NextResponse.json({ message: "토큰 검증 실패" }, { status: 401 });
   }
 }
