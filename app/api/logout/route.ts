@@ -3,13 +3,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { serialize } from "cookie";
 
 export async function POST(req: NextRequest) {
-  const cookie = serialize("accessToken", "", {
-    httpOnly: true,
-    // secure: process.env.NODE_ENV === "production",
-    maxAge: -1,
-    path: "/",
-    sameSite: "strict",
-  });
+  const cookiesToClear = [
+    "accessToken",
+    "next-auth.session-token",
+    "next-auth.csrf-token",
+    "next-auth.callback-url",
+    "next-auth.pkce.code_verifier",
+  ];
+
+  const cookies = cookiesToClear.map((cookieName) =>
+    serialize(cookieName, "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: -1,
+      path: "/",
+      sameSite: "lax",
+    })
+  );
 
   const response = NextResponse.json(
     {
@@ -19,6 +29,9 @@ export async function POST(req: NextRequest) {
     { status: 200 }
   );
 
-  response.headers.set("Set-Cookie", cookie);
+  cookies.forEach((cookie) => {
+    response.headers.append("Set-Cookie", cookie);
+  });
+
   return response;
 }
