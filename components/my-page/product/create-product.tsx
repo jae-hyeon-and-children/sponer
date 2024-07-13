@@ -53,6 +53,15 @@ export default function CreateProductForm() {
 	const router = useRouter();
 
 	useEffect(() => {
+		if (
+			status === "unauthenticated" ||
+			(!session?.user?.id && session?.user?.userType !== "admin")
+		) {
+			router.push("/");
+		}
+	}, [status, session, router]);
+
+	useEffect(() => {
 		if (session) {
 			const newFormData = new FormData();
 			images.forEach((image) => newFormData.append("images", image));

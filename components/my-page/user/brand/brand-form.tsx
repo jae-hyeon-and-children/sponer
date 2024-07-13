@@ -17,6 +17,7 @@ import { PhoneInput } from "../common/phone-input";
 import { AddressInput } from "../common/address-input";
 import { getHistoryById } from "@/app/(my-page)/my-page/history/[id]/actions";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface BrandUserFormProps {
 	data: IUser;
@@ -33,8 +34,19 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 	const [isApprove, setIsApprove] = useState<boolean>(true);
 	const [history, setHistory] = useState<string>("");
 
+	const { data: session, status } = useSession();
+
 	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
 	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+
+	useEffect(() => {
+		if (
+			status === "unauthenticated" ||
+			(session?.user?.id !== userId && session?.user?.userType !== "admin")
+		) {
+			router.push("/");
+		}
+	}, [status, session, router]);
 
 	useEffect(() => {
 		const fetchApproveData = async () => {

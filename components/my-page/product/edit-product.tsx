@@ -71,14 +71,15 @@ export default function EditProductForm(data: any) {
 
 	const router = useRouter();
 
-	// useEffect(() => {
-	// 	if (
-	// 		status === "unauthenticated" ||
-	// 		(session?.user?.id !== params.id && session?.user?.userType !== "admin")
-	// 	) {
-	// 		router.push("/");
-	// 	}
-	// }, [status, session, router]);
+	useEffect(() => {
+		if (
+			status === "unauthenticated" ||
+			(session?.user?.id !== data.data.brandId &&
+				session?.user?.userType !== "admin")
+		) {
+			router.push("/");
+		}
+	}, [status, session, router]);
 
 	useEffect(() => {
 		if (data) {
@@ -235,14 +236,6 @@ export default function EditProductForm(data: any) {
 	};
 
 	if (!initialData) return <div>Loading...</div>;
-
-	if (loading) {
-		return <div>로딩 중...</div>;
-	}
-
-	// if (!user) {
-	// 	return <div>유저를 찾을 수 없습니다.</div>;
-	// }
 
 	return (
 		<>

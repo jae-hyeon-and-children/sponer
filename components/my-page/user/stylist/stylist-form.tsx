@@ -13,6 +13,8 @@ import { PhoneInput } from "../common/phone-input";
 import { ProfileImageUploader } from "../common/profile-image-uploader";
 import { TextInput } from "../common/text-input";
 import Modal from "@/components/global/modal";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface StylistUserFormProps {
 	data: IUser;
@@ -24,11 +26,23 @@ export default function StylistUserForm({
 	userId,
 }: StylistUserFormProps) {
 	const userData = data;
+	const router = useRouter();
 	const [profileImg, setProfileImg] = useState<File | null>(null);
 	const [errors, setErrors] = useState<Record<string, string>>({});
 
+	const { data: session, status } = useSession();
+
 	const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
 	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+
+	useEffect(() => {
+		if (
+			status === "unauthenticated" ||
+			(session?.user?.id !== userId && session?.user?.userType !== "admin")
+		) {
+			router.push("/");
+		}
+	}, [status, session, router]);
 
 	useEffect(() => {
 		if (data) {
