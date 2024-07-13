@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Input from "@/components/global/input";
 import AddressForm from "@/components/global/address";
 import { PhotoIcon } from "@heroicons/react/24/solid";
@@ -10,6 +11,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import useToast from "@/libs/hook/useToast";
 
 export default function BrandUserPageForm() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [profilephoto, setProfilephoto] = useState<string | null>(null);
   const [certificatephoto, setCertificatephoto] = useState<string | null>(null);
@@ -44,12 +46,18 @@ export default function BrandUserPageForm() {
       } else {
         setUid(null);
         console.log("brand-user::::::::", user);
-        router.push("/login");
+        // router.push("/login");
       }
     });
 
     return () => unsubscribe();
   }, [router]);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -78,6 +86,10 @@ export default function BrandUserPageForm() {
       console.error("Error:", error);
     }
   };
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -237,7 +249,7 @@ export default function BrandUserPageForm() {
                       <>
                         <PhotoIcon className="w-16" />
                         <div className="text-neutral-400 text-xs lg:text-lg ">
-                          사진을 추가해주세요.
+                          사진을 추가해주세요.{" "}
                         </div>
                       </>
                     )}
