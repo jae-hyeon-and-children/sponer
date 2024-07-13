@@ -95,7 +95,7 @@ export default function ProductList() {
 	}
 
 	return (
-		<main className="w-full h-screen flex">
+		<main className="w-full  flex">
 			<ProductSideBar />
 			<div className="w-full mt-20">
 				<div className="w-full h-52 bg-primary px-4 md:px-36">
