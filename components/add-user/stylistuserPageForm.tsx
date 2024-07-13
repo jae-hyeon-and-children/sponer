@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Input from "@/components/global/input";
 import AddressForm from "@/components/global/address";
 import { PhotoIcon } from "@heroicons/react/24/solid";
@@ -10,6 +11,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import useToast from "@/libs/hook/useToast";
 
 export default function StylistUserPageForm() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [profilephoto, setProfilephoto] = useState<string | null>(null);
   const [isValidSize, setIsValidSize] = useState<boolean>(true);
@@ -32,12 +34,18 @@ export default function StylistUserPageForm() {
       } else {
         setUid(null);
         console.log("stylist-user::::::::", user);
-        router.push("/login");
+        // router.push("/login");
       }
     });
 
     return () => unsubscribe();
   }, [router]);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -68,6 +76,10 @@ export default function StylistUserPageForm() {
       console.error("Error:", error);
     }
   };
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
