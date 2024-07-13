@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import useAuth from "@/libs/auth";
+import { useSession } from "next-auth/react";
 
 export default function AdduserPageComponent() {
-  const user = useAuth();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     router.push("/login");
-  //   }
-  // }, [user, router]);
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   const handleSelection = (option: string) => {
     setSelectedOption(option);
@@ -29,9 +29,9 @@ export default function AdduserPageComponent() {
     }
   };
 
-  // if (!user) {
-  //   return null; // 유저가 없으면 로그인 페이지로 리다이렉트하기 때문에 이 부분은 실제로 렌더링되지 않습니다.
-  // }
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col justify-center items-center px-4">
