@@ -17,7 +17,7 @@ import {
 } from "@/app/(my-page)/my-page/product/[id]/actions";
 import { IProduct } from "@/model/product";
 import { useRouter } from "next/navigation";
-import useAuth from "@/libs/auth";
+// import useAuth from "@/libs/auth";
 import { IResponse } from "@/model/responses";
 import Modal from "../../global/modal";
 import { useRecoilState } from "recoil";
@@ -28,6 +28,7 @@ import SizeTable from "../../global/size-table";
 import { FormModal } from "./form-modal";
 import { ProductDetails } from "./product-details";
 import { ImageUploader } from "./image-uploader";
+import { useSession } from "next-auth/react";
 
 export const base64ToFile = (
 	base64Data: string,
@@ -64,8 +65,20 @@ export default function EditProductForm(data: any) {
 
 	const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
-	const userAuth = useAuth();
+	const { data: session, status } = useSession();
+
+	const [loading, setLoading] = useState(true);
+
 	const router = useRouter();
+
+	// useEffect(() => {
+	// 	if (
+	// 		status === "unauthenticated" ||
+	// 		(session?.user?.id !== params.id && session?.user?.userType !== "admin")
+	// 	) {
+	// 		router.push("/");
+	// 	}
+	// }, [status, session, router]);
 
 	useEffect(() => {
 		if (data) {
@@ -222,6 +235,14 @@ export default function EditProductForm(data: any) {
 	};
 
 	if (!initialData) return <div>Loading...</div>;
+
+	if (loading) {
+		return <div>로딩 중...</div>;
+	}
+
+	// if (!user) {
+	// 	return <div>유저를 찾을 수 없습니다.</div>;
+	// }
 
 	return (
 		<>

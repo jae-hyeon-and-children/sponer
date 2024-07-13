@@ -28,10 +28,11 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getUserById } from "./actions";
-import BrandUserForm from "@/components/my-page/user/brand/brand-form";
-import StylistUserForm from "@/components/my-page/user/stylist/stylist-form";
+import BrandUserForm from "../../../../components/my-page/user/brand/brand-form";
+import StylistUserForm from "../../../../components/my-page/user/stylist/stylist-form";
+// import BrandUserForm from "../../../../components/my-page/user/brand/brand-form";
 
 export default function EditProfile({ params }: { params: { id: string } }) {
 	const { data: session, status } = useSession();

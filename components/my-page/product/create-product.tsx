@@ -17,7 +17,7 @@ import {
 	PRODUCT_TYPES,
 } from "@/constants/variables";
 import Input from "@/components/global/input";
-import useAuth from "@/libs/auth";
+// import useAuth from "@/libs/auth";
 import { useRouter } from "next/navigation";
 import { IResponse } from "@/model/responses";
 import Modal from "@/components/global/modal";
@@ -30,6 +30,7 @@ import { uploadProduct } from "@/app/(my-page)/my-page/product/actions";
 import { FormModal } from "./form-modal";
 import { ImageUploader } from "./image-uploader";
 import { ProductDetails } from "./product-details";
+import { useSession } from "next-auth/react";
 
 export default function CreateProductForm() {
 	const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -47,11 +48,12 @@ export default function CreateProductForm() {
 
 	const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
-	const userAuth = useAuth();
+	// const userAuth = useAuth();
+	const { data: session, status } = useSession();
 	const router = useRouter();
 
 	useEffect(() => {
-		if (userAuth) {
+		if (session) {
 			const newFormData = new FormData();
 			images.forEach((image) => newFormData.append("images", image));
 			if (selectedType) newFormData.append("selectedType", selectedType);
@@ -61,7 +63,7 @@ export default function CreateProductForm() {
 				newFormData.append("selectedStyles", style)
 			);
 
-			newFormData.append("brandId", userAuth.uid);
+			newFormData.append("brandId", session?.user?.id);
 
 			setFormData(newFormData);
 
@@ -73,7 +75,7 @@ export default function CreateProductForm() {
 		selectedGender,
 		selectedStyles,
 		images,
-		userAuth,
+		session,
 	]);
 
 	const selectType = (item: string) => setSelectedType(item);

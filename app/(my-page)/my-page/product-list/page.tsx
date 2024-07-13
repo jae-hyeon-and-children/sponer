@@ -5,9 +5,9 @@ import { getProduct } from "./actions";
 import Image from "next/image";
 import Link from "next/link";
 import { IProduct } from "@/model/product";
-import useAuth from "@/libs/auth";
 import { useEffect, useState } from "react";
 import EmptyView from "@/components/global/empty-view";
+import { useSession } from "next-auth/react";
 
 const SkeletonProduct = () => (
 	<div className="animate-pulse h-fit">
@@ -21,14 +21,15 @@ const SkeletonProduct = () => (
 export default function ProductList() {
 	const [products, setProducts] = useState<IProduct[] | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
+	const { data: session, status } = useSession();
 
-	const userAuth = useAuth();
+	// const userAuth = useAuth();
 
 	useEffect(() => {
 		const fetchData = async () => {
-			if (userAuth && userAuth.uid) {
+			if (session && session?.user?.id) {
 				try {
-					const result = await getProduct(userAuth.uid);
+					const result = await getProduct(session?.user?.id);
 					setProducts(result);
 					setLoading(false);
 					console.log(result);
@@ -40,7 +41,7 @@ export default function ProductList() {
 		};
 
 		fetchData();
-	}, [userAuth]);
+	}, [session]);
 
 	if (loading) {
 		console.log("Loading");
