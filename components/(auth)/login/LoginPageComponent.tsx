@@ -1,19 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword, getIdToken } from "firebase/auth";
-import { auth } from "@/config/firebase/firebase";
-import useAuth from "@/libs/auth";
+import { useSession, signIn } from "next-auth/react";
 import Input from "@/components/global/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import GoogleLoginButton from "./google-login";
-import { setCookie } from "nookies";
 
 export default function LoginPageComponent() {
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const user = useAuth();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  if (status === "authenticated") {
+    router.push("/");
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,50 +24,29 @@ export default function LoginPageComponent() {
     const password = formData.get("password")?.toString() || "";
 
     if (!email || !password) {
-      setErrorMessage("Email과 Password가 필요합니다.");
+      setErrorMessage("이메일과 비밀번호를 입력해주세요.");
       return;
     }
 
     try {
-      const loginUser = await signInWithEmailAndPassword(auth, email, password);
-      const idToken = await getIdToken(loginUser.user);
-      console.log("로그인 성공, ID Token:", idToken);
-
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idToken }),
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
       });
+      console.log("로그인 시도 결과:", result);
 
-      if (!response.ok) {
-        throw new Error("로그인 요청 중 문제가 발생했습니다.");
-      }
-
-      const result = await response.json();
-      console.log("서버 응답:", result);
-
-      if (result.success) {
-        setCookie(null, "accessTokenClient", result.token, {
-          maxAge: 3600,
-          path: "/",
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-        });
-        router.push("/add-user");
+      if (result?.error) {
+        console.error("로그인 오류:", result.error);
+        setErrorMessage(result.error);
       } else {
-        setErrorMessage(result.message || "오류가 발생했습니다");
+        // window.location.href = "/";
       }
     } catch (error) {
-      console.error("로그인 오류:", error);
-      setErrorMessage(
-        "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."
-      );
+      console.error("로그인 요청 오류:", error);
+      setErrorMessage("로그인 중 오류가 발생했습니다.");
     }
   };
-
-  if (user) return null;
 
   return (
     <div className="flex flex-col items-center h-screen px-5">
@@ -103,8 +83,8 @@ export default function LoginPageComponent() {
                 <GoogleLoginButton />
               </div>
             </div>
-            <div className="flex mt-3">
-              <div className="label-2 text-gray-600">
+            <div className="flex justify-center mt-6 mr-3">
+              <div className="label-2 text-gray-600 ">
                 스포너가 처음이신가요?
               </div>
               <Link
