@@ -1,21 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import Input from "@/components/global/input";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-  getIdToken,
-} from "firebase/auth";
+import { useSession } from "next-auth/react";
+import Input from "@/components/global/input";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
+import { signIn } from "next-auth/react";
 
 export default function CreateAccountForm() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,23 +50,34 @@ export default function CreateAccountForm() {
       );
       await updateProfile(createUser.user, { displayName: email });
 
-      // 자동 로그인 시도
-      const loginUser = await signInWithEmailAndPassword(auth, email, password);
-      const uid = loginUser.user.uid;
-      const idToken = await getIdToken(loginUser.user);
+      // NextAuth를 사용한 자동 로그인 시도
+      const loginResponse = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (loginResponse?.error) {
+        setErrorMessage("로그인 중 문제가 발생했습니다.");
+        setLoading(false);
+        return;
+      }
+
+      // 토큰 가져오기
+      const token = await createUser.user.getIdToken();
 
       // 서버에 사용자 정보 저장 및 채팅방 생성 요청
       const response = await fetch("/api/create-account", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({
           userId: createUser.user.uid,
           email: createUser.user.email,
           profileImage:
             createUser.user.photoURL || "/path/to/default/profileImage.png",
+          token,
         }),
       });
 
@@ -70,21 +85,8 @@ export default function CreateAccountForm() {
       setLoading(false);
 
       if (response.ok) {
-        // 로그인 후 토큰 발급 요청
-        const loginResponse = await fetch("/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ uid }),
-        });
-
-        if (loginResponse.ok) {
-          // 페이지 리다이렉트
-          router.push("/add-user");
-        } else {
-          setErrorMessage("로그인 중 문제가 발생했습니다.");
-        }
+        // 페이지 리다이렉트
+        router.push("/add-user");
       } else {
         setErrorMessage(result.message || "오류가 발생했습니다");
       }
@@ -104,6 +106,14 @@ export default function CreateAccountForm() {
       }
     }
   };
+
+  if (status === "loading") {
+    return <div>로딩 중...</div>;
+  }
+
+  if (status === "authenticated") {
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-center h-screen px-4">
