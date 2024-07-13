@@ -17,7 +17,6 @@ import IcArrowRight from "@/public/icons/ic_arrow_right.png";
 
 import { IUser } from "@/model/user";
 import { useRouter } from "next/navigation";
-import useAuth from "@/libs/hook/useAuth";
 import { createChatRoom } from "@/libs/api/chat-room";
 import { getUser } from "@/libs/api/user";
 import Modal from "@/components/global/modal";
@@ -28,6 +27,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { showDefaultModalState } from "@/recoil/atoms";
 import EmptyView from "@/components/global/empty-view";
 import Header from "@/components/global/header";
+import { useSession } from "next-auth/react";
 
 interface ProductDetailParams {
   params: {
@@ -36,7 +36,8 @@ interface ProductDetailParams {
 }
 
 export default function Product({ params: { id } }: ProductDetailParams) {
-  const userId = useAuth()?.uid;
+  const { data: session, status } = useSession();
+  const userId = session?.user?.id;
   const setShowModal = useSetRecoilState(showDefaultModalState);
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<IProduct | null>(null);
