@@ -7,7 +7,6 @@ import Input from "@/components/global/input";
 import AddressForm from "@/components/global/address";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { auth } from "@/config/firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import useToast from "@/libs/hook/useToast";
 
 export default function StylistUserPageForm() {
@@ -15,7 +14,6 @@ export default function StylistUserPageForm() {
   const router = useRouter();
   const [profilephoto, setProfilephoto] = useState<string | null>(null);
   const [isValidSize, setIsValidSize] = useState<boolean>(true);
-  const [uid, setUid] = useState<string | null>(null);
   const showToast = useToast();
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,20 +26,6 @@ export default function StylistUserPageForm() {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUid(user.uid);
-      } else {
-        setUid(null);
-        console.log("stylist-user::::::::", user);
-        // router.push("/login");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [router]);
-
-  useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
     }
@@ -49,10 +33,10 @@ export default function StylistUserPageForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!uid) return;
+    if (!session || !session.user) return;
 
     const formData = new FormData(event.currentTarget);
-    formData.append("uid", uid);
+    formData.append("uid", session.user.id);
     console.log("FormData:", Object.fromEntries(formData.entries()));
 
     try {

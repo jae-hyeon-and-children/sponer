@@ -6,8 +6,6 @@ import { useSession } from "next-auth/react";
 import Input from "@/components/global/input";
 import AddressForm from "@/components/global/address";
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { auth } from "@/config/firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import useToast from "@/libs/hook/useToast";
 
 export default function BrandUserPageForm() {
@@ -16,8 +14,8 @@ export default function BrandUserPageForm() {
   const [profilephoto, setProfilephoto] = useState<string | null>(null);
   const [certificatephoto, setCertificatephoto] = useState<string | null>(null);
   const [isValidSize, setIsValidSize] = useState<boolean>(true);
-  const [uid, setUid] = useState<string | null>(null);
   const showToast = useToast();
+  const uid = session?.user?.id ?? null;
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -38,20 +36,6 @@ export default function BrandUserPageForm() {
     setCertificatephoto(url);
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUid(user.uid);
-      } else {
-        setUid(null);
-        console.log("brand-user::::::::", user);
-        // router.push("/login");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [router]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
