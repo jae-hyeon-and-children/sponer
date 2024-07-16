@@ -8,6 +8,11 @@ export const showDefaultModalState = atom<boolean>({
   default: false,
 });
 
+export const modalMessageState = atom<string>({
+  key: "modalMessageState",
+  default: "",
+});
+
 export const showChatRoomListState = atom<boolean>({
   key: "showChatRoomListState",
   default: false,
