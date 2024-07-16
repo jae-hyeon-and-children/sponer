@@ -146,6 +146,51 @@ export async function editProfile(
   }
 }
 
+// export async function getUserById(userId: string): Promise<IUser | null> {
+// 	try {
+// 		const docRef = doc(fireStore, COLLECTION_NAME_USER, userId);
+// 		console.log("Fetching document with ID:", userId);
+
+// 		const docSnap = await getDoc(docRef);
+
+// 		if (docSnap.exists()) {
+// 			console.log("Document data:", docSnap.data());
+// 			const data = docSnap.data();
+
+// 			if (data.profileImage) {
+// 				const profileFileName = getFileNameFromUrl(
+// 					data.profileImage,
+// 					"profile"
+// 				);
+// 				const base64 = await urlToBase64(data.profileImage);
+// 				data.profileImage = `data:image/jpeg;base64,${base64}`;
+
+// 				data.profileFileName = profileFileName;
+// 			}
+
+// 			if (data.businessImageUrl) {
+// 				const businessFileName = getFileNameFromUrl(
+// 					data.businessImageUrl,
+// 					"business"
+// 				);
+
+// 				const base64 = await urlToBase64(data.businessImageUrl);
+// 				data.businessImageUrl = `data:image/jpeg;base64,${base64}`;
+
+// 				data.businessFileName = businessFileName;
+// 			}
+
+// 			return data as IUser;
+// 		} else {
+// 			console.log("No such document!");
+// 			return null;
+// 		}
+// 	} catch (error) {
+// 		console.error("Error fetching document:", error);
+// 		return null;
+// 	}
+// }
+
 export async function getUserById(userId: string): Promise<IUser | null> {
   try {
     const docRef = doc(fireStore, COLLECTION_NAME_USER, userId);
@@ -182,8 +227,12 @@ export async function getUserById(userId: string): Promise<IUser | null> {
 
       return data as IUser;
     } else {
-      console.log("No such document!");
-      return null;
+      console.log("파베에서못찾음");
+      // 유저 데이터가 없는 경우 기본 값을 설정합니다.
+      return {
+        id: userId,
+        userType: "",
+      } as IUser;
     }
   } catch (error) {
     console.error("Error fetching document:", error);
