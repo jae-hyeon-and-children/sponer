@@ -13,7 +13,7 @@ export default function Modal({ children, onClose }: ModalProps) {
   );
 
   const closeModal = () => {
-    setShowDefaultModal(false)
+    setShowDefaultModal(false);
     if (onClose) {
       onClose();
     }
