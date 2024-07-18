@@ -139,6 +139,7 @@ import { ContentType, STORAGE_REF_CHAT_IMAGES } from "@/constants/variables";
 import { useRecoilValue } from "recoil";
 import { chatRoomIdState } from "@/recoil/atoms";
 import { useSession } from "next-auth/react";
+import { getMessaging, getToken } from "firebase/messaging";
 
 export default function MessageForm() {
   const { data: session } = useSession();
@@ -154,6 +155,28 @@ export default function MessageForm() {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setFile(event.target.files[0]);
+    }
+  };
+
+  const sendPushNotification = async (title: string, body: string) => {
+    const messaging = getMessaging();
+    try {
+      const token = await getToken(messaging);
+      if (token) {
+        await fetch("/api/sendPushNotification", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token,
+            title,
+            body,
+          }),
+        });
+      }
+    } catch (error) {
+      console.error("Push notification error:", error);
     }
   };
 
@@ -189,21 +212,21 @@ export default function MessageForm() {
         async () => {
           const imageURL = await getDownloadURL(uploadTask.snapshot.ref);
           await sendMessage(uid!, chatRoomId!, imageURL, ContentType.image);
+          setMessage("");
+          setFile(null);
         }
       );
     } else {
       await sendMessage(uid!, chatRoomId!, message, ContentType.text);
+      setMessage(""); // 메시지 전송 후 입력란 초기화
     }
-
-    setFile(null);
-    setMessage("");
   };
 
   return (
     <div className="sticky bottom-0 flex items-center px-3 pb-4">
       <form
         onSubmit={handleSubmit}
-        className=" flex gap-8 items-center w-full bg-white border-gray-200 border rounded-full py-5 px-4"
+        className="flex gap-8 items-center w-full bg-white border-gray-200 border rounded-full py-5 px-4"
       >
         <input
           type="file"
@@ -238,11 +261,11 @@ export default function MessageForm() {
         <button
           type="submit"
           disabled={!message.trim() && !file}
-          className=" shrink-0 bg-gray-100 w-7 h-7 p-1 rounded-full flex justify-center items-center"
+          className="shrink-0 bg-gray-100 w-7 h-7 p-1 rounded-full flex justify-center items-center"
         >
           <Image
             src={IcSend}
-            alt="photo"
+            alt="send"
             width={24}
             height={24}
             className="w-full aspect-square"
