@@ -89,7 +89,7 @@ export default function ProductsSetction() {
           />
         )}
       </Modal>
-      <div className="px-6 py-5 flex items-center justify-between">
+      <div className="px-6 py-5 mt-20 flex items-center justify-between">
         <h1 className="label-1 text-gray-600">상품 정보</h1>
         <button onClick={handleCLose}>
           <Image src={IcClose} alt="IcClose" width={20} height={20} />
