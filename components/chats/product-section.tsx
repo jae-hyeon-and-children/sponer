@@ -22,7 +22,7 @@ import SizeTable from "../global/size-table";
 import { ISizeTable } from "@/constants/type-table";
 import { getSizeTable } from "@/libs/utils/table";
 
-export default function ProductsSetction() {
+export default function ProductsSection() {
   const [loading, setLoading] = useState(true);
   const chatRoomProduct = useRecoilValue(chatRoomProductState);
   const imageListRef = useRef<HTMLUListElement>(null);
@@ -77,9 +77,9 @@ export default function ProductsSetction() {
 
   return (
     <section
-      className={`fixed top-0 right-0 overflow-y-scroll scrollbar-hide w-96 h-screen bg-white border-l border-l-gray-100 ${
-        !showProductSection && "hidden"
-      }`}
+      className={`fixed top-0 right-0 transition-transform duration-300 ease-in-out transform ${
+        showProductSection ? "translate-x-0" : "translate-x-full"
+      } overflow-y-scroll scrollbar-hide w-96 h-screen bg-white border-l border-l-gray-100`}
     >
       <Modal>
         {sizeTable && (
@@ -135,7 +135,7 @@ export default function ProductsSetction() {
                   >
                     <Image
                       src={IcArrowRight}
-                      alt="IcArrowLeft"
+                      alt="IcArrowRight"
                       width={20}
                       height={20}
                     />

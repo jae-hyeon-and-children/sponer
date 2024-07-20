@@ -355,7 +355,7 @@ export default function ChatRoomList() {
   }, [chatRoomId, router, setChatRoomProduct, setChatRoomUser, uid, status]);
 
   return (
-    <ul className="flex flex-col gap-4 ">
+    <ul className="flex flex-col gap-4  ">
       {chatRooms.map((value, index) => {
         const otherUser = getOtherUser(value);
         return (
