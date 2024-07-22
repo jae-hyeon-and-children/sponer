@@ -9,6 +9,29 @@ import { auth } from "@/config/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 import { signIn } from "next-auth/react";
 
+function CreateAccountFormSkeleton() {
+  return (
+    <div className="flex flex-col items-center h-screen px-4 animate-pulse">
+      <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+        <div className="flex flex-col items-start h-screen-1/2 w-full md:w-[50%] gap-2">
+          <div className="w-full">
+            <div className="display text-gray-300 text-[2rem] flex justify-center mb-10">
+              스포너에 오신 것을 환영합니다
+            </div>
+            <div className="flex flex-col gap-5 mt-14">
+              <div className="w-full bg-gray-200 h-10 rounded"></div>
+              <div className="w-full bg-gray-200 h-10 rounded"></div>
+            </div>
+            <div className="flex flex-col justify-center items-center text-center gap-2 mt-10">
+              <div className="border bg-gray-300 text-gray-300 rounded-xl w-full h-14 flex justify-center items-center"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CreateAccountForm() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -108,7 +131,7 @@ export default function CreateAccountForm() {
   };
 
   if (status === "loading") {
-    return <div>로딩 중...</div>;
+    return <CreateAccountFormSkeleton />;
   }
 
   if (status === "authenticated") {

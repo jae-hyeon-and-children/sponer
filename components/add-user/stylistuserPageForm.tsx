@@ -9,6 +9,67 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { auth } from "@/config/firebase/firebase";
 import useToast from "@/libs/hook/useToast";
 
+function StylistUserPageSkeleton() {
+  return (
+    <div className="flex flex-col items-center px-4 pt-40 animate-pulse">
+      <div className="flex flex-col items-center max-w-screen-2xl w-full">
+        <div className="w-full mb-5">
+          <div className="caption w-16 bg-gray-300 border rounded-full text-gray-300 text-center">
+            step 2
+          </div>
+          <div className="display bg-gray-300 w-[15.5rem] h-8 mt-4"></div>
+        </div>
+        <div className="w-full mb-10">
+          <div className="text-2xl font-semibold mb-4 bg-gray-300 w-40 h-8"></div>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center">
+              <span className="lg:w-1/4 bg-gray-300 w-24 h-6"></span>
+              <div className="flex justify-center lg:w-3/4">
+                <div className="border box-border aspect-square flex items-center justify-center flex-col text-neutral-300 border-gray-400 rounded-full bg-gray-200 w-32 h-32 lg:w-52 lg:h-52"></div>
+              </div>
+            </div>
+            <div className="flex lg:flex-row items-center w-full gap-2">
+              <span className="lg:w-1/4 bg-gray-300 w-24 h-6"></span>
+              <div className="lg:w-3/4 w-full bg-gray-200 h-10"></div>
+            </div>
+            <div className="flex lg:flex-row items-center w-full gap-2">
+              <span className="lg:w-1/4 bg-gray-300 w-24 h-6"></span>
+              <div className="lg:w-3/4 w-full bg-gray-200 h-10"></div>
+            </div>
+            <div className="flex lg:flex-row items-center w-full gap-2">
+              <span className="lg:w-1/4 bg-gray-300 w-24 h-6"></span>
+              <div className="lg:w-3/4 w-full bg-gray-200 h-10"></div>
+            </div>
+          </div>
+        </div>
+        <div className="w-full mb-10">
+          <div className="text-2xl font-semibold mb-4 bg-gray-300 w-40 h-8"></div>
+          <div className="flex flex-col gap-4">
+            <div className="flex lg:flex-row items-center w-full gap-2">
+              <span className="lg:w-1/4 bg-gray-300 w-24 h-6"></span>
+              <div className="lg:w-3/4 w-full bg-gray-200 h-10"></div>
+            </div>
+            <div className="flex lg:flex-row items-center w-full gap-2">
+              <span className="lg:w-1/4 bg-gray-300 w-24 h-6"></span>
+              <div className="lg:w-3/4 w-full bg-gray-200 h-10"></div>
+            </div>
+          </div>
+        </div>
+        <div className="w-full mb-10">
+          <div className="text-2xl font-semibold mb-4 bg-gray-300 w-40 h-8"></div>
+          <div className="flex flex-col lg:flex-row lg:items-center">
+            <span className="lg:w-1/4 bg-gray-300 w-24 h-6"></span>
+            <div className="lg:w-3/4 w-full bg-gray-200 h-40 lg:h-60 rounded-md"></div>
+          </div>
+        </div>
+        <div className="flex justify-center mt-10">
+          <div className="border box-border bg-gray-300 rounded-full w-96 h-14 flex justify-center items-center"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function StylistUserPageForm() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -62,7 +123,7 @@ export default function StylistUserPageForm() {
   };
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <StylistUserPageSkeleton />;
   }
 
   return (

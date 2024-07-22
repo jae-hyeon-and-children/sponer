@@ -6,6 +6,31 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+function ChangePasswordPageSkeleton() {
+  return (
+    <div className="flex flex-col items-center h-screen px-4 animate-pulse">
+      <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+        <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+          <div className="w-full">
+            <div className="text-gray-300 text-[2rem] flex justify-center mb-10">
+              비밀번호 찾기
+            </div>
+            <div className="flex flex-col gap-5 mt-10">
+              <div className="w-full bg-gray-200 h-10 rounded"></div>
+            </div>
+            <div className="flex flex-col justify-center items-center text-center gap-2 mt-5">
+              <div className="border bg-gray-300 text-gray-300 rounded-xl w-full h-14 flex justify-center items-center"></div>
+              <div className="mt-10 label-2 text-gray-300 w-full h-5 rounded">
+                {/* 로그인 페이지로 이동하기 */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ChangePasswordPageForm() {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -46,7 +71,7 @@ export default function ChangePasswordPageForm() {
     }
   };
 
-  if (status === "loading") return <div>로딩 중...</div>;
+  if (status === "loading") return <ChangePasswordPageSkeleton />;
 
   return (
     <div className="flex flex-col items-center h-screen px-4">

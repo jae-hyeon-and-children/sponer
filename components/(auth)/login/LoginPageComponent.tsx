@@ -7,6 +7,37 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import GoogleLoginButton from "./google-login";
 
+function LoginPageSkeleton() {
+  return (
+    <div className="flex flex-col items-center h-screen px-5 animate-pulse">
+      <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+        <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+          <div className="w-full">
+            <div className="display text-gray-300 text-[2rem] flex justify-center mb-10">
+              로그인
+            </div>
+            <div className="flex flex-col gap-3 mt-14">
+              <div className="w-full bg-gray-200 h-10 rounded"></div>
+              <div className="w-full bg-gray-200 h-10 rounded"></div>
+              <div className="flex flex-col items-end my-1 mr-3">
+                <div className="label-2 text-gray-300 w-24 h-6 rounded"></div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center text-center gap-2 mt-2">
+              <div className="border bg-gray-300 text-gray-300 rounded-xl w-full h-12 flex justify-center items-center"></div>
+              <div className="border bg-gray-300 text-gray-300 rounded-xl w-full h-12 flex justify-center items-center mt-2"></div>
+            </div>
+            <div className="flex justify-center mt-6 mr-3">
+              <div className="label-2 text-gray-300 w-32 h-6 rounded"></div>
+              <div className="label-2 text-gray-300 w-24 h-6 rounded ml-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LoginPageComponent() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -49,6 +80,10 @@ export default function LoginPageComponent() {
       setErrorMessage("로그인 중 오류가 발생했습니다.");
     }
   };
+
+  if (status === "loading") {
+    return <LoginPageSkeleton />;
+  }
 
   return (
     <div className="flex flex-col items-center h-screen px-5">
