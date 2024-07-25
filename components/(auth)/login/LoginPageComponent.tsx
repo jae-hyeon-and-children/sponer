@@ -10,12 +10,12 @@ import GoogleLoginButton from "./google-login";
 function LoginPageSkeleton() {
   return (
     <div className="flex flex-col items-center h-screen px-5 animate-pulse">
-      <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-        <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+      <main className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+        <section className="flex flex-col items-start w-full md:w-[50%] gap-2">
           <div className="w-full">
-            <div className="display text-gray-300 text-[2rem] flex justify-center mb-10">
+            <h1 className="display text-gray-300 text-[2rem] flex justify-center mb-10">
               로그인
-            </div>
+            </h1>
             <div className="flex flex-col gap-3 mt-14">
               <div className="w-full bg-gray-200 h-10 rounded"></div>
               <div className="w-full bg-gray-200 h-10 rounded"></div>
@@ -32,8 +32,8 @@ function LoginPageSkeleton() {
               <div className="label-2 text-gray-300 w-24 h-6 rounded ml-3"></div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
@@ -87,12 +87,12 @@ export default function LoginPageComponent() {
 
   return (
     <div className="flex flex-col items-center h-screen px-5">
-      <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-        <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+      <main className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
+        <section className="flex flex-col items-start w-full md:w-[50%] gap-2">
           <form onSubmit={handleSubmit} method="POST" className="w-full">
-            <div className="display text-gray-900 text-[2rem] flex justify-center">
+            <h1 className="display text-gray-900 text-[2rem] flex justify-center">
               로그인
-            </div>
+            </h1>
             <div className="flex flex-col gap-3 mt-14">
               <Input name="email" type="email" placeholder="이메일" required />
               <Input
@@ -132,8 +132,8 @@ export default function LoginPageComponent() {
               </Link>
             </div>
           </form>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
