@@ -141,7 +141,7 @@ export default function CreateAccountForm() {
   return (
     <div className="flex flex-col items-center h-screen px-4">
       <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-        <div className="flex flex-col items-start h-screen-1/2 w-full md:w-[50%] gap-2">
+        <div className="flex flex-col items-start  w-full md:w-[50%] gap-2">
           <form onSubmit={handleSubmit} className="w-full">
             <div className="display text-gray-900 text-[2rem] flex justify-center">
               스포너에 오신 것을 환영합니다

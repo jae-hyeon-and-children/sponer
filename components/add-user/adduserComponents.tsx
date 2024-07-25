@@ -9,17 +9,17 @@ import { useRecoilState } from "recoil";
 
 function AdduserPageSkeleton() {
   return (
-    <div className="flex flex-col justify-center items-center px-4">
+    <main className="flex flex-col justify-center items-center px-4">
       <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-        <div className="flex flex-col items-start w-full md:w-[50%] gap-2 animate-pulse">
+        <section className="flex flex-col items-start w-full md:w-[50%] gap-2 animate-pulse">
           <div className="w-full mb-5">
-            <div className="caption w-16 bg-gray-300 border rounded-full text-gray-300 text-center">
+            <span className="caption w-16 bg-gray-300 border rounded-full text-gray-300 text-center">
               step 1
-            </div>
+            </span>
           </div>
-          <div className="display text-gray-300 text-[2rem] mb-10 text-start md:text-left">
+          <h1 className="display text-gray-300 text-[2rem] mb-10 text-start md:text-left">
             소속을 선택해 주세요
-          </div>
+          </h1>
           <div className="flex justify-center lg:justify-center w-full">
             <div className="flex flex-col items-center lg:items-center w-full">
               <div className="w-full h-24 box-border border bg-gray-200 mt-2 rounded-lg cursor-pointer"></div>
@@ -29,9 +29,9 @@ function AdduserPageSkeleton() {
           <div className="flex items-center justify-center w-full mt-10">
             <div className="border bg-gray-300 rounded-full w-96 h-14 flex justify-center items-center"></div>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -81,17 +81,17 @@ export default function AdduserPageComponent() {
           </button>
         </div>
       </Modal>
-      <div className="flex flex-col justify-center items-center px-4">
+      <main className="flex flex-col justify-center items-center px-4">
         <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-          <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+          <section className="flex flex-col items-start w-full md:w-[50%] gap-2">
             <div className="w-full mb-5">
-              <div className="caption w-16 bg-gray-700 border rounded-full text-gray-100 text-center">
+              <div className="caption w-16 h-5 bg-gray-900 border rounded-full text-gray-100 text-center text-lg">
                 step 1
               </div>
             </div>
-            <div className="display text-gray-900 text-[2rem] mb-10 text-start md:text-left">
+            <h1 className="display text-gray-900 text-[2rem] mb-10 text-start md:text-left">
               소속을 선택해 주세요
-            </div>
+            </h1>
             <div className="flex justify-center lg:justify-center w-full">
               <div className="flex flex-col items-center lg:items-center w-full">
                 <div
@@ -144,9 +144,9 @@ export default function AdduserPageComponent() {
                 <span className="label-1 text-gray-100">다음으로</span>
               </button>
             </div>
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
     </>
   );
 }

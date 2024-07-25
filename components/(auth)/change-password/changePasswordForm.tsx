@@ -8,13 +8,13 @@ import { useSession } from "next-auth/react";
 
 function ChangePasswordPageSkeleton() {
   return (
-    <div className="flex flex-col items-center h-screen px-4 animate-pulse">
+    <main className="flex flex-col items-center h-screen px-4 animate-pulse">
       <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-        <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+        <section className="flex flex-col items-start w-full md:w-[50%] gap-2">
           <div className="w-full">
-            <div className="text-gray-300 text-[2rem] flex justify-center mb-10">
+            <h1 className="text-gray-300 text-[2rem] flex justify-center mb-10">
               비밀번호 찾기
-            </div>
+            </h1>
             <div className="flex flex-col gap-5 mt-10">
               <div className="w-full bg-gray-200 h-10 rounded"></div>
             </div>
@@ -25,9 +25,9 @@ function ChangePasswordPageSkeleton() {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -74,13 +74,13 @@ export default function ChangePasswordPageForm() {
   if (status === "loading") return <ChangePasswordPageSkeleton />;
 
   return (
-    <div className="flex flex-col items-center h-screen px-4">
+    <main className="flex flex-col items-center h-screen px-4">
       <div className="flex flex-col items-center md:flex-row max-w-screen-2xl w-full h-screen justify-center">
-        <div className="flex flex-col items-start w-full md:w-[50%] gap-2">
+        <section className="flex flex-col items-start w-full md:w-[50%] gap-2">
           <form onSubmit={handleSubmit} className="w-full">
-            <div className="text-gray-900 text-[2rem] flex justify-center">
+            <h1 className="text-gray-900 text-[2rem] flex justify-center">
               비밀번호 찾기
-            </div>
+            </h1>
             <div className="flex flex-col gap-5 mt-10">
               <Input
                 name="email"
@@ -110,8 +110,8 @@ export default function ChangePasswordPageForm() {
               </Link>
             </div>
           </form>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
