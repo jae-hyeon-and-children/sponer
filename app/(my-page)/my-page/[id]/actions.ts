@@ -38,6 +38,7 @@ const profileSchema = z.object({
 	address: z.string().min(1, "주소는 필수입니다."),
 	email: z.string().email("올바른 이메일 형식이 아닙니다."),
 	businessImageUrl: z.instanceof(File).nullable().optional(),
+	affiliation: z.string().min(1, "소속은 필수입니다."),
 });
 
 async function uploadFile(file: File, path: string): Promise<string> {
@@ -65,6 +66,7 @@ export async function editProfile(
 			)}, ${formData.get("detail_address")}, ${formData.get("extra_address")}`,
 			email: formData.get("email"),
 			// businessImageUrl: formData.get("businessImageUrl"),
+			affiliation: formData.get("affiliation"),
 		};
 
 		const brandName = formData.get("brandName");
@@ -133,6 +135,8 @@ export async function editProfile(
 				userData = {
 					profileImage: profileImageUrl || existingData.profileImage,
 					// brandName: parsedData.brandName || existingData.brandName,
+					nickName: parsedData.name || existingData.nickName,
+					affiliation: parsedData.affiliation || existingData.affiliation,
 					phoneNumber: parsedData.phoneNumber,
 					name: parsedData.name,
 					homepage: parsedData.homepage || existingData.homepage,
