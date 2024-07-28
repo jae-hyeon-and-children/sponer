@@ -27,13 +27,17 @@ import { z } from "zod";
 
 const profileSchema = z.object({
 	profileImage: z.instanceof(File),
-	brandName: z.string().min(1, "브랜드 이름은 필수입니다.").optional(),
+	brandName: z
+		.string()
+		.min(1, "브랜드 이름은 필수입니다.")
+		.nullable()
+		.optional(),
 	phoneNumber: z.string().min(9, "잘못된 전화번호 형식입니다.").max(11),
 	name: z.string().min(1, "이름은 필수입니다."),
-	homepage: z.string().url().optional(),
+	homepage: z.string().url().nullable().optional(),
 	address: z.string().min(1, "주소는 필수입니다."),
 	email: z.string().email("올바른 이메일 형식이 아닙니다."),
-	businessImageUrl: z.instanceof(File).optional(),
+	businessImageUrl: z.instanceof(File).nullable().optional(),
 });
 
 async function uploadFile(file: File, path: string): Promise<string> {
@@ -50,7 +54,7 @@ export async function editProfile(
 	try {
 		const data = {
 			profileImage: formData.get("profileImage"),
-			brandName: formData.get("brandName"),
+			// brandName: formData.get("brandName"),
 			phoneNumber: ((((formData.get("phoneNumber1") as string) +
 				formData.get("phoneNumber2")) as string) +
 				formData.get("phoneNumber3")) as string,
@@ -60,10 +64,22 @@ export async function editProfile(
 				"address"
 			)}, ${formData.get("detail_address")}, ${formData.get("extra_address")}`,
 			email: formData.get("email"),
-			businessImageUrl: formData.get("businessImageUrl"),
+			// businessImageUrl: formData.get("businessImageUrl"),
 		};
 
+		const brandName = formData.get("brandName");
+		const businessImageUrl = formData.get("businessImageUrl");
+
+		if (brandName) {
+			data.brandName = brandName;
+			data.businessImageUrl = businessImageUrl;
+		}
+
+		// console.log(data);
+
 		const parsedData = profileSchema.parse(data);
+
+		// console.log(parsedData);
 
 		const prevUserRef = doc(fireStore, COLLECTION_NAME_USER, userId);
 		const docSnap = await getDoc(prevUserRef);
@@ -100,16 +116,33 @@ export async function editProfile(
 				  )
 				: existingData.businessImageUrl;
 
-			const userData: Partial<IUser> = {
-				profileImage: profileImageUrl || existingData.profileImage,
-				// brandName: parsedData.brandName || existingData.brandName,
-				phoneNumber: parsedData.phoneNumber,
-				name: parsedData.name,
-				homepage: parsedData.homepage || existingData.homepage,
-				address: parsedData.address,
-				businessImageUrl: businessImageUrl || existingData.businessImageUrl,
-				updatedAt: Timestamp.now(),
-			};
+			let userData: Partial<IUser> = {};
+
+			if (brandName) {
+				userData = {
+					profileImage: profileImageUrl || existingData.profileImage,
+					// brandName: parsedData.brandName || existingData.brandName,
+					phoneNumber: parsedData.phoneNumber,
+					name: parsedData.name,
+					homepage: parsedData.homepage || existingData.homepage,
+					address: parsedData.address,
+					businessImageUrl: businessImageUrl || existingData.businessImageUrl,
+					updatedAt: Timestamp.now(),
+				};
+			} else {
+				userData = {
+					profileImage: profileImageUrl || existingData.profileImage,
+					// brandName: parsedData.brandName || existingData.brandName,
+					phoneNumber: parsedData.phoneNumber,
+					name: parsedData.name,
+					homepage: parsedData.homepage || existingData.homepage,
+					address: parsedData.address,
+					// businessImageUrl: businessImageUrl || existingData.businessImageUrl,
+					updatedAt: Timestamp.now(),
+				};
+			}
+
+			console.log(userData);
 
 			const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
 			await updateDoc(userRef, userData);
