@@ -69,6 +69,7 @@ interface MessageProps {
 }
 
 export default function Message({
+  id,
   content,
   contentType,
   createdAt,
@@ -96,16 +97,18 @@ export default function Message({
         </div>
       )}
       {contentType === ContentType.image && (
-        <Image
-          src={content}
-          alt="이미지"
-          width={400}
-          height={400}
-          quality={100}
-          className={`${
-            senderId === userId ? "bg-gray-800" : "bg-gray-100"
-          } rounded-lg p-6 w-full max-w-md`}
-        />
+        <div className="relative max-w-md">
+          <Image
+            src={content}
+            alt="이미지"
+            width={400}
+            height={400}
+            quality={100}
+            className={`${
+              senderId === userId ? "bg-gray-800" : "bg-gray-100"
+            } rounded-lg p-6 w-full object-cover`}
+          />
+        </div>
       )}
       <div className="flex flex-col items-center text-xs text-gray-400">
         <span>{getDateTextWith(createdAt)}</span>

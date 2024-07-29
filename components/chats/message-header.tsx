@@ -24,7 +24,7 @@ export default function MessageHeader() {
   if (loading) return <Skeleton />;
 
   return (
-    <div className="sticky mt-[72px]  top-0 bg-white border-b border-b-gray-200 flex justify-between items-center py-3 px-5">
+    <div className="sticky mt-[72px] top-0 bg-white border-b border-b-gray-200 flex justify-between items-center py-3 px-5">
       <div className="flex gap-4 items-center">
         <button onClick={handleShowChatList}>
           <Image
