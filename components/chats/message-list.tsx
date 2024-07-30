@@ -93,6 +93,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { chatRoomIdState, showProductSectionState } from "@/recoil/atoms";
 import { useSession } from "next-auth/react";
 import Message from "./message";
+import Notice from "../global/notice";
 
 export default function MessageList() {
   const { data: session } = useSession();
@@ -171,6 +172,27 @@ export default function MessageList() {
         showProductSection ? "md:w-2/3" : "w-full"
       }`}
     >
+      <Notice
+        message={
+          <>
+            <p>
+              <strong>*TIP*</strong>
+            </p>
+            <p>
+              브랜드에게 문의는양식에 맞게 작성해주시면 빠른소통 가능합니다.
+            </p>
+            <ul>
+              <li>제품명 : </li>
+              <li>사이즈 : </li>
+              <li>수량 : </li>
+              <li>대여날짜 : </li>
+              <li>대여기간 : </li>
+              <li>용도 : </li>
+              <li>아티스트명 : </li>
+            </ul>
+          </>
+        }
+      />
       {messages.map((value) => (
         <Message
           key={value.id}
