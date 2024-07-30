@@ -255,8 +255,8 @@ export default function AdduserPageComponent() {
                         : "text-gray-400"
                     }`}
                   >
-                    공간의 제약 없이 브랜드와 직접적인 메시지를 주고 받을 수
-                    있으며 일정을 조율할 수 있습니다.
+                    더 이상 협찬사에 발품을 팔지 않아도 브랜드에게 편하게 제품
+                    협찬을 받을 수 있어요.
                   </div>
                 </div>
                 <div
@@ -275,8 +275,7 @@ export default function AdduserPageComponent() {
                         : "text-gray-400"
                     }`}
                   >
-                    브랜드는 획기적인 가격과 공간의 제약 없이 제품을 업로드할 수
-                    있습니다.
+                    내 브랜드 제품을 연예인에게 협찬 할 수 있어요.
                   </div>
                 </div>
               </div>
