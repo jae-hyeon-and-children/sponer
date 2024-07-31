@@ -101,31 +101,7 @@ export default function ChatRoomList() {
             ChatRoomConverter.fromFirestore(chatRoom)
           );
 
-          let selectedChatRoom = convertedChatRooms.find(
-            (chatRoom) => chatRoom.id == chatRoomId
-          );
-
-          if (selectedChatRoom === undefined && convertedChatRooms[0]) {
-            router.push(`/chats/${convertedChatRooms[0].id}`);
-          }
-
-          if (selectedChatRoom) {
-            const otherUser = getOtherUser(selectedChatRoom);
-            setChatRoomUser(otherUser!);
-
-            const fetchProduct = async () => {
-              if (selectedChatRoom.productId) {
-                const res = await getProduct(selectedChatRoom.productId);
-                if (res.status === 404) setChatRoomProduct(null);
-                setChatRoomProduct(res.data ?? null);
-              }
-            };
-
-            fetchProduct();
-          }
-          setChatRooms(convertedChatRooms);
-
-          // Unread message counts
+          // Fetch unread message counts
           const counts: { [key: string]: number } = {};
           for (const chatRoom of convertedChatRooms) {
             const messagesSnapshot = await getDocs(
@@ -143,6 +119,41 @@ export default function ChatRoomList() {
             }).length;
           }
           setUnreadCounts(counts);
+
+          // Sort chat rooms based on unread counts and updatedAt
+          const sortedChatRooms = convertedChatRooms.sort((a, b) => {
+            const countA = counts[a.id!] || 0;
+            const countB = counts[b.id!] || 0;
+            if (countA === countB) {
+              return b.updatedAt.seconds - a.updatedAt.seconds; // 최근 업데이트 기준
+            }
+            return countB - countA; // 읽지 않은 메시지 수 기준
+          });
+
+          setChatRooms(sortedChatRooms);
+
+          let selectedChatRoom = sortedChatRooms.find(
+            (chatRoom) => chatRoom.id == chatRoomId
+          );
+
+          if (selectedChatRoom === undefined && sortedChatRooms[0]) {
+            router.push(`/chats/${sortedChatRooms[0].id}`);
+          }
+
+          if (selectedChatRoom) {
+            const otherUser = getOtherUser(selectedChatRoom);
+            setChatRoomUser(otherUser!);
+
+            const fetchProduct = async () => {
+              if (selectedChatRoom.productId) {
+                const res = await getProduct(selectedChatRoom.productId);
+                if (res.status === 404) setChatRoomProduct(null);
+                setChatRoomProduct(res.data ?? null);
+              }
+            };
+
+            fetchProduct();
+          }
         }
       );
       return () => {
