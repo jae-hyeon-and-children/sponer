@@ -126,7 +126,6 @@
 // }
 
 "use client";
-"use client";
 
 import Image from "next/image";
 import IcPhoto from "@/public/icons/ic_photo.png";
@@ -150,6 +149,8 @@ export default function MessageForm() {
   const setShowProductSection = useSetRecoilState(showProductSectionState);
   const [message, setMessage] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [isComposing, setIsComposing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -199,12 +200,20 @@ export default function MessageForm() {
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (event.key === "Enter" && !event.shiftKey && !isComposing) {
       event.preventDefault();
       if (message.trim() || file) {
         handleSubmit();
       }
     }
+  };
+
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
   };
 
   const sendPushNotification = async (title: string, body: string) => {
@@ -232,49 +241,63 @@ export default function MessageForm() {
   const handleSubmit = async (event?: React.FormEvent<HTMLFormElement>) => {
     if (event) event.preventDefault();
 
-    if (file) {
-      const storageRef = ref(
-        storage,
-        `${STORAGE_REF_CHAT_IMAGES}/${file.name}`
-      );
+    if (isSending) return; // 이미 전송 중이면 중단
+    setIsSending(true); // 전송 중 상태 설정
 
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {
-          console.error("Image upload failed:", error);
-        },
-        async () => {
-          const imageURL = await getDownloadURL(uploadTask.snapshot.ref);
-          await sendMessage(uid!, chatRoomId!, imageURL, ContentType.image);
-          setMessage("");
-          setFile(null);
-          await sendPushNotification(
-            "New Image Message",
-            "You have received a new image."
-          );
-        }
-      );
-    } else {
-      await sendMessage(uid!, chatRoomId!, message, ContentType.text);
-      setMessage(""); // 메시지 전송 후 입력란 초기화
-      await sendPushNotification("New Message", message);
+    if (!message.trim() && !file) {
+      setIsSending(false);
+      return;
     }
-    resizeTextarea();
+
+    try {
+      if (file) {
+        const storageRef = ref(
+          storage,
+          `${STORAGE_REF_CHAT_IMAGES}/${file.name}`
+        );
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {
+            console.error("Image upload failed:", error);
+            setIsSending(false); // 전송 중 상태 해제
+          },
+          async () => {
+            const imageURL = await getDownloadURL(uploadTask.snapshot.ref);
+            await sendMessage(uid!, chatRoomId!, imageURL, ContentType.image);
+            setMessage("");
+            setFile(null);
+            await sendPushNotification(
+              "New Image Message",
+              "You have received a new image."
+            );
+            setIsSending(false); // 전송 중 상태 해제
+          }
+        );
+      } else {
+        await sendMessage(uid!, chatRoomId!, message, ContentType.text);
+        setMessage(""); // 메시지 전송 후 입력란 초기화
+        await sendPushNotification("New Message", message);
+        setIsSending(false); // 전송 중 상태 해제
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setIsSending(false); // 전송 중 상태 해제
+    }
   };
 
   const resizeTextarea = () => {
@@ -334,6 +357,8 @@ export default function MessageForm() {
             value={message}
             onChange={handleMessageChange}
             onKeyDown={handleKeyDown}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
             rows={1}
           />
         )}
