@@ -101,7 +101,7 @@ export default function Header() {
   console.log("헤더 - 세션 데이터:", session);
 
   if (status === "loading") {
-    return <p>Loading...</p>; // 로딩 중일 때 보여줄 UI
+    return <p>Loading...</p>;
   }
 
   return (

@@ -32,6 +32,7 @@ import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
 import { IMessage } from "@/model/message";
 import Modal from "@/components/global/modal";
+import { TrashIcon } from "@heroicons/react/24/solid";
 
 export default function ChatRoomList() {
   const { data: session, status } = useSession();
@@ -120,14 +121,13 @@ export default function ChatRoomList() {
           }
           setUnreadCounts(counts);
 
-          // Sort chat rooms based on unread counts and updatedAt
           const sortedChatRooms = convertedChatRooms.sort((a, b) => {
             const countA = counts[a.id!] || 0;
             const countB = counts[b.id!] || 0;
             if (countA === countB) {
-              return b.updatedAt.seconds - a.updatedAt.seconds; // 최근 업데이트 기준
+              return b.updatedAt.seconds - a.updatedAt.seconds;
             }
-            return countB - countA; // 읽지 않은 메시지 수 기준
+            return countB - countA;
           });
 
           setChatRooms(sortedChatRooms);
@@ -180,11 +180,17 @@ export default function ChatRoomList() {
                 unreadCount={unreadCounts[value.id!] || 0}
               />
             </Link>
-            <button
+            {/* <button
               className="absolute right-1 top-0 text-red-500 text-xs"
               onClick={() => confirmDeleteChatRoom(value.id!)}
             >
               X
+            </button> */}
+            <button
+              className="absolute right-1 top-1 p-[2px] rounded-full text-gray-400 hover:text-red-500 transition-all"
+              onClick={() => confirmDeleteChatRoom(value.id!)}
+            >
+              <TrashIcon className="h-4 w-4" />
             </button>
           </div>
         );
