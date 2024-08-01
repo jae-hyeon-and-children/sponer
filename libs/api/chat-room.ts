@@ -38,7 +38,11 @@ export async function createChatRoom(
 ): Promise<IResponse<string>> {
   const data: IChatRoom = {
     users: [
-      { id: brand.id!, name: brand.name, profileImage: brand.profileImage },
+      {
+        id: brand.id!,
+        name: brand.brandName!,
+        profileImage: brand.profileImage,
+      },
       {
         id: stylelist.id!,
         name: stylelist.nickName ?? stylelist.name,
