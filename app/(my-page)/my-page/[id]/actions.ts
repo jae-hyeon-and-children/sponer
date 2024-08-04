@@ -39,6 +39,7 @@ const profileSchema = z.object({
 	email: z.string().email("올바른 이메일 형식이 아닙니다."),
 	businessImageUrl: z.instanceof(File).nullable().optional(),
 	affiliation: z.string().min(1, "소속은 필수입니다.").optional(),
+	nickName: z.string().optional(),
 });
 
 async function uploadFile(file: File, path: string): Promise<string> {
@@ -55,7 +56,6 @@ export async function editProfile(
 	try {
 		const data = {
 			profileImage: formData.get("profileImage"),
-			// brandName: formData.get("brandName"),
 			phoneNumber: ((((formData.get("phoneNumber1") as string) +
 				formData.get("phoneNumber2")) as string) +
 				formData.get("phoneNumber3")) as string,
@@ -65,26 +65,22 @@ export async function editProfile(
 				"address"
 			)}, ${formData.get("detail_address")}, ${formData.get("extra_address")}`,
 			email: formData.get("email"),
-			// businessImageUrl: formData.get("businessImageUrl"),
 		};
 
 		const brandName = formData.get("brandName");
 		const businessImageUrl = formData.get("businessImageUrl");
 		const affiliation = formData.get("affiliation");
+		const nickName = formData.get("nickName");
 
 		if (brandName) {
 			data.brandName = brandName;
 			data.businessImageUrl = businessImageUrl;
 		} else {
 			data.affiliation = affiliation;
+			data.nickName = nickName;
 		}
 
-		// console.log(data);
-
 		const parsedData = profileSchema.parse(data);
-
-		// console.log(parsedData);
-
 		const prevUserRef = doc(fireStore, COLLECTION_NAME_USER, userId);
 		const docSnap = await getDoc(prevUserRef);
 
@@ -125,7 +121,6 @@ export async function editProfile(
 			if (brandName) {
 				userData = {
 					profileImage: profileImageUrl || existingData.profileImage,
-					// brandName: parsedData.brandName || existingData.brandName,
 					phoneNumber: parsedData.phoneNumber,
 					name: parsedData.name,
 					homepage: parsedData.homepage || existingData.homepage,
@@ -136,14 +131,12 @@ export async function editProfile(
 			} else {
 				userData = {
 					profileImage: profileImageUrl || existingData.profileImage,
-					// brandName: parsedData.brandName || existingData.brandName,
-					nickName: parsedData.name || existingData.nickName,
+					nickName: parsedData.nickName || existingData.nickName,
 					affiliation: parsedData.affiliation || existingData.affiliation,
 					phoneNumber: parsedData.phoneNumber,
 					name: parsedData.name,
 					homepage: parsedData.homepage || existingData.homepage,
 					address: parsedData.address,
-					// businessImageUrl: businessImageUrl || existingData.businessImageUrl,
 					updatedAt: Timestamp.now(),
 				};
 			}
