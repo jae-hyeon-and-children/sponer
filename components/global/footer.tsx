@@ -20,7 +20,7 @@ interface FooterMenuProps {
 
 function FooterMenu({ text }: FooterMenuProps) {
   return (
-    <li className="[&:not(:last-child)]:lg:after:content-['|'] after:m-3">
+    <li className="[&:not(:last-child)]:lg:after:content-['|'] after:m-1 text-sm">
       {text}
     </li>
   );
@@ -28,15 +28,17 @@ function FooterMenu({ text }: FooterMenuProps) {
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 py-16 flex justify-center px-4 mt-36 lg:mt-48">
-      <div className="lg:max-w-screen-2xl flex flex-col w-full lg:flex-row gap-10 lg:gap-24">
-        <div className="shrink-0">로고</div>
-        <div className="w-full flex flex-col gap-6 lg:gap-16">
+    <footer className="bg-gray-800 py-8 flex justify-center px-4 mt-24 lg:mt-32">
+      <div className="lg:max-w-screen-2xl flex flex-col w-full lg:flex-row gap-6 lg:gap-12">
+        <div className="shrink-0 text-gray-200 text-lg">로고</div>
+        <div className="w-full flex flex-col gap-4 lg:gap-8">
           <div className="flex flex-col lg:flex-row lg:justify-between w-full">
-            <div className="flex flex-col lg:flex-row w-full lg:gap-16">
-              <div className="mb-10 lg:mb-0 basis-2/3">
-                <h1 className="heading-3 text-gray-200 mb-5">회사 정보</h1>
-                <ul className="flex flex-col gap-3 paragraph-1 text-gray-300">
+            <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+              <div className="mb-6 lg:mb-0 basis-2/3">
+                <h1 className="heading-3 text-gray-200 mb-3 text-lg">
+                  회사 정보
+                </h1>
+                <ul className="flex flex-col gap-2 paragraph-1 text-gray-300">
                   <FooterCompanyInfo title="company" content="스포너" />
                   <FooterCompanyInfo
                     title="제휴 및 업무 문의"
@@ -57,25 +59,27 @@ export default function Footer() {
                   />
                 </ul>
               </div>
-              <div className="mb-10 lg:mb-0 basis-1/3">
-                <h1 className="heading-3 text-gray-200 mb-5">고객센터</h1>
-                <ul className="flex flex-col gap-3 paragraph-1 text-gray-300">
-                  <li>1544-1232</li>
-                  <li>1:1 문의</li>
-                  <li>평일 오전 9시 ~ 오후 6시</li>
-                  <li>FAQ 자주 묻는 질문</li>
+              <div className="mb-6 lg:mb-0 basis-1/3">
+                <h1 className="heading-3 text-gray-200 mb-3 text-lg">
+                  고객센터
+                </h1>
+                <ul className="flex flex-col gap-2 paragraph-1 text-gray-300">
+                  <li className="text-sm">1544-1232</li>
+                  {/* <li className="text-sm">1:1 문의</li> */}
+                  <li className="text-sm">평일 오전 9시 ~ 오후 6시</li>
+                  <li className="text-sm">FAQ 자주 묻는 질문</li>
                 </ul>
               </div>
             </div>
-            <div className="mb-9">
-              <ul className="flex gap-3">
-                <li className="w-6 h-6 shrink-0 bg-slate-600 rounded-full"></li>
-                <li className="w-6 h-6 shrink-0 bg-slate-600 rounded-full"></li>
-                <li className="w-6 h-6 shrink-0 bg-slate-600 rounded-full"></li>
+            <div className="mb-6">
+              <ul className="flex gap-2">
+                <li className="w-5 h-5 shrink-0 bg-slate-600 rounded-full"></li>
+                <li className="w-5 h-5 shrink-0 bg-slate-600 rounded-full"></li>
+                <li className="w-5 h-5 shrink-0 bg-slate-600 rounded-full"></li>
               </ul>
             </div>
           </div>
-          <ul className="flex flex-col gap-2 paragraph-2 text-gray-400 lg:flex-row lg:gap-0">
+          <ul className="flex flex-col gap-1 paragraph-2 text-gray-400 lg:flex-row lg:gap-0 text-sm">
             <FooterMenu text="회사 소개" />
             <FooterMenu text="공지사항" />
             <FooterMenu text="이벤트 공지" />

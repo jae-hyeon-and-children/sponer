@@ -1,39 +1,22 @@
 "use client";
 
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "@/config/firebase/firebase";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function GoogleLoginButton() {
   const router = useRouter();
-  const uid = auth.currentUser?.uid;
 
   const handleGoogleLogin = async () => {
     try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      const idToken = await user.getIdToken();
-
-      const response = await fetch("/api/google-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idToken }),
-      });
-
-      if (response.ok) {
-        router.push("/add-user");
-      } else {
-        console.error("구글 로그인 서버 처리 중 오류가 발생했습니다.");
+      const result = await signIn("google", { callbackUrl: "/" });
+      if (result?.error) {
+        console.error("구글 로그인 오류:", result.error);
       }
     } catch (error) {
-      console.error("구글 로그인 오류:", error);
+      console.error("구글 로그인 요청 오류:", error);
     }
-    console.log("현재 로그인 유저 uid : ", uid);
   };
-  console.log("현재 로그인 유저 uid : ", uid);
+
   return (
     <button
       onClick={handleGoogleLogin}

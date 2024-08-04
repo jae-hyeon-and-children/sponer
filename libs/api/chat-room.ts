@@ -38,7 +38,11 @@ export async function createChatRoom(
 ): Promise<IResponse<string>> {
   const data: IChatRoom = {
     users: [
-      { id: brand.id!, name: brand.name, profileImage: brand.profileImage },
+      {
+        id: brand.id!,
+        name: brand.brandName!,
+        profileImage: brand.profileImage,
+      },
       {
         id: stylelist.id!,
         name: stylelist.nickName ?? stylelist.name,
@@ -53,11 +57,16 @@ export async function createChatRoom(
   };
 
   try {
+    console.log("Creating chat room with data:", data);
+
     const chatroomId = randomUUID();
     await setDoc(doc(fireStore, COLLECTION_NAME_CHAT, chatroomId), data);
 
+    console.log("Chat room created with ID:", chatroomId);
+
     return { status: 200, success: true, data: chatroomId };
   } catch (error) {
+    console.error("Error while creating chatroom:", error);
     return {
       status: 400,
       success: false,

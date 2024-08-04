@@ -25,7 +25,7 @@ export default function Toast() {
   return (
     <div
       className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded shadow-lg ${
-        toast.type === "success" ? "bg-green-500" : "bg-red-500"
+        toast.type === "success" ? "bg-primary" : "bg-red-500"
       } text-white`}
     >
       {toast.message}

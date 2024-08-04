@@ -26,6 +26,7 @@ export async function uploadBrandUser(
   }
 
   try {
+    console.log("Fetching user document:", uid);
     const userDocRef = doc(fireStore, "User", uid);
     const userDocSnap = await getDoc(userDocRef);
 
@@ -78,6 +79,7 @@ export async function uploadBrandUser(
     }
 
     const brandFormData: IUser = {
+      id: uid,
       profileImage: profileImageUrl,
       businessImageUrl: certificateImageUrl,
       brandName: formData.get("brand_name") as string,
@@ -98,6 +100,7 @@ export async function uploadBrandUser(
       createdAt: Timestamp.now(),
     };
 
+    console.log("Setting user document:", brandFormData);
     await setDoc(doc(fireStore, "User", uid), brandFormData);
     await addDoc(collection(fireStore, `/User/${uid}/History`), approve);
 

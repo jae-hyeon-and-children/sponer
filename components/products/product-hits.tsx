@@ -20,7 +20,7 @@ export default function ProductHits(props: UseHitsProps<IProduct>) {
                 title={hit.title}
                 size={hit.size}
                 height={hit.height}
-                brandName={hit.brandName}
+                brandName={hit.brandName || "오와이"}
               />
             </Link>
           ))}

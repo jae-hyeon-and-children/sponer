@@ -27,6 +27,7 @@ export default function Chats({ params: { chatRoomId } }: ChatsParams) {
 
   useEffect(() => {
     setChatRoomId(chatRoomId);
+    // window.scrollTo(0, 0); // 페이지 로드 시 스크롤 위치를 맨 위로 조정
   }, [chatRoomId, setChatRoomId]);
 
   return (

@@ -57,6 +57,7 @@ export async function uploadStylistUser(
     }
 
     const stylistFormData: IUser = {
+      id: uid,
       profileImage: imageUrl,
       name: formData.get("name") as string,
       nickName: formData.get("nickname") as string,

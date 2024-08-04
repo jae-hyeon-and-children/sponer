@@ -28,7 +28,7 @@ export default async function EditProfile({
 	}
 
 	return (
-		<main className="flex h-screen text-gray-900 label-1">
+		<main className="flex  text-gray-900 label-1">
 			<ProductSideBar />
 			<div className="w-full mt-20">
 				<div className="w-full h-52 bg-primary pl-4 md:pl-36">
