@@ -27,13 +27,19 @@ import { z } from "zod";
 
 const profileSchema = z.object({
   profileImage: z.instanceof(File),
-  brandName: z.string().min(1, "브랜드 이름은 필수입니다.").optional(),
+  brandName: z
+    .string()
+    .min(1, "브랜드 이름은 필수입니다.")
+    .nullable()
+    .optional(),
   phoneNumber: z.string().min(9, "잘못된 전화번호 형식입니다.").max(11),
   name: z.string().min(1, "이름은 필수입니다."),
-  homepage: z.string().url().optional(),
+  homepage: z.string().url().nullable().optional(),
   address: z.string().min(1, "주소는 필수입니다."),
   email: z.string().email("올바른 이메일 형식이 아닙니다."),
-  businessImageUrl: z.instanceof(File).optional(),
+  businessImageUrl: z.instanceof(File).nullable().optional(),
+  affiliation: z.string().min(1, "소속은 필수입니다.").optional(),
+  nickName: z.string().optional(),
 });
 
 async function uploadFile(file: File, path: string): Promise<string> {
@@ -50,7 +56,6 @@ export async function editProfile(
   try {
     const data = {
       profileImage: formData.get("profileImage"),
-      brandName: formData.get("brandName"),
       phoneNumber: ((((formData.get("phoneNumber1") as string) +
         formData.get("phoneNumber2")) as string) +
         formData.get("phoneNumber3")) as string,
@@ -60,11 +65,26 @@ export async function editProfile(
         "address"
       )}, ${formData.get("detail_address")}, ${formData.get("extra_address")}`,
       email: formData.get("email"),
-      businessImageUrl: formData.get("businessImageUrl"),
     };
 
-    const parsedData = profileSchema.parse(data);
+    const brandName = formData.get("brandName");
+    const businessImageUrl = formData.get("businessImageUrl");
+    const affiliation = formData.get("affiliation");
+    const nickName = formData.get("nickName");
 
+    if (brandName) {
+      //@ts-ignore
+      data.brandName = brandName;
+      //@ts-ignore
+      data.businessImageUrl = businessImageUrl;
+    } else {
+      //@ts-ignore
+      data.affiliation = affiliation;
+      //@ts-ignore
+      data.nickName = nickName;
+    }
+
+    const parsedData = profileSchema.parse(data);
     const prevUserRef = doc(fireStore, COLLECTION_NAME_USER, userId);
     const docSnap = await getDoc(prevUserRef);
 
@@ -100,16 +120,32 @@ export async function editProfile(
           )
         : existingData.businessImageUrl;
 
-      const userData: Partial<IUser> = {
-        profileImage: profileImageUrl || existingData.profileImage,
-        // brandName: parsedData.brandName || existingData.brandName,
-        phoneNumber: parsedData.phoneNumber,
-        name: parsedData.name,
-        homepage: parsedData.homepage || existingData.homepage,
-        address: parsedData.address,
-        businessImageUrl: businessImageUrl || existingData.businessImageUrl,
-        updatedAt: Timestamp.now(),
-      };
+      let userData: Partial<IUser> = {};
+
+      if (brandName) {
+        userData = {
+          profileImage: profileImageUrl || existingData.profileImage,
+          phoneNumber: parsedData.phoneNumber,
+          name: parsedData.name,
+          homepage: parsedData.homepage || existingData.homepage,
+          address: parsedData.address,
+          businessImageUrl: businessImageUrl || existingData.businessImageUrl,
+          updatedAt: Timestamp.now(),
+        };
+      } else {
+        userData = {
+          profileImage: profileImageUrl || existingData.profileImage,
+          nickName: parsedData.nickName || existingData.nickName,
+          affiliation: parsedData.affiliation || existingData.affiliation,
+          phoneNumber: parsedData.phoneNumber,
+          name: parsedData.name,
+          homepage: parsedData.homepage || existingData.homepage,
+          address: parsedData.address,
+          updatedAt: Timestamp.now(),
+        };
+      }
+
+      console.log(userData);
 
       const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
       await updateDoc(userRef, userData);
@@ -145,51 +181,6 @@ export async function editProfile(
     }
   }
 }
-
-// export async function getUserById(userId: string): Promise<IUser | null> {
-// 	try {
-// 		const docRef = doc(fireStore, COLLECTION_NAME_USER, userId);
-// 		console.log("Fetching document with ID:", userId);
-
-// 		const docSnap = await getDoc(docRef);
-
-// 		if (docSnap.exists()) {
-// 			console.log("Document data:", docSnap.data());
-// 			const data = docSnap.data();
-
-// 			if (data.profileImage) {
-// 				const profileFileName = getFileNameFromUrl(
-// 					data.profileImage,
-// 					"profile"
-// 				);
-// 				const base64 = await urlToBase64(data.profileImage);
-// 				data.profileImage = `data:image/jpeg;base64,${base64}`;
-
-// 				data.profileFileName = profileFileName;
-// 			}
-
-// 			if (data.businessImageUrl) {
-// 				const businessFileName = getFileNameFromUrl(
-// 					data.businessImageUrl,
-// 					"business"
-// 				);
-
-// 				const base64 = await urlToBase64(data.businessImageUrl);
-// 				data.businessImageUrl = `data:image/jpeg;base64,${base64}`;
-
-// 				data.businessFileName = businessFileName;
-// 			}
-
-// 			return data as IUser;
-// 		} else {
-// 			console.log("No such document!");
-// 			return null;
-// 		}
-// 	} catch (error) {
-// 		console.error("Error fetching document:", error);
-// 		return null;
-// 	}
-// }
 
 export async function getUserById(userId: string): Promise<IUser | null> {
   try {
@@ -227,12 +218,8 @@ export async function getUserById(userId: string): Promise<IUser | null> {
 
       return data as IUser;
     } else {
-      console.log("파베에서못찾음");
-      // 유저 데이터가 없는 경우 기본 값을 설정합니다.
-      return {
-        id: userId,
-        userType: "",
-      } as IUser;
+      console.log("No such document!");
+      return null;
     }
   } catch (error) {
     console.error("Error fetching document:", error);
