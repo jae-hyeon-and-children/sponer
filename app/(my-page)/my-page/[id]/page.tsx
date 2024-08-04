@@ -32,7 +32,7 @@ import React, { useEffect, useState } from "react";
 import { getUserById } from "./actions";
 import BrandUserForm from "../../../../components/my-page/user/brand/brand-form";
 import StylistUserForm from "../../../../components/my-page/user/stylist/stylist-form";
-import UnregisteredUserForm from "@/components/my-page/UnregisteredUserForm";
+// import BrandUserForm from "../../../../components/my-page/user/brand/brand-form";
 
 export default function EditProfile({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession();
@@ -43,27 +43,31 @@ export default function EditProfile({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getUserById(params.id);
-      console.log("Fetched user data:", userData); // 로그 추가
       setUser(userData);
       setLoading(false);
+
+      if (!userData) {
+        router.push("/add-user");
+      }
     };
 
     fetchUser();
   }, [params.id]);
 
   useEffect(() => {
+    console.log(session?.user?.userType);
     if (
       status === "unauthenticated" ||
       (session?.user?.id !== params.id && session?.user?.userType !== "admin")
     ) {
-      router.push("/login");
+      console.log("go to add-user");
+      router.push("/add-user");
     }
   }, [status, session, params.id, router]);
 
   if (loading) {
     return <div>로딩 중...</div>;
   }
-
   if (!user) {
     return <div>유저를 찾을 수 없습니다.</div>;
   }
@@ -72,10 +76,8 @@ export default function EditProfile({ params }: { params: { id: string } }) {
     <>
       {user.userType === "brand" ? (
         <BrandUserForm data={user} userId={params.id} />
-      ) : user.userType === "stylist" ? (
-        <StylistUserForm data={user} userId={params.id} />
       ) : (
-        <UnregisteredUserForm data={user} userId={params.id} />
+        <StylistUserForm data={user} userId={params.id} />
       )}
     </>
   );
