@@ -1,6 +1,7 @@
 "use client";
 import Dropdown from "@/components/faq/dropdown";
 import { ProductSideBar } from "@/components/my-page/side-bar";
+import { faqItems } from "@/components/faq/faqData";
 
 export default function faqPage() {
   return (
@@ -12,15 +13,13 @@ export default function faqPage() {
             <div className="display text-gray-100 pt-36">자주 묻는 질문</div>
           </div>
           <div className="w-full max-w-screen-2xl h-fit mt-20 flex-col text-center px-4 md:px-36">
-            <Dropdown />
-            <Dropdown />
-            <Dropdown />
-            <Dropdown />
-            <Dropdown />
-            <Dropdown />
-            <Dropdown />
-            <Dropdown />
-            <Dropdown />
+            {faqItems.map((item, index) => (
+              <Dropdown
+                key={index}
+                question={item.question}
+                answer={item.answer}
+              />
+            ))}
           </div>
         </div>
       </main>
