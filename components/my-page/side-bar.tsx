@@ -311,12 +311,18 @@ export const ProductSideBar = () => {
               "브랜드 신청 이력",
               isActive(`/my-page/history/${session.user.id}`)
             )}
-          <span
+          <Link
+            href="/add-user"
+            className="text-gray-400 label-2 pt-2 cursor-pointer"
+          >
+            소속 정하기
+          </Link>
+          {/* <span
             onClick={openModal}
             className="text-gray-400 label-2 pt-2 cursor-pointer"
           >
             탈퇴하기
-          </span>
+          </span> */}
         </div>
         {isBrandUser && (
           <div className="h-fit flex flex-col gap-6 flex-nowrap">
