@@ -5,13 +5,13 @@
 //   isUserTypeBrand,
 // } from "@/app/(my-page)/my-page/[id]/actions";
 // import { auth } from "@/config/firebase/firebase";
-// import useAuth from "@/libs/auth";
 // import { IResponse } from "@/model/responses";
 // import { onAuthStateChanged } from "firebase/auth";
 // import Link from "next/link";
 // import { usePathname, useRouter } from "next/navigation";
 // import { useEffect, useState } from "react";
 // import Modal from "./my-page-modal";
+// import { useSession } from "next-auth/react";
 
 // const SkeletonSidebar = () => (
 //   <div className="w-[15rem] border-r border-r-gray-200 flex-col sticky top-0 left-0 h-screen hidden lg:flex">
@@ -36,7 +36,7 @@
 // );
 
 // export const ProductSideBar = () => {
-//   const userAuth = useAuth();
+//   const { data: session, status } = useSession();
 //   const [isBrandUser, setIsBrandUser] = useState<boolean | null>(null);
 //   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 //   const [loading, setLoading] = useState<boolean>(true);
@@ -44,28 +44,24 @@
 //   const router = useRouter();
 
 //   useEffect(() => {
-//     const fetchUserType = async (userAuth: any) => {
-//       const isBrand = await isUserTypeBrand(userAuth.uid);
+//     const fetchUserType = async (userUid: string) => {
+//       const isBrand = await isUserTypeBrand(userUid);
 //       setIsBrandUser(isBrand);
 //       setLoading(false);
-//       console.log(userAuth.uid);
+//       console.log(userUid);
 //     };
 
-//     const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
-//       if (userAuth) {
-//         fetchUserType(userAuth);
-//       } else {
-//         setIsBrandUser(false);
-//         setLoading(false);
-//       }
-//     });
-
-//     return () => unsubscribe();
-//   }, []);
+//     if (status === "authenticated" && session?.user?.id) {
+//       fetchUserType(session.user.id);
+//     } else {
+//       setIsBrandUser(false);
+//       setLoading(false);
+//     }
+//   }, [status, session]);
 
 //   const confirmDeleteUser = async () => {
-//     if (userAuth) {
-//       const result: IResponse = await deleteUserData(userAuth.uid);
+//     if (session?.user?.id) {
+//       const result: IResponse = await deleteUserData(session.user.id);
 //       setIsModalOpen(false);
 
 //       alert(result.message);
@@ -100,7 +96,7 @@
 //     return <SkeletonSidebar />;
 //   }
 
-//   if (!userAuth) {
+//   if (status !== "authenticated") {
 //     return null;
 //   }
 
@@ -110,15 +106,15 @@
 //         <div className="h-fit flex flex-col gap-6 flex-nowrap">
 //           <span className="text-gray-900 heading-2">회원 정보</span>
 //           {renderLink(
-//             `/my-page/${userAuth!.uid}`,
+//             `/my-page/${session.user.id}`,
 //             "프로필 관리",
-//             isActive(`/my-page/${userAuth!.uid}`)
+//             isActive(`/my-page/${session.user.id}`)
 //           )}
 //           {isBrandUser &&
 //             renderLink(
-//               `/my-page/history/${userAuth!.uid}`,
+//               `/my-page/history/${session.user.id}`,
 //               "브랜드 신청 이력",
-//               isActive(`/my-page/history/${userAuth!.uid}`)
+//               isActive(`/my-page/history/${session.user.id}`)
 //             )}
 //           <span
 //             onClick={openModal}
@@ -164,14 +160,15 @@ import {
   deleteUserData,
   isUserTypeBrand,
 } from "@/app/(my-page)/my-page/[id]/actions";
-import { auth } from "@/config/firebase/firebase";
 import { IResponse } from "@/model/responses";
-import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Modal from "./my-page-modal";
 import { useSession } from "next-auth/react";
+import { createChatRoom } from "@/libs/api/chat-room";
+import { IUser } from "@/model/user";
+import { Timestamp } from "firebase/firestore"; // Firestore Timestamp import
 
 const SkeletonSidebar = () => (
   <div className="w-[15rem] border-r border-r-gray-200 flex-col sticky top-0 left-0 h-screen hidden lg:flex">
@@ -252,6 +249,44 @@ export const ProductSideBar = () => {
     </Link>
   );
 
+  // 1:1 문의 시 채팅방 생성 및 이동
+  // 이부분 다시 체크해봐야함 firebase db에 잘 쌓이고 메시지로 들어가면 채팅방이 생겨져 있으나 라우트가 404뜸
+  const handleDirectInquiry = async () => {
+    const adminUser: IUser = {
+      id: "admin-id",
+      name: "스포너 관리자",
+      profileImage: "/path/to/admin/profileImage.png",
+      email: "admin@example.com",
+      address: "Admin Address",
+      phoneNumber: "010-0000-0000",
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+      userType: "admin",
+    };
+
+    if (session?.user) {
+      const user: IUser = {
+        id: session.user.id,
+        name: session.user.name || session.user.email,
+        profileImage: session.user.image || "/default/path/to/profile.png",
+        email: session.user.email || "",
+        address: "",
+        phoneNumber: "",
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+        userType: "user",
+      };
+
+      const chatRoomResponse = await createChatRoom(adminUser, user, "");
+
+      if (chatRoomResponse.success) {
+        router.push(`/chat/${chatRoomResponse.data}`);
+      } else {
+        alert("채팅방 생성에 실패했습니다.");
+      }
+    }
+  };
+
   if (loading) {
     return <SkeletonSidebar />;
   }
@@ -295,7 +330,12 @@ export const ProductSideBar = () => {
         )}
         <div className="h-fit flex flex-col gap-6 flex-nowrap">
           <span className="text-gray-900 heading-2">문의</span>
-          <span className="text-gray-400 label-2 pt-2">1:1 문의</span>
+          <span
+            onClick={handleDirectInquiry}
+            className="text-gray-400 label-2 pt-2 cursor-pointer"
+          >
+            1:1 문의
+          </span>
           {renderLink(
             `/my-page/faq`,
             "FAQ 자주 묻는 질문",

@@ -1,5 +1,3 @@
-// api/product-access/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { verify } from "jsonwebtoken";
 import { doc, getDoc } from "firebase/firestore";
