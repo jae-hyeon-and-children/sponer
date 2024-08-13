@@ -34,13 +34,26 @@ const profileSchema = z.object({
     .optional(),
   phoneNumber: z.string().min(9, "잘못된 전화번호 형식입니다.").max(11),
   name: z.string().min(1, "이름은 필수입니다."),
-  homepage: z.string().url().nullable().optional(),
+  homepage: z.string().nullable().optional(),
   address: z.string().min(1, "주소는 필수입니다."),
   email: z.string().email("올바른 이메일 형식이 아닙니다."),
   businessImageUrl: z.instanceof(File).nullable().optional(),
   affiliation: z.string().min(1, "소속은 필수입니다.").optional(),
   nickName: z.string().optional(),
 });
+
+type ProfileData = {
+  profileImage: FormDataEntryValue | null;
+  phoneNumber: string;
+  name: FormDataEntryValue | null;
+  homepage: FormDataEntryValue | null;
+  address: string;
+  email: FormDataEntryValue | null;
+  brandName?: FormDataEntryValue | null;
+  businessImageUrl?: FormDataEntryValue | null;
+  affiliation?: FormDataEntryValue | null;
+  nickName?: FormDataEntryValue | null;
+};
 
 async function uploadFile(file: File, path: string): Promise<string> {
   const storageRef = ref(storage, path);
@@ -54,7 +67,7 @@ export async function editProfile(
   formData: FormData
 ): Promise<IResponse> {
   try {
-    const data = {
+    const data: ProfileData = {
       profileImage: formData.get("profileImage"),
       phoneNumber: ((((formData.get("phoneNumber1") as string) +
         formData.get("phoneNumber2")) as string) +
@@ -73,14 +86,12 @@ export async function editProfile(
     const nickName = formData.get("nickName");
 
     if (brandName) {
-      //@ts-ignore
       data.brandName = brandName;
-      //@ts-ignore
+
       data.businessImageUrl = businessImageUrl;
     } else {
-      //@ts-ignore
       data.affiliation = affiliation;
-      //@ts-ignore
+
       data.nickName = nickName;
     }
 
