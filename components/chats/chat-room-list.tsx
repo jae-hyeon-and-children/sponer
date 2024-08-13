@@ -34,6 +34,16 @@ import { IMessage } from "@/model/message";
 import Modal from "@/components/global/modal";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
+const SkeletonChatRoom = () => (
+  <div className="animate-pulse flex items-center gap-4 p-4">
+    <div className="bg-gray-200 h-12 w-12 rounded-full" />
+    <div className="flex-1">
+      <div className="bg-gray-200 h-4 rounded w-1/2 mb-2" />
+      <div className="bg-gray-200 h-4 rounded w-1/4" />
+    </div>
+  </div>
+);
+
 export default function ChatRoomList() {
   const { data: session, status } = useSession();
   const chatRoomId = useRecoilValue(chatRoomIdState);
@@ -163,6 +173,16 @@ export default function ChatRoomList() {
       router.push("/login");
     }
   }, [chatRoomId, router, setChatRoomProduct, setChatRoomUser, uid, status]);
+
+  if (status === "loading") {
+    return (
+      <ul className="flex flex-col gap-4">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SkeletonChatRoom key={index} />
+        ))}
+      </ul>
+    );
+  }
 
   return (
     <ul className="flex flex-col gap-4 ">
