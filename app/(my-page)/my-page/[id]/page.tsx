@@ -66,7 +66,7 @@ export default function EditProfile({ params }: { params: { id: string } }) {
   }, [status, session, params.id, router]);
 
   if (loading) {
-    return <div>로딩 중...</div>;
+    return <Skeleton />;
   }
   if (!user) {
     return <div>유저를 찾을 수 없습니다.</div>;
@@ -80,5 +80,22 @@ export default function EditProfile({ params }: { params: { id: string } }) {
         <StylistUserForm data={user} userId={params.id} />
       )}
     </>
+  );
+}
+
+function Skeleton() {
+  return (
+    <div className="animate-pulse p-4">
+      <div className="h-8 bg-gray-200 rounded mb-4 w-1/2"></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-12 bg-gray-200 rounded"></div>
+      </div>
+      <div className="h-48 bg-gray-200 rounded mt-4"></div>
+    </div>
   );
 }
