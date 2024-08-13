@@ -95,13 +95,37 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
+function HeaderSkeleton() {
+  return (
+    <header className="">
+      <nav className="shadow-md shadow-[#00000029] p-1 fixed top-0 left-0 right-0 bg-white z-10">
+        <div className="container mx-auto flex justify-between items-center h-16">
+          <div className="flex items-center">
+            <div className="bg-gray-200 rounded-lg w-16 h-10"></div>
+          </div>
+          <div className="hidden lg:flex space-x-4 gap-12">
+            <div className="bg-gray-200 rounded-lg w-24 h-6"></div>
+            <div className="bg-gray-200 rounded-lg w-24 h-6"></div>
+            <div className="bg-gray-200 rounded-lg w-24 h-6"></div>
+          </div>
+          <div className="flex lg:hidden space-x-4 gap-6 items-center">
+            <div className="bg-gray-200 rounded-full w-6 h-6"></div>
+            <div className="bg-gray-200 rounded-full w-6 h-6"></div>
+            <div className="bg-gray-200 rounded-full w-6 h-6"></div>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
+}
+
 export default function Header() {
   const { data: session, status } = useSession();
   console.log("헤더 - 세션 상태:", status);
   console.log("헤더 - 세션 데이터:", session);
 
   if (status === "loading") {
-    return <p>Loading...</p>;
+    return <HeaderSkeleton />;
   }
 
   return (
@@ -118,9 +142,9 @@ export default function Header() {
                 className="cursor-pointer"
               />
             </Link>
-            <div className="ml-4">
+            {/* <div className="ml-4">
               <Link href="/add-user">소속정하기</Link>
-            </div>
+            </div> */}
           </div>
 
           {status === "authenticated" ? (
