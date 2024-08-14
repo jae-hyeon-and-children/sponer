@@ -141,14 +141,7 @@ export default function StylistUserForm({
               defaultValue={userData.affiliation!}
               error={errors.affiliation}
             />
-            {/* <PhoneInput
-              defaultValues={[
-                userData.phoneNumber.slice(0, 3),
-                userData.phoneNumber.slice(3, 7),
-                userData.phoneNumber.slice(7, 11),
-              ]}
-              error={errors.phoneNumber}
-            /> */}
+
             <PhoneInput
               defaultValues={userData.phoneNumber}
               error={errors.phoneNumber}

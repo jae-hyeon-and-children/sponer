@@ -17,16 +17,6 @@ export function PhoneInput({ defaultValues, error }: PhoneInputProps) {
             placeholder="010-1234-5678"
             defaultValue={defaultValues}
           />
-          {/* <Input
-						name="phoneNumber2"
-						type="text"
-						defaultValue={defaultValues[1]}
-					/>
-					<Input
-						name="phoneNumber3"
-						type="text"
-						defaultValue={defaultValues[2]}
-					/> */}
         </span>
         {error && <span className="text-red-500">{error}</span>}
       </div>
