@@ -70,9 +70,6 @@ export async function editProfile(
     const data: ProfileData = {
       profileImage: formData.get("profileImage"),
       phoneNumber: (formData.get("phoneNumber") as string).replace(/-/g, ""),
-      // phoneNumber: ((((formData.get("phoneNumber1") as string) +
-      //   formData.get("phoneNumber2")) as string) +
-      //   formData.get("phoneNumber3")) as string,
       name: formData.get("name"),
       homepage: formData.get("homepage"),
       address: `${formData.get("postal_code")}, ${formData.get(
