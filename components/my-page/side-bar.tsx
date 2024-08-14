@@ -216,17 +216,17 @@ export const ProductSideBar = () => {
     }
   }, [status, session]);
 
-  const confirmDeleteUser = async () => {
-    if (session?.user?.id) {
-      const result: IResponse = await deleteUserData(session.user.id);
-      setIsModalOpen(false);
+  // const confirmDeleteUser = async () => {
+  //   if (session?.user?.id) {
+  //     const result: IResponse = await deleteUserData(session.user.id);
+  //     setIsModalOpen(false);
 
-      alert(result.message);
-      if (result.success) {
-        router.push("/");
-      }
-    }
-  };
+  //     alert(result.message);
+  //     if (result.success) {
+  //       router.push("/");
+  //     }
+  //   }
+  // };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -278,18 +278,16 @@ export const ProductSideBar = () => {
       };
 
       const chatRoomResponse = await createChatRoom(adminUser, user, "");
+      console.log("Chat Room Response: ", chatRoomResponse);
 
       if (chatRoomResponse.success) {
-        router.push(`/chat/${chatRoomResponse.data}`);
+        // Use Link component with session.user.id and chatRoomResponse.data
+        router.push(`/chats/${session.user.id}`);
       } else {
         alert("채팅방 생성에 실패했습니다.");
       }
     }
   };
-
-  if (loading) {
-    return <SkeletonSidebar />;
-  }
 
   if (status !== "authenticated") {
     return null;
@@ -349,13 +347,13 @@ export const ProductSideBar = () => {
           )}
         </div>
       </div>
-      <Modal
+      {/* <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
         onConfirm={confirmDeleteUser}
       >
         <p>정말 탈퇴하시겠습니까?</p>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
