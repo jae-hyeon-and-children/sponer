@@ -39,12 +39,11 @@ import { InstantSearch } from "react-instantsearch";
 
 // Skeleton for FilterSideBar
 const SkeletonFilterSideBar = () => (
-  <div className="w-64 p-4 border-r border-gray-200">
+  <div className="w-64 p-4 border-r mt-20 border-gray-200">
     <div className="animate-pulse flex flex-col gap-4">
-      <div className="h-6 bg-gray-200 rounded"></div>
-      <div className="h-6 bg-gray-200 rounded"></div>
-      <div className="h-6 bg-gray-200 rounded"></div>
-      <div className="h-6 bg-gray-200 rounded"></div>
+      {Array.from({ length: 15 }).map((_, index) => (
+        <div key={index} className="h-6 bg-gray-200 rounded"></div>
+      ))}
     </div>
   </div>
 );
