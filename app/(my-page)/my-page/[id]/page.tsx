@@ -84,7 +84,7 @@ function Skeleton() {
             <div className="flex flex-col gap-4 w-full">
               {/* 프로필 정보 입력란 */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Array.from({ length: 16 }).map((_, index) => (
+                {Array.from({ length: 12 }).map((_, index) => (
                   <div key={index} className="h-10 bg-gray-200 rounded"></div>
                 ))}
               </div>
