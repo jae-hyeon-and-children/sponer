@@ -151,9 +151,9 @@ export default function RootLayout({ children }: Props) {
             <Header />
             {children}
             <Toast />
+            <Footer />
           </RecoilWrapper>
         </AuthProvider>
-        <Footer />
       </body>
     </html>
   );
