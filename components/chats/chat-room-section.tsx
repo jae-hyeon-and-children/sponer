@@ -49,7 +49,7 @@ export default function ChatRoomSection({ children }: ChatRoomSectionProps) {
     <section
       className={`${
         !showChatRoomList && "hidden"
-      } fixed mt-[72px] top-0 z-10 md:sticky  overflow-y-scroll scrollbar-hide w-full  md:w-96 bg-gray-100 px-6 py-8 border-r border-r-gray-200 md:block `}
+      } fixed mt-[72px]  top-0 z-10 md:sticky  overflow-y-scroll scrollbar-hide w-full  md:w-96 bg-gray-100 px-6 py-8 border-r border-r-gray-200 md:block `}
       style={{ height: "calc(100vh - 72px)" }}
     >
       {status === "loading"

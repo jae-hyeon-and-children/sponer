@@ -35,7 +35,7 @@ export default function Message({
             senderId === userId
               ? "text-gray-50 bg-gray-800"
               : "text-gray-800 bg-gray-100"
-          } rounded-lg py-4 px-6 max-w-md relative whitespace-pre-line`}
+          } rounded-lg  py-4 px-6 max-w-md relative whitespace-pre-line`}
         >
           {content}
         </div>
