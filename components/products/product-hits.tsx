@@ -7,6 +7,8 @@ import Link from "next/link";
 export default function ProductHits(props: UseHitsProps<IProduct>) {
   const { hits } = useInfiniteHits<IProduct>(props);
 
+  console.log("his : ", hits);
+
   return (
     <section className="w-full">
       {hits.length === 0 ? (
