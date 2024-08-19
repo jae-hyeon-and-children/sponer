@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import { isUserTypeAdmin } from "./actions";
-import ProductsSection from "./components/products-Section";
-import MessagesSection from "./components/messages-Section";
-import ApprovalsSection from "./components/approvals-Section";
-import UsersSection from "./components/users-Section";
+import ProductsSection from "./components/products-section";
+import MessagesSection from "./components/messages-section";
+import ApprovalsSection from "./components/approvals-section";
+import UsersSection from "./components/users-section";
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
