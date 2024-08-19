@@ -57,37 +57,40 @@ export default function UsersSection() {
       <h2 className="text-xl font-semibold text-gray-800 mb-4">사용자 목록</h2>
       <ul className="space-y-4">
         {users.map((user, index) => (
-          <li key={index} className="p-4 bg-gray-100 rounded-lg shadow-sm">
-            {user.userType === "brand" && (
-              <p>
-                <strong>브랜드명:</strong> {user.brandName || "없음"}
-              </p>
-            )}
-            {user.userType === "stylist" && (
-              <>
-                <p>
+          <li
+            key={index}
+            className="p-4 bg-gray-100 rounded-lg shadow-sm hover:bg-gray-200 transition duration-300 ease-in-out"
+          >
+            <div className="flex flex-col">
+              {user.userType === "brand" && (
+                <p className="text-sm text-gray-600">
+                  <strong>브랜드명:</strong> {user.brandName || "없음"}
+                </p>
+              )}
+              {user.userType === "stylist" && (
+                <p className="text-sm text-gray-600">
                   <strong>닉네임:</strong> {user.nickName || "없음"}
                 </p>
-              </>
-            )}
-            <p>
-              <strong>UID:</strong> {user.uid || "없음"}
-            </p>
-            <p>
-              <strong>유저 타입:</strong> {user.userType || "없음"}
-            </p>
-            <p>
-              <strong>이메일:</strong> {user.email || "없음"}
-            </p>
-            <p>
-              <strong>이름:</strong> {user.name || "없음"}
-            </p>
-            <p>
-              <strong>전화번호:</strong> {user.phoneNumber || "없음"}
-            </p>
-            <p>
-              <strong>주소:</strong> {user.address || "없음"}
-            </p>
+              )}
+              <p className="text-sm text-gray-600">
+                <strong>UID:</strong> {user.uid || "없음"}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>유저 타입:</strong> {user.userType || "없음"}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>이메일:</strong> {user.email || "없음"}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>이름:</strong> {user.name || "없음"}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>전화번호:</strong> {user.phoneNumber || "없음"}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>주소:</strong> {user.address || "없음"}
+              </p>
+            </div>
           </li>
         ))}
       </ul>
