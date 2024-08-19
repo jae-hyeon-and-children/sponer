@@ -79,7 +79,7 @@ export default function ProductsSection() {
     <section
       className={`fixed top-0 right-0 transition-transform duration-300 ease-in-out transform ${
         showProductSection ? "translate-x-0" : "translate-x-full"
-      } overflow-y-scroll scrollbar-hide w-96 h-screen bg-white border-l border-l-gray-100`}
+      } overflow-y-scroll scrollbar-hide w-96  h-screen bg-white border-l border-l-gray-100`}
     >
       <Modal>
         {sizeTable && (
@@ -89,7 +89,7 @@ export default function ProductsSection() {
           />
         )}
       </Modal>
-      <div className="px-6 py-5 mt-20 flex items-center justify-between">
+      <div className="px-6 py-5 mt-[4.5rem] flex items-center justify-between">
         <h1 className="label-1 text-gray-600">상품 정보</h1>
         <button onClick={handleCLose}>
           <Image src={IcClose} alt="IcClose" width={20} height={20} />
