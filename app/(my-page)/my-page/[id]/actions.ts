@@ -154,7 +154,7 @@ export async function editProfile(
         };
       }
 
-      console.log(userData);
+      console.log("Updating user with data:", userData);
 
       const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
       await updateDoc(userRef, userData);
