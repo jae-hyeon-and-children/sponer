@@ -8,6 +8,7 @@ import { IProduct } from "@/model/product";
 import { useEffect, useState } from "react";
 import EmptyView from "@/components/global/empty-view";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const SkeletonProduct = () => (
   <div className="animate-pulse h-fit">
@@ -22,12 +23,27 @@ export default function ProductList() {
   const [products, setProducts] = useState<IProduct[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { data: session, status } = useSession();
-
-  // const userAuth = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!session) {
+        router.push("login");
+        return;
+      }
+
       if (session && session?.user?.id) {
+        const userType = session.user.userType;
+        const userBrandId = session.user.uid;
+
+        if (
+          userType === "stylist" ||
+          (userType !== "admin" && userBrandId !== session.user.uid)
+        ) {
+          router.push("/");
+          return;
+        }
+
         try {
           const result = await getProduct(session?.user?.id);
           setProducts(result);
