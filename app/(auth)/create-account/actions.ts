@@ -124,12 +124,12 @@ export async function createAccountHandler(
 
     // 어드민 정보 설정
     const adminUser: IUser = {
-      id: "sponer@gmail.com",
+      id: "8bwWPTjfDraAphQZTNBWA95bZpA3",
       name: "스포너 관리자",
-      profileImage: "/path/to/admin/profileImage.png",
-      email: "admin@example.com",
-      address: "Admin Address",
-      phoneNumber: "010-0000-0000",
+      profileImage: "/sponer_Logo.png",
+      email: "sponer.company@gmail.com",
+      address: " 서울특별시 용산구 한강대로92길 15, 1층(갈월동)",
+      phoneNumber: " 010-4331-7797",
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       userType: "admin",
