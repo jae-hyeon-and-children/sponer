@@ -1,22 +1,23 @@
 "use client";
 
-import { editProfile } from "@/app/(my-page)/my-page/[id]/actions";
+import { editProfile, getUserById } from "@/app/(my-page)/my-page/[id]/actions";
 import Button from "@/components/global/button";
 import { IResponse } from "@/model/responses";
 import { IBrandApplication, IUser } from "@/model/user";
-import { showDefaultModalState } from "@/recoil/atoms";
+import { toastState } from "@/recoil/atoms";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { base64ToFile } from "../../product/edit-product";
 import { BusinessImageUploader } from "./business-image-uploader";
 import { ProfileImageUploader } from "../common/profile-image-uploader";
-import Modal from "@/components/global/modal";
+
 import { ProductSideBar } from "../../side-bar";
 import { TextInput } from "../common/text-input";
 import { PhoneInput } from "../common/phone-input";
 import { AddressInput } from "../common/address-input";
 import { getHistoryById } from "@/app/(my-page)/my-page/history/[id]/actions";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface BrandUserFormProps {
   data: IUser;
@@ -29,12 +30,19 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const [businessImg, setBusinessImg] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
   const [isApprove, setIsApprove] = useState<boolean>(true);
   const [history, setHistory] = useState<string>("");
+  const [toast, setToast] = useRecoilState(toastState);
+  const { data: session, status } = useSession();
 
-  const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
-  const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+  useEffect(() => {
+    if (
+      status === "unauthenticated" ||
+      (session?.user?.id !== userId && session?.user?.userType !== "admin")
+    ) {
+      router.push("/");
+    }
+  }, [status, session, router]);
 
   useEffect(() => {
     const fetchApproveData = async () => {
@@ -49,6 +57,20 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 
     fetchApproveData();
   }, []);
+
+  // 프로필 업데이트
+  useEffect(() => {
+    const fetchUserProfileImage = async () => {
+      if (status === "authenticated" && session?.user?.id) {
+        const userData = await getUserById(session.user.id);
+        if (userData?.profileImage) {
+          session.user.image = userData.profileImage;
+        }
+      }
+    };
+
+    fetchUserProfileImage();
+  }, [status, session]);
 
   useEffect(() => {
     if (data) {
@@ -121,21 +143,24 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
           }
         });
         setErrors(newErrors);
+        setToast({
+          isVisible: true,
+          message: "프로필 수정 실패: 오류가 발생했습니다.",
+          type: "error",
+        });
       } else {
-        setModalContent(<div>브랜드 정보 수정 성공</div>);
-        setShowModal(true);
+        setToast({
+          isVisible: true,
+          message: "프로필 정보 수정 성공",
+          type: "success",
+        });
+        router.refresh();
       }
     }
   };
 
-  const handleCloseModal = () => {
-    console.log("refresh");
-    router.refresh();
-  };
-
   return (
     <>
-      <Modal onClose={handleCloseModal}>{isShowModal && modalContent}</Modal>
       <main className="flex flex-col lg:flex-row text-gray-900 label-1">
         <ProductSideBar />
         <div className="w-full mt-8">

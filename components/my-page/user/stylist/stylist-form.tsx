@@ -1,9 +1,9 @@
 "use client";
-import { editProfile } from "@/app/(my-page)/my-page/[id]/actions";
+import { editProfile, getUserById } from "@/app/(my-page)/my-page/[id]/actions";
 import Button from "@/components/global/button";
 import { IResponse } from "@/model/responses";
 import { IUser } from "@/model/user";
-import { showDefaultModalState } from "@/recoil/atoms";
+import { toastState } from "@/recoil/atoms";
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useRecoilState } from "recoil";
 import { base64ToFile } from "../../product/edit-product";
@@ -12,7 +12,6 @@ import { AddressInput } from "../common/address-input";
 import { PhoneInput } from "../common/phone-input";
 import { ProfileImageUploader } from "../common/profile-image-uploader";
 import { TextInput } from "../common/text-input";
-import Modal from "@/components/global/modal";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -29,11 +28,8 @@ export default function StylistUserForm({
   const router = useRouter();
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
   const { data: session, status } = useSession();
-
-  const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
-  const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+  const [toast, setToast] = useRecoilState(toastState);
 
   useEffect(() => {
     if (
@@ -43,6 +39,20 @@ export default function StylistUserForm({
       router.push("/");
     }
   }, [status, session, router]);
+
+  // 프로필 업데이트
+  useEffect(() => {
+    const fetchUserProfileImage = async () => {
+      if (status === "authenticated" && session?.user?.id) {
+        const userData = await getUserById(session.user.id);
+        if (userData?.profileImage) {
+          session.user.image = userData.profileImage;
+        }
+      }
+    };
+
+    fetchUserProfileImage();
+  }, [status, session]);
 
   useEffect(() => {
     if (data) {
@@ -70,47 +80,40 @@ export default function StylistUserForm({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!profileImg) {
-      const formData = new FormData(event.currentTarget);
-      const result: IResponse = await editProfile(userId, formData);
+    const formData = new FormData(event.currentTarget);
 
-      if (!result.success && result.errors) {
-        const newErrors: Record<string, string> = {};
-        result.errors.forEach((error: any) => {
-          if (Array.isArray(error.path) && error.path.length > 0) {
-            newErrors[error.path[0]] = error.message;
-          }
-        });
-        setErrors(newErrors);
-      } else {
-        setModalContent(<div>스타일리스트 정보 수정 성공</div>);
-        setShowModal(true);
-      }
-    } else {
-      const formData = new FormData(event.currentTarget);
+    if (profileImg) {
       formData.delete("profileImage");
       formData.append("profileImage", profileImg);
+    }
 
-      const result: IResponse = await editProfile(userId, formData);
+    const result: IResponse = await editProfile(userId, formData);
 
-      if (!result.success && result.errors) {
-        const newErrors: Record<string, string> = {};
-        result.errors.forEach((error: any) => {
-          if (Array.isArray(error.path) && error.path.length > 0) {
-            newErrors[error.path[0]] = error.message;
-          }
-        });
-        setErrors(newErrors);
-      } else {
-        setModalContent(<div>스타일리스트 정보 수정 성공</div>);
-        setShowModal(true);
-      }
+    if (!result.success && result.errors) {
+      const newErrors: Record<string, string> = {};
+      result.errors.forEach((error: any) => {
+        if (Array.isArray(error.path) && error.path.length > 0) {
+          newErrors[error.path[0]] = error.message;
+        }
+      });
+      setErrors(newErrors);
+      setToast({
+        isVisible: true,
+        message: "프로필 수정 실패: 오류가 발생했습니다.",
+        type: "error",
+      });
+    } else {
+      setToast({
+        isVisible: true,
+        message: "프로필 정보 수정 성공",
+        type: "success",
+      });
+      router.refresh();
     }
   };
 
   return (
     <>
-      <Modal>{isShowModal && modalContent}</Modal>
       <main className="flex flex-col lg:flex-row text-gray-900 label-1">
         <div className="">
           <ProductSideBar />
