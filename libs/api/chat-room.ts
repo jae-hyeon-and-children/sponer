@@ -75,14 +75,13 @@ export async function fetchChatRoom() {}
 //   }
 // }
 
-// 이부분 다시 체크해봐야함 firebase db에 잘 쌓이고 메시지로 들어가면 채팅방이 생겨져 있으나 라우트가 404뜸
 export async function createChatRoom(
   brand: IUser,
   stylelist: IUser,
   productId: string
 ): Promise<IResponse<string>> {
-  const brandName = brand.name || brand.email || "Unknown Brand";
-  const stylelistName = stylelist.name || stylelist.email || "Unknown User";
+  const brandName = brand.brandName || brand.email || "Unknown Brand";
+  const stylelistName = stylelist.nickName || stylelist.email || "Unknown User";
 
   const brandProfileImage =
     brand.profileImage || "/default/path/to/profile.png";
@@ -127,17 +126,19 @@ export async function createChatRoom(
     };
   }
 }
-// 이부분 다시 체크해봐야함 firebase db에 잘 쌓이고 메시지로 들어가면 채팅방이 생겨져 있으나 라우트가 404뜸
+
 export async function createChatRoomWithAdmin(
   user: IUser
 ): Promise<IResponse<string>> {
   const adminUser: IUser = {
-    id: "admin-id",
+    id: "8bwWPTjfDraAphQZTNBWA95bZpA3",
     name: "스포너 관리자",
-    profileImage: "/path/to/admin/profileImage.png",
-    email: "admin@example.com",
-    address: "Admin Address",
-    phoneNumber: "010-0000-0000",
+    nickName: "스포너 관리자",
+    brandName: "스포너",
+    profileImage: "/sponer_Logo.png",
+    email: "",
+    address: "서울특별시 용산구 한강대로92길 15, 1층(갈월동)",
+    phoneNumber: "010-4331-7797",
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
     userType: "admin",
@@ -148,11 +149,15 @@ export async function createChatRoomWithAdmin(
       {
         id: adminUser.id!,
         name: adminUser.name!,
+        nickName: adminUser.nickName,
+        brandName: adminUser.brandName,
         profileImage: adminUser.profileImage,
       },
       {
         id: user.id!,
-        name: user.nickName ?? user.name,
+        name: user.name || "이거 없음?",
+        nickName: user.nickName || "이거 없음?",
+        brandName: user.brandName || "이거 없음?",
         profileImage: user.profileImage,
       },
     ],
@@ -162,6 +167,9 @@ export async function createChatRoomWithAdmin(
     createdAt: Timestamp.now(),
     productId: "",
   };
+  console.log("User object:", user);
+  console.log("NickName:", user.nickName);
+  console.log("BrandName:", user.brandName);
 
   try {
     console.log("Creating chat room with admin and user:", data);
