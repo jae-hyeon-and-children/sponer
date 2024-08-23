@@ -17,11 +17,11 @@ import {
   PRODUCT_TYPES,
 } from "@/constants/variables";
 import Input from "@/components/global/input";
-// import useAuth from "@/libs/auth";
+
 import { useRouter } from "next/navigation";
 import { IResponse } from "@/model/responses";
 import Modal from "@/components/global/modal";
-import { showDefaultModalState } from "@/recoil/atoms";
+import { showDefaultModalState, toastState } from "@/recoil/atoms";
 import { useRecoilState } from "recoil";
 import { ISizeTable } from "@/constants/type-table";
 import { getSizeTable } from "@/libs/utils/table";
@@ -45,30 +45,45 @@ export default function CreateProductForm() {
   const [isShowSize, setShowSize] = useState<boolean>(false);
 
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+  const [toast, setToast] = useRecoilState(toastState); // Toast 상태 관리
 
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
-  // const userAuth = useAuth();
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (session) {
-      const newFormData = new FormData();
-      images.forEach((image) => newFormData.append("images", image));
-      if (selectedType) newFormData.append("selectedType", selectedType);
-      if (selectedSize) newFormData.append("selectedSize", selectedSize);
-      if (selectedGender) newFormData.append("selectedGender", selectedGender);
-      selectedStyles.forEach((style) =>
-        newFormData.append("selectedStyles", style)
-      );
+    if (status === "loading") return;
 
-      newFormData.append("brandId", session?.user?.id);
-
-      setFormData(newFormData);
-
-      setSizeTable(getSizeTable(PRODUCT_CATEGORIES_REVERSE[selectedType!]));
+    if (!session) {
+      router.push("/login");
+      return;
     }
+
+    const userType = session.user.userType;
+    const userBrandId = session.user.uid;
+
+    if (
+      userType === "stylist" ||
+      (userType !== "admin" && userBrandId !== session.user.uid)
+    ) {
+      router.push("/");
+    }
+
+    const newFormData = new FormData();
+    images.forEach((image) => newFormData.append("images", image));
+    if (selectedType) newFormData.append("selectedType", selectedType);
+    if (selectedSize) newFormData.append("selectedSize", selectedSize);
+    if (selectedGender) newFormData.append("selectedGender", selectedGender);
+    selectedStyles.forEach((style) =>
+      newFormData.append("selectedStyles", style)
+    );
+
+    newFormData.append("brandId", session?.user?.id);
+
+    setFormData(newFormData);
+
+    setSizeTable(getSizeTable(PRODUCT_CATEGORIES_REVERSE[selectedType!]));
   }, [
     selectedType,
     selectedSize,
@@ -76,6 +91,7 @@ export default function CreateProductForm() {
     selectedStyles,
     images,
     session,
+    status,
   ]);
 
   const selectType = (item: string) => setSelectedType(item);
@@ -135,14 +151,21 @@ export default function CreateProductForm() {
       });
       setErrors(newErrors);
     } else {
-      setModalContent(<div>상품 등록 성공</div>);
-      setShowModal(true);
+      setToast({
+        isVisible: true,
+        message: "상품 등록 성공",
+        type: "success",
+      });
+
+      setTimeout(() => {
+        router.push("/my-page/product-list");
+      }, 2000);
     }
   };
 
-  const handleCloseModal = () => {
-    router.push("/my-page/product-list");
-  };
+  // const handleCloseModal = () => {
+  //   router.push("/my-page/product-list");
+  // };
 
   const handleCloseSize = () => {
     setShowSize(false);
@@ -160,7 +183,7 @@ export default function CreateProductForm() {
         isShowSize={isShowSize}
         modalContent={modalContent}
         sizeTable={sizeTable}
-        handleCloseModal={handleCloseModal}
+        // handleCloseModal={handleCloseModal}
         handleCloseSize={handleCloseSize}
       />
       <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">

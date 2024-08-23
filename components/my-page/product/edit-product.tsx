@@ -17,17 +17,18 @@ import {
 } from "@/app/(my-page)/my-page/product/[id]/actions";
 import { IProduct } from "@/model/product";
 import { useRouter } from "next/navigation";
-// import useAuth from "@/libs/auth";
+
 import { IResponse } from "@/model/responses";
 import Modal from "../../global/modal";
 import { useRecoilState } from "recoil";
-import { showDefaultModalState } from "@/recoil/atoms";
+import { showDefaultModalState, toastState } from "@/recoil/atoms";
 import { ISizeTable } from "@/constants/type-table";
 import { getSizeTable } from "@/libs/utils/table";
 import SizeTable from "../../global/size-table";
 import { FormModal } from "./form-modal";
 import { ProductDetails } from "./product-details";
 import { ImageUploader } from "./image-uploader";
+import { useSession } from "next-auth/react";
 
 export const base64ToFile = (
   base64Data: string,
@@ -59,15 +60,31 @@ export default function EditProductForm(data: any) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
   const [isShowSize, setShowSize] = useState<boolean>(false);
-
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
-
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
-
-  // const userAuth = useAuth();
+  const [toast, setToast] = useRecoilState(toastState);
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    const productBrandId = data.data.brandId;
+    const userBrandId = session?.user?.uid;
+    const userType = session?.user?.userType;
+
+    if (
+      userType === "stylist" ||
+      (userType !== "admin" && userBrandId !== productBrandId)
+    ) {
+      router.push("/");
+    }
+
     if (data) {
       setInitialData(data.data);
       setSelectedType(data.data.productCategory);
@@ -78,7 +95,7 @@ export default function EditProductForm(data: any) {
       setImageURLs(data.data.productImages || []);
       setFileNames(data.data.fileNames || []);
     }
-  }, [data]);
+  }, [session, status, data]);
 
   useEffect(() => {
     const newFormData = new FormData();
@@ -184,9 +201,23 @@ export default function EditProductForm(data: any) {
         }
       });
       setErrors(newErrors);
+      setToast({
+        isVisible: true,
+        message: "상품 수정 실패",
+        type: "error",
+      });
     } else {
-      setModalContent(<div>상품 정보 수정 성공</div>);
-      setShowModal(true);
+      // 성공 시 Toast 표시
+      setToast({
+        isVisible: true,
+        message: "상품 수정 성공",
+        type: "success",
+      });
+
+      // 3초 후 리다이렉트
+      setTimeout(() => {
+        router.push("/my-page/product-list");
+      }, 2000);
     }
   };
 
@@ -199,18 +230,27 @@ export default function EditProductForm(data: any) {
     const result: IResponse = await deleteProduct(productId);
 
     if (result.success) {
-      alert(result.message);
-      setModalContent(<div>상품 삭제 성공</div>);
-      setShowModal(true);
+      setToast({
+        isVisible: true,
+        message: "상품 삭제 성공",
+        type: "success",
+      });
+
+      setTimeout(() => {
+        router.push("/my-page/product-list");
+      }, 3000);
     } else {
-      setModalContent(<div>상품 삭제 실패</div>);
-      setShowModal(true);
+      setToast({
+        isVisible: true,
+        message: "상품 삭제 실패",
+        type: "error",
+      });
     }
   };
 
-  const handleCloseModal = () => {
-    router.push("/my-page/product-list");
-  };
+  // const handleCloseModal = () => {
+  //   router.push("/my-page/product-list");
+  // };
 
   const handleCloseSize = () => {
     setShowSize(false);
@@ -230,7 +270,7 @@ export default function EditProductForm(data: any) {
         isShowSize={isShowSize}
         modalContent={modalContent}
         sizeTable={sizeTable}
-        handleCloseModal={handleCloseModal}
+        // handleCloseModal={handleCloseModal}
         handleCloseSize={handleCloseSize}
       />
       <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
