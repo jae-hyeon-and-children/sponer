@@ -63,6 +63,10 @@ export default function Modal({ children, onClose }: ModalProps) {
       onClose();
     }
   };
+  console.log("Modal visibility:", showDefaultModal);
+  console.log("Modal children:", children);
+  //@ts-ignore
+  console.log("Modal children props:", children ? children.props : "No props");
 
   return (
     <section
@@ -81,7 +85,12 @@ export default function Modal({ children, onClose }: ModalProps) {
           </button>
         </div>
 
-        <div className="overflow-y-auto max-h-[80vh]">{children}</div>
+        {/* <div className="overflow-y-auto max-h-[80vh]">
+          <div>{modalMessage}</div>
+        </div> */}
+        <div className="overflow-y-auto max-h-[80vh]">
+          {children || "No content available"}
+        </div>
       </div>
     </section>
   );
