@@ -155,9 +155,9 @@ export async function createChatRoomWithAdmin(
       },
       {
         id: user.id!,
-        name: user.name || "이거 없음?",
-        nickName: user.nickName || "이거 없음?",
-        brandName: user.brandName || "이거 없음?",
+        name: user.name || "없음",
+        nickName: user.nickName || "없음",
+        brandName: user.brandName || "없음",
         profileImage: user.profileImage,
       },
     ],
