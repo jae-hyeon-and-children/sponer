@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { auth } from "@/config/firebase/firebase";
 import { getUserById } from "./app/(my-page)/my-page/[id]/actions";
+import { createAccountHandler } from "./app/(auth)/create-account/actions";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -61,10 +62,20 @@ const authOptions: NextAuthOptions = {
         const credential = GoogleAuthProvider.credential(account.id_token);
         const userCredential = await signInWithCredential(auth, credential);
 
-        user.id = userCredential.user.uid; // Assign Firebase uid to user id
+        user.id = userCredential.user.uid;
         const userInfo = await getUserById(user.id);
-        user.userType = userInfo!.userType; // userType 추가
+        user.userType = userInfo!.userType;
         console.log("user id : ", user.id);
+
+        // 소셜 로그인 시 채팅방 생성 로직 추가
+        const token = await userCredential.user.getIdToken();
+        await createAccountHandler(
+          user.id,
+          user.email!,
+          user.name!,
+          userCredential.user.photoURL || "",
+          token
+        );
       }
       return true;
     },
