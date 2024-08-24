@@ -19,12 +19,7 @@ export function TextInput({
     <div className="flex flex-col md:flex-row justify-between w-full">
       <span>{label}</span>
       <span className="w-full md:w-[36rem] mt-4 md:mt-0">
-        <Input
-          name={name}
-          type={type}
-          defaultValue={defaultValue}
-          placeholder="없다면 없음을 적어주세요."
-        />
+        <Input name={name} type={type} defaultValue={defaultValue} />
         {error && <span className="text-red-500">{error}</span>}
       </span>
     </div>
