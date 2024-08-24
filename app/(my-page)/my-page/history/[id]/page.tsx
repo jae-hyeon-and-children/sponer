@@ -98,7 +98,7 @@ export default async function EditProfile({
   return (
     <main className="flex text-gray-900 label-1">
       <ProductSideBar />
-      <div className="w-full mt-20">
+      <div className="w-full mt-8">
         <div className="w-full h-52 bg-primary pl-4 md:pl-36">
           <div className="display text-gray-100 pt-36">브랜드 신청 이력</div>
         </div>

@@ -65,7 +65,7 @@ export default function ProductList() {
     return (
       <main className="w-full h-screen flex">
         <ProductSideBar />
-        <div className="w-full mt-20">
+        <div className="w-full mt-8">
           <div className="w-full h-52 bg-primary px-4 md:px-36">
             <div className="w-full flex justify-between pt-36 max-w-screen-xl">
               <div className="display text-gray-100">상품 관리</div>
