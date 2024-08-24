@@ -63,6 +63,9 @@ interface FileNameProp {
 }
 
 export interface IUser extends FileNameProp {
+  historyId?: string;
+  history?: IBrandApplication[];
+  reason?: string;
   id?: string;
   address: string;
   affiliation?: string;
@@ -81,6 +84,8 @@ export interface IUser extends FileNameProp {
 }
 
 export interface IBrandApplication {
+  historyId: string;
+  id: string;
   approve: boolean;
   brandName: string;
   createdAt: Timestamp;
@@ -100,7 +105,6 @@ export const UserConverter = {
       businessImageUrl: data.businessImageUrl,
       email: data.email,
       homepage: data.homepage,
-
       name: data.name,
       phoneNumber: data.phoneNumber,
       profileImage: data.profileImage,
@@ -108,6 +112,8 @@ export const UserConverter = {
       updatedAt: data.updatedAt,
       userType: data.userType,
       nickName: data.nickName,
+      reason: data.reason,
+      history: [], // history 필드를 빈 배열로 초기화
     };
   },
 };
