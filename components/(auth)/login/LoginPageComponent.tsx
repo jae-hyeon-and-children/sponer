@@ -6,6 +6,8 @@ import Input from "@/components/global/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import GoogleLoginButton from "./google-login";
+import { doc, getDoc } from "firebase/firestore";
+import { fireStore } from "@/config/firebase/firebase";
 
 function LoginPageSkeleton() {
   return (
@@ -44,10 +46,35 @@ export default function LoginPageComponent() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/");
-    }
-  }, [status, router]);
+    const checkUserType = async () => {
+      if (status === "authenticated" && session?.user?.id) {
+        try {
+          // Firestore에서 userType 확인
+          const userDoc = await getDoc(doc(fireStore, "User", session.user.id));
+
+          if (!userDoc.exists()) {
+            setErrorMessage("사용자 정보를 찾을 수 없습니다.");
+            return;
+          }
+
+          const userType = userDoc.data()?.userType;
+
+          // userType이 없으면 add-user 페이지로 리다이렉트
+          if (!userType) {
+            router.push("/add-user");
+          } else {
+            // userType이 있으면 메인 페이지로 이동
+            router.push("/");
+          }
+        } catch (error) {
+          console.error("사용자 유형 확인 중 오류 발생:", error);
+          setErrorMessage("사용자 정보를 확인하는 중 오류가 발생했습니다.");
+        }
+      }
+    };
+
+    checkUserType();
+  }, [status, session, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,13 +94,9 @@ export default function LoginPageComponent() {
         email,
         password,
       });
-      console.log("로그인 시도 결과:", result);
 
       if (result?.error) {
-        console.error("로그인 오류:", result.error);
         setErrorMessage(result.error);
-      } else {
-        // window.location.href = "/";
       }
     } catch (error) {
       console.error("로그인 요청 오류:", error);
