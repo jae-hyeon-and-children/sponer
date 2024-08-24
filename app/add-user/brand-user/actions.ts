@@ -98,6 +98,8 @@ export async function uploadBrandUser(
       approve: false,
       brandName: formData.get("brand_name") as string,
       createdAt: Timestamp.now(),
+      historyId: "",
+      id: "",
     };
 
     console.log("Setting user document:", brandFormData);
