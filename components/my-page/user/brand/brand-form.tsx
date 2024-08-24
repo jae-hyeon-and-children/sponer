@@ -196,14 +196,7 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
                 <p className="text-red-400">{`브랜드 ${history}는 승인 대기 중 입니다.`}</p>
               )}
             </div>
-            {/* <PhoneInput
-              defaultValues={[
-                userData.phoneNumber.slice(0, 3),
-                userData.phoneNumber.slice(3, 7),
-                userData.phoneNumber.slice(7, 11),
-              ]}
-              error={errors.phoneNumber}
-            /> */}
+
             <PhoneInput
               defaultValues={userData.phoneNumber}
               error={errors.phoneNumber}
