@@ -87,6 +87,7 @@ export default function StylistUserForm({
       formData.append("profileImage", profileImg);
     }
 
+    console.log("Homepage value:", formData.get("homepage"));
     const result: IResponse = await editProfile(userId, formData);
 
     if (!result.success && result.errors) {
