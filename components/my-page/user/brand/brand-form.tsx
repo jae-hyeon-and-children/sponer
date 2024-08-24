@@ -46,17 +46,24 @@ export default function BrandUserForm({ data, userId }: BrandUserFormProps) {
 
   useEffect(() => {
     const fetchApproveData = async () => {
-      const history: IBrandApplication[] = await getHistoryById(userId);
-      const latestHistory = history[0];
+      const historyData: IBrandApplication[] = await getHistoryById(userId);
 
-      if (!latestHistory.approve) {
-        setIsApprove(false);
-        setHistory(latestHistory.brandName);
+      if (historyData.length > 0) {
+        const latestHistory = historyData[0];
+
+        // 거절된 경우는 무시하고, 승인 대기 중인 경우에만 isApprove를 false로 설정
+        if (latestHistory?.approve === false && !latestHistory.reason) {
+          setIsApprove(false);
+          setHistory(latestHistory.brandName);
+        }
+      } else {
+        // historyData가 비어있을 때 처리할 로직
+        console.error("No history records found for this user.");
       }
     };
 
     fetchApproveData();
-  }, []);
+  }, [userId]);
 
   // 프로필 업데이트
   useEffect(() => {
