@@ -181,7 +181,7 @@ export async function editProfile(
       profileImage: formData.get("profileImage"),
       phoneNumber: (formData.get("phoneNumber") as string).replace(/-/g, ""),
       name: formData.get("name"),
-      homepage: formData.get("homepage") || "",
+      homepage: formData.get("homepage") || "없음",
       address: `${formData.get("postal_code") || ""}, ${
         formData.get("address") || ""
       }, ${formData.get("detail_address") || ""}, ${
