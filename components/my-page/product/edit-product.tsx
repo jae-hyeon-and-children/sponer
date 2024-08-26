@@ -248,9 +248,9 @@ export default function EditProductForm(data: any) {
     }
   };
 
-  // const handleCloseModal = () => {
-  //   router.push("/my-page/product-list");
-  // };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   const handleCloseSize = () => {
     setShowSize(false);
@@ -270,13 +270,13 @@ export default function EditProductForm(data: any) {
         isShowSize={isShowSize}
         modalContent={modalContent}
         sizeTable={sizeTable}
-        // handleCloseModal={handleCloseModal}
+        handleCloseModal={handleCloseModal}
         handleCloseSize={handleCloseSize}
       />
-      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
-        <div className="display">상품 정보 수정</div>
+      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-24 pt-36 max-w-screen-2xl mx-auto">
+        <div className="display mb-10 text-gray-900">상품 정보 수정</div>
         <form
-          className="w-full flex flex-col mt-16 max-w-screen-xl"
+          className="w-full flex flex-col mt-8 max-w-screen-xl bg-white p-8 rounded-lg "
           onSubmit={handleSubmitUpdate}
         >
           <ImageUploader
@@ -304,18 +304,27 @@ export default function EditProductForm(data: any) {
             handleShowModal={handleShowModal}
             selectedHeight={selectedHeight}
           />
-          <div className="mt-[5rem] w-full h-fit flex justify-center label-1 text-gray-100">
-            <button type="submit" className="bg-primary px-12 py-4 rounded-3xl">
+          {/* Button group */}
+          <div className="mt-16 w-full h-fit flex justify-center gap-4">
+            <button
+              type="submit"
+              className="bg-primary px-12 py-4 rounded-3xl text-white hover:bg-blue-700 transition max-w-xs"
+            >
               상품 수정하기
             </button>
           </div>
         </form>
+
+        {/* Separate form for deletion */}
         <form
           className="w-full flex flex-col mt-4"
           onSubmit={handleSubmitDelete}
         >
           <div className="w-full h-fit flex justify-center label-1 text-gray-100">
-            <button type="submit" className="bg-primary px-12 py-4 rounded-3xl">
+            <button
+              type="submit"
+              className="bg-red-500 px-12 py-4 rounded-3xl text-white hover:bg-red-700 transition max-w-xs"
+            >
               상품 삭제하기
             </button>
           </div>
