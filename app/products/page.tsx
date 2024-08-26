@@ -35,7 +35,7 @@ import FilterSideBar from "@/components/products/filter-side-bar";
 import ProductHits from "@/components/products/product-hits";
 import ProductSearchBox from "@/components/products/product-search-box";
 import searchClient from "@/config/algolia/algolia";
-import { InstantSearch } from "react-instantsearch";
+import { InstantSearch, SortBy } from "react-instantsearch";
 
 // Skeleton for FilterSideBar
 const SkeletonFilterSideBar = () => (
@@ -84,6 +84,12 @@ export default function Products() {
   return (
     <>
       <InstantSearch searchClient={searchClient} indexName={"Product"}>
+        {/* <SortBy
+          items={[
+            { value: "Product", label: "Default" },
+            { value: "Product_by_date_desc", label: "Newest First" }, // 커스텀 정렬 인덱스
+          ]}
+        /> */}
         <main className="flex">
           {isLoading ? <SkeletonFilterSideBar /> : <FilterSideBar />}
           <div className="pt-24 px-4 lg:pt-36 flex justify-center w-full">
