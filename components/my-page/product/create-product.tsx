@@ -1,6 +1,5 @@
 "use client";
 
-import { ProductLabel } from "@/components/my-page/label";
 import React, {
   ChangeEvent,
   DragEvent,
@@ -8,24 +7,13 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import {
-  PRODUCT_CATEGORIES,
-  PRODUCT_CATEGORIES_REVERSE,
-  PRODUCT_HEIGHT,
-  PRODUCT_SIZE,
-  PRODUCT_STYLES,
-  PRODUCT_TYPES,
-} from "@/constants/variables";
-import Input from "@/components/global/input";
-
+import { PRODUCT_CATEGORIES_REVERSE } from "@/constants/variables";
 import { useRouter } from "next/navigation";
 import { IResponse } from "@/model/responses";
-import Modal from "@/components/global/modal";
 import { showDefaultModalState, toastState } from "@/recoil/atoms";
 import { useRecoilState } from "recoil";
 import { ISizeTable } from "@/constants/type-table";
 import { getSizeTable } from "@/libs/utils/table";
-import SizeTable from "@/components/global/size-table";
 import { uploadProduct } from "@/app/(my-page)/my-page/product/actions";
 import { FormModal } from "./form-modal";
 import { ImageUploader } from "./image-uploader";
@@ -45,7 +33,7 @@ export default function CreateProductForm() {
   const [isShowSize, setShowSize] = useState<boolean>(false);
 
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
-  const [toast, setToast] = useRecoilState(toastState); // Toast 상태 관리
+  const [toast, setToast] = useRecoilState(toastState);
 
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
@@ -163,9 +151,9 @@ export default function CreateProductForm() {
     }
   };
 
-  // const handleCloseModal = () => {
-  //   router.push("/my-page/product-list");
-  // };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   const handleCloseSize = () => {
     setShowSize(false);
@@ -183,13 +171,13 @@ export default function CreateProductForm() {
         isShowSize={isShowSize}
         modalContent={modalContent}
         sizeTable={sizeTable}
-        // handleCloseModal={handleCloseModal}
+        handleCloseModal={handleCloseModal}
         handleCloseSize={handleCloseSize}
       />
-      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
-        <div className="display">상품 정보 등록</div>
+      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-24 pt-36 max-w-screen-2xl mx-auto">
+        <div className="display mb-10 text-gray-900">상품 정보 등록</div>
         <form
-          className="w-full flex flex-col mt-16 max-w-screen-xl"
+          className="w-full flex flex-col mt-8 max-w-screen-xl bg-white p-8 rounded-lg " //shadow-md
           onSubmit={handleSubmit}
         >
           <ImageUploader
@@ -207,7 +195,6 @@ export default function CreateProductForm() {
             selectedSize={selectedSize}
             selectedGender={selectedGender}
             selectedStyles={selectedStyles}
-            // selectedHeight={selected}
             errors={errors}
             selectType={selectType}
             selectSize={selectSize}
@@ -215,8 +202,11 @@ export default function CreateProductForm() {
             toggleStyle={toggleStyle}
             handleShowModal={handleShowModal}
           />
-          <div className="mt-[5rem] w-full h-fit flex justify-center label-1 text-gray-100">
-            <button type="submit" className="bg-primary px-12 py-4 rounded-3xl">
+          <div className="mt-16 w-full h-fit flex justify-center">
+            <button
+              type="submit"
+              className="bg-primary px-12 py-4 rounded-3xl text-white hover:bg-blue-700 transition"
+            >
               상품 등록하기
             </button>
           </div>
