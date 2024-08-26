@@ -2,6 +2,7 @@
 
 import Footer from "@/components/global/footer";
 import {
+  PRODUCT_CATEGORIES,
   PRODUCT_SIZE,
   PRODUCT_STYLES,
   PRODUCT_TYPES,
@@ -66,6 +67,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
       if (productResponse.success) {
         setProduct(productResponse.data!);
         setSizeTable(getSizeTable(productResponse.data!.productCategory));
+
         const brandResponse = await getUser(productResponse.data!.brandId);
         if (brandResponse.success) {
           setBrand(brandResponse.data!);
@@ -126,7 +128,11 @@ export default function Product({ params: { id } }: ProductDetailParams) {
     router.push(`/chats/${response!.data}`);
   };
 
-  const handleShowModal = () => setShowModal(true);
+  // const handleShowModal = () => setShowModal(true);
+  const handleShowModal = () => {
+    console.log("Modal Opened");
+    setShowModal(true);
+  };
 
   if (loading) return <EmptyView text="로딩 중" />;
   if (!product) return <EmptyView text="상품이 존재하지 않습니다." />;
@@ -230,9 +236,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
             <h1 className="display  text-gray-900 mb-3">{product!.title}</h1>
             <hr className="mb-12" />
             <div className="">
-              <h3 className="heading-3 text-gray-800 mb-4">
-                Product Information
-              </h3>
+              <h3 className="heading-3 text-gray-800 mb-4">상품 정보</h3>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-6">
                 <div className="flex flex-col gap-3">
                   <h4 className="label-1  text-gray-800">Size</h4>
@@ -259,6 +263,15 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                       </li>
                     ))}
                   </ul>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <h4 className="label-1 text-gray-800">Category</h4>
+                  <p className="label-2 text-gray-800">
+                    {PRODUCT_CATEGORIES[
+                      product!
+                        .productCategory as keyof typeof PRODUCT_CATEGORIES
+                    ] || "카테고리 없음"}
+                  </p>
                 </div>
               </div>
               {sizeTable && (
