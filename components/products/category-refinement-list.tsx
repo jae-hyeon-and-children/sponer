@@ -5,7 +5,7 @@ export default function CategoryRefinementList(props: UseRefinementListProps) {
   const { items, refine } = useRefinementList(props);
 
   return (
-    <ul className="flex gap-x-3 gap-y-2 flex-wrap">
+    <ul className="flex gap-x-3 gap-y-2 flex-wrap ">
       {items.map((item) => (
         <li key={item.label}>
           <label className="flex flex-wrap items-center cursor-pointer gap-2">

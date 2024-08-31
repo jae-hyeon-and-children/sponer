@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { PRODUCT_SIZE } from "@/constants/variables";
+import { PRODUCT_CATEGORIES, PRODUCT_SIZE } from "@/constants/variables";
 
 interface ProductItemProps {
   imageUrl: string;
@@ -8,6 +8,8 @@ interface ProductItemProps {
   size: string;
   height: string;
   brandName: string;
+  styleCategory: string[];
+  productCategory: string;
 }
 
 export default function ProductItem({
@@ -16,6 +18,8 @@ export default function ProductItem({
   size,
   height,
   brandName,
+  styleCategory,
+  productCategory,
 }: ProductItemProps) {
   return (
     <li className="flex flex-col gap-6 items-center">
@@ -34,6 +38,21 @@ export default function ProductItem({
           <span className="caption  text-gray-200">/</span>
           <span className="caption  text-gray-500">{height}</span>
         </div>
+        <div className="flex gap-x-2 gap-y-1 flex-wrap justify-center mt-2 mb-2">
+          {styleCategory.map((style) => (
+            <span
+              key={style}
+              className="px-2 py-1 bg-gray-100 rounded-md text-xs text-gray-700"
+            >
+              {style}
+            </span>
+          ))}
+        </div>
+        <span className="caption text-gray-500">
+          {PRODUCT_CATEGORIES[
+            productCategory as keyof typeof PRODUCT_CATEGORIES
+          ] || "카테고리 없음"}
+        </span>
       </div>
     </li>
   );

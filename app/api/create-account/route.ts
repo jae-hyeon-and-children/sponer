@@ -3,12 +3,13 @@ import { createAccountHandler } from "@/app/(auth)/create-account/actions";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, email, profileImage, token } = await req.json();
+    const { userId, email, profileImage, token, name } = await req.json();
     const response = await createAccountHandler(
       userId,
       email,
       profileImage,
-      token
+      token,
+      name
     );
     return NextResponse.json(response);
   } catch (error) {

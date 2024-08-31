@@ -2,6 +2,7 @@
 
 import Footer from "@/components/global/footer";
 import {
+  PRODUCT_CATEGORIES,
   PRODUCT_SIZE,
   PRODUCT_STYLES,
   PRODUCT_TYPES,
@@ -19,7 +20,7 @@ import { IUser } from "@/model/user";
 import { useRouter } from "next/navigation";
 import { createChatRoom } from "@/libs/api/chat-room";
 import { getUser } from "@/libs/api/user";
-import Modal from "@/components/global/modal";
+
 import SizeTable from "@/components/global/size-table";
 import { getSizeTable } from "@/libs/utils/table";
 import { ISizeTable } from "@/constants/type-table";
@@ -28,6 +29,7 @@ import { showDefaultModalState } from "@/recoil/atoms";
 import EmptyView from "@/components/global/empty-view";
 import Header from "@/components/global/header";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/my-page/product/custom-modal";
 
 interface ProductDetailParams {
   params: {
@@ -47,6 +49,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
   const [imageCurrIndex, setImageCurrIndex] = useState(1);
   const router = useRouter();
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchUser() {
@@ -66,6 +69,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
       if (productResponse.success) {
         setProduct(productResponse.data!);
         setSizeTable(getSizeTable(productResponse.data!.productCategory));
+
         const brandResponse = await getUser(productResponse.data!.brandId);
         if (brandResponse.success) {
           setBrand(brandResponse.data!);
@@ -126,20 +130,28 @@ export default function Product({ params: { id } }: ProductDetailParams) {
     router.push(`/chats/${response!.data}`);
   };
 
-  const handleShowModal = () => setShowModal(true);
+  const handleShowModal = () => {
+    console.log("Modal Opened");
+    setIsModalOpen(true);
+  };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   if (loading) return <EmptyView text="로딩 중" />;
   if (!product) return <EmptyView text="상품이 존재하지 않습니다." />;
   return (
     <>
-      <Modal>
-        {sizeTable && (
+      <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {sizeTable ? (
           <SizeTable
-            tableHeader={sizeTable!.header}
-            tableBody={sizeTable!.body}
+            tableHeader={sizeTable.header}
+            tableBody={sizeTable.body}
           />
+        ) : (
+          <p>아직 해당 물품은 가이드 표가 준비되어 있지 않습니다.</p>
         )}
-      </Modal>
+      </CustomModal>
 
       <main className="flex flex-col items-center px-4">
         <div className="max-w-screen-sm lg:max-w-screen-2xl flex gap-x-36 w-full flex-col lg:flex-row">
@@ -230,9 +242,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
             <h1 className="display  text-gray-900 mb-3">{product!.title}</h1>
             <hr className="mb-12" />
             <div className="">
-              <h3 className="heading-3 text-gray-800 mb-4">
-                Product Information
-              </h3>
+              <h3 className="heading-3 text-gray-800 mb-4">상품 정보</h3>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-6">
                 <div className="flex flex-col gap-3">
                   <h4 className="label-1  text-gray-800">Size</h4>
@@ -259,6 +269,15 @@ export default function Product({ params: { id } }: ProductDetailParams) {
                       </li>
                     ))}
                   </ul>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <h4 className="label-1 text-gray-800">Category</h4>
+                  <p className="label-2 text-gray-800">
+                    {PRODUCT_CATEGORIES[
+                      product!
+                        .productCategory as keyof typeof PRODUCT_CATEGORIES
+                    ] || "카테고리 없음"}
+                  </p>
                 </div>
               </div>
               {sizeTable && (

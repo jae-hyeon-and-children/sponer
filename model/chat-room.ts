@@ -3,6 +3,9 @@ import { DocumentSnapshot, Timestamp } from "firebase/firestore";
 export interface IChatUser {
   id: string;
   name: string;
+  nickName?: string;
+  brandName?: string;
+
   profileImage: string;
 }
 

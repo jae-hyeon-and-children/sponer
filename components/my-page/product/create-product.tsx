@@ -1,6 +1,5 @@
 "use client";
 
-import { ProductLabel } from "@/components/my-page/label";
 import React, {
   ChangeEvent,
   DragEvent,
@@ -8,24 +7,17 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import {
-  PRODUCT_CATEGORIES,
-  PRODUCT_CATEGORIES_REVERSE,
-  PRODUCT_HEIGHT,
-  PRODUCT_SIZE,
-  PRODUCT_STYLES,
-  PRODUCT_TYPES,
-} from "@/constants/variables";
-import Input from "@/components/global/input";
-// import useAuth from "@/libs/auth";
+import { PRODUCT_CATEGORIES_REVERSE } from "@/constants/variables";
 import { useRouter } from "next/navigation";
 import { IResponse } from "@/model/responses";
-import Modal from "@/components/global/modal";
-import { showDefaultModalState } from "@/recoil/atoms";
+import {
+  showCustomModalState,
+  showDefaultModalState,
+  toastState,
+} from "@/recoil/atoms";
 import { useRecoilState } from "recoil";
 import { ISizeTable } from "@/constants/type-table";
 import { getSizeTable } from "@/libs/utils/table";
-import SizeTable from "@/components/global/size-table";
 import { uploadProduct } from "@/app/(my-page)/my-page/product/actions";
 import { FormModal } from "./form-modal";
 import { ImageUploader } from "./image-uploader";
@@ -41,34 +33,50 @@ export default function CreateProductForm() {
   const [otherData, setFormData] = useState(new FormData());
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
+  const [isShowModal, setShowModal] = useRecoilState(showCustomModalState);
   const [isShowSize, setShowSize] = useState<boolean>(false);
 
-  const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+  const [toast, setToast] = useRecoilState(toastState);
 
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
-  // const userAuth = useAuth();
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isValidSiz, setIsValidSize] = useState<boolean>(true);
+  const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 
   useEffect(() => {
-    if (session) {
-      const newFormData = new FormData();
-      images.forEach((image) => newFormData.append("images", image));
-      if (selectedType) newFormData.append("selectedType", selectedType);
-      if (selectedSize) newFormData.append("selectedSize", selectedSize);
-      if (selectedGender) newFormData.append("selectedGender", selectedGender);
-      selectedStyles.forEach((style) =>
-        newFormData.append("selectedStyles", style)
-      );
+    if (status === "loading") return;
 
-      newFormData.append("brandId", session?.user?.id);
-
-      setFormData(newFormData);
-
-      setSizeTable(getSizeTable(PRODUCT_CATEGORIES_REVERSE[selectedType!]));
+    if (!session) {
+      router.push("/login");
+      return;
     }
+
+    const userType = session.user.userType;
+    const userBrandId = session.user.uid;
+
+    if (
+      userType === "stylist" ||
+      (userType !== "admin" && userBrandId !== session.user.uid)
+    ) {
+      router.push("/");
+    }
+
+    const newFormData = new FormData();
+    images.forEach((image) => newFormData.append("images", image));
+    if (selectedType) newFormData.append("selectedType", selectedType);
+    if (selectedSize) newFormData.append("selectedSize", selectedSize);
+    if (selectedGender) newFormData.append("selectedGender", selectedGender);
+    selectedStyles.forEach((style) =>
+      newFormData.append("selectedStyles", style)
+    );
+
+    newFormData.append("brandId", session?.user?.id);
+
+    setFormData(newFormData);
+
+    setSizeTable(getSizeTable(PRODUCT_CATEGORIES_REVERSE[selectedType!]));
   }, [
     selectedType,
     selectedSize,
@@ -76,9 +84,11 @@ export default function CreateProductForm() {
     selectedStyles,
     images,
     session,
+    status,
   ]);
 
   const selectType = (item: string) => setSelectedType(item);
+
   const selectSize = (item: string) => setSelectedSize(item);
   const selectGender = (item: string) => setSelectedGender(item);
   const toggleStyle = (item: string) =>
@@ -87,9 +97,32 @@ export default function CreateProductForm() {
     );
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
+    const validFiles: File[] = [];
+    let validSize = true;
+
+    files.forEach((file) => {
+      console.log(`File size of ${file.name}: ${file.size} bytes`);
+      if (file.size > MAX_IMAGE_SIZE) {
+        validSize = false;
+      } else {
+        validFiles.push(file);
+      }
+    });
+
+    if (!validSize) {
+      setToast({
+        isVisible: true,
+        message: "이미지 크기는 4MB를 초과할 수 없습니다.",
+        type: "error",
+      });
+      setIsValidSize(false);
+    } else {
+      setIsValidSize(true);
+    }
+
     setImages((prevImages) => [
       ...prevImages,
-      ...files.slice(0, 5 - prevImages.length),
+      ...validFiles.slice(0, 5 - prevImages.length),
     ]);
   };
 
@@ -135,17 +168,16 @@ export default function CreateProductForm() {
       });
       setErrors(newErrors);
     } else {
-      setModalContent(<div>상품 등록 성공</div>);
-      setShowModal(true);
+      setToast({
+        isVisible: true,
+        message: "상품 등록 성공",
+        type: "success",
+      });
+
+      setTimeout(() => {
+        router.push("/my-page/product-list");
+      }, 2000);
     }
-  };
-
-  const handleCloseModal = () => {
-    router.push("/my-page/product-list");
-  };
-
-  const handleCloseSize = () => {
-    setShowSize(false);
   };
 
   const handleShowModal = () => {
@@ -158,15 +190,15 @@ export default function CreateProductForm() {
       <FormModal
         isShowModal={isShowModal}
         isShowSize={isShowSize}
-        modalContent={modalContent}
+        modalContent={null}
         sizeTable={sizeTable}
-        handleCloseModal={handleCloseModal}
-        handleCloseSize={handleCloseSize}
+        handleCloseModal={() => setShowModal(false)}
+        handleCloseSize={() => setShowSize(false)}
       />
-      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
-        <div className="display">상품 정보 등록</div>
+      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-24 pt-36 max-w-screen-2xl mx-auto">
+        <div className="display mb-10 text-gray-900">상품 정보 등록</div>
         <form
-          className="w-full flex flex-col mt-16 max-w-screen-xl"
+          className="w-full flex flex-col mt-8 max-w-screen-xl bg-white p-8 rounded-lg " //shadow-md
           onSubmit={handleSubmit}
         >
           <ImageUploader
@@ -184,7 +216,6 @@ export default function CreateProductForm() {
             selectedSize={selectedSize}
             selectedGender={selectedGender}
             selectedStyles={selectedStyles}
-            // selectedHeight={selected}
             errors={errors}
             selectType={selectType}
             selectSize={selectSize}
@@ -192,8 +223,11 @@ export default function CreateProductForm() {
             toggleStyle={toggleStyle}
             handleShowModal={handleShowModal}
           />
-          <div className="mt-[5rem] w-full h-fit flex justify-center label-1 text-gray-100">
-            <button type="submit" className="bg-primary px-12 py-4 rounded-3xl">
+          <div className="mt-16 w-full h-fit flex justify-center">
+            <button
+              type="submit"
+              className="bg-primary px-12 py-4 rounded-3xl text-white hover:bg-blue-700 transition"
+            >
               상품 등록하기
             </button>
           </div>

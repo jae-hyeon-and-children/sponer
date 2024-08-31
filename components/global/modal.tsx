@@ -63,6 +63,10 @@ export default function Modal({ children, onClose }: ModalProps) {
       onClose();
     }
   };
+  console.log("Modal visibility:", showDefaultModal);
+  console.log("Modal children:", children);
+  //@ts-ignore
+  console.log("Modal children props:", children ? children.props : "No props");
 
   return (
     <section
@@ -80,9 +84,13 @@ export default function Modal({ children, onClose }: ModalProps) {
             <Image src={IcClose} alt="IcClose" width={20} height={20} />
           </button>
         </div>
-        {/* <div>{modalMessage}</div>
-        / 이거 다른곳에도 사용하는지 한규님한테 물어보기 */}
-        {children}
+
+        {/* <div className="overflow-y-auto max-h-[80vh]">
+          <div>{modalMessage}</div>
+        </div> */}
+        <div className="overflow-y-auto max-h-[80vh]">
+          {children || "No content available"}
+        </div>
       </div>
     </section>
   );

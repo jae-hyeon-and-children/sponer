@@ -17,17 +17,22 @@ import {
 } from "@/app/(my-page)/my-page/product/[id]/actions";
 import { IProduct } from "@/model/product";
 import { useRouter } from "next/navigation";
-// import useAuth from "@/libs/auth";
+
 import { IResponse } from "@/model/responses";
 import Modal from "../../global/modal";
 import { useRecoilState } from "recoil";
-import { showDefaultModalState } from "@/recoil/atoms";
+import {
+  showCustomModalState,
+  showDefaultModalState,
+  toastState,
+} from "@/recoil/atoms";
 import { ISizeTable } from "@/constants/type-table";
 import { getSizeTable } from "@/libs/utils/table";
 import SizeTable from "../../global/size-table";
 import { FormModal } from "./form-modal";
 import { ProductDetails } from "./product-details";
 import { ImageUploader } from "./image-uploader";
+import { useSession } from "next-auth/react";
 
 export const base64ToFile = (
   base64Data: string,
@@ -57,17 +62,37 @@ export default function EditProductForm(data: any) {
   const [initialData, setInitialData] = useState<IProduct | null>(null);
   const [otherData, setFormData] = useState(new FormData());
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
+
+  const [isShowModal, setShowModal] = useRecoilState(showCustomModalState);
   const [isShowSize, setShowSize] = useState<boolean>(false);
 
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
-
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
-
-  // const userAuth = useAuth();
+  const [toast, setToast] = useRecoilState(toastState);
+  const { data: session, status } = useSession();
   const router = useRouter();
+  const [isValidSiz, setIsValidSize] = useState<boolean>(true);
+  const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    const productBrandId = data.data.brandId;
+    const userBrandId = session?.user?.uid;
+    const userType = session?.user?.userType;
+
+    if (
+      userType === "stylist" ||
+      (userType !== "admin" && userBrandId !== productBrandId)
+    ) {
+      router.push("/");
+    }
+
     if (data) {
       setInitialData(data.data);
       setSelectedType(data.data.productCategory);
@@ -78,7 +103,7 @@ export default function EditProductForm(data: any) {
       setImageURLs(data.data.productImages || []);
       setFileNames(data.data.fileNames || []);
     }
-  }, [data]);
+  }, [session, status, data]);
 
   useEffect(() => {
     const newFormData = new FormData();
@@ -130,9 +155,31 @@ export default function EditProductForm(data: any) {
     );
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
+    const validFiles: File[] = [];
+    let validSize = true;
+
+    files.forEach((file) => {
+      console.log(`File size of ${file.name}: ${file.size} bytes`);
+      if (file.size > MAX_IMAGE_SIZE) {
+        validSize = false;
+      } else {
+        validFiles.push(file);
+      }
+    });
+
+    if (!validSize) {
+      setToast({
+        isVisible: true,
+        message: "이미지 크기는 4MB를 초과할 수 없습니다.",
+        type: "error",
+      });
+      setIsValidSize(false);
+    } else {
+      setIsValidSize(true);
+    }
     setImages((prevImages) => [
       ...prevImages,
-      ...files.slice(0, 5 - prevImages.length),
+      ...validFiles.slice(0, 5 - prevImages.length),
     ]);
 
     setImageURLs([]);
@@ -184,9 +231,21 @@ export default function EditProductForm(data: any) {
         }
       });
       setErrors(newErrors);
+      setToast({
+        isVisible: true,
+        message: "상품 수정 실패",
+        type: "error",
+      });
     } else {
-      setModalContent(<div>상품 정보 수정 성공</div>);
-      setShowModal(true);
+      setToast({
+        isVisible: true,
+        message: "상품 수정 성공",
+        type: "success",
+      });
+
+      setTimeout(() => {
+        router.push("/my-page/product-list");
+      }, 2000);
     }
   };
 
@@ -199,21 +258,22 @@ export default function EditProductForm(data: any) {
     const result: IResponse = await deleteProduct(productId);
 
     if (result.success) {
-      alert(result.message);
-      setModalContent(<div>상품 삭제 성공</div>);
-      setShowModal(true);
+      setToast({
+        isVisible: true,
+        message: "상품 삭제 성공",
+        type: "success",
+      });
+
+      setTimeout(() => {
+        router.push("/my-page/product-list");
+      }, 3000);
     } else {
-      setModalContent(<div>상품 삭제 실패</div>);
-      setShowModal(true);
+      setToast({
+        isVisible: true,
+        message: "상품 삭제 실패",
+        type: "error",
+      });
     }
-  };
-
-  const handleCloseModal = () => {
-    router.push("/my-page/product-list");
-  };
-
-  const handleCloseSize = () => {
-    setShowSize(false);
   };
 
   const handleShowModal = () => {
@@ -230,13 +290,13 @@ export default function EditProductForm(data: any) {
         isShowSize={isShowSize}
         modalContent={modalContent}
         sizeTable={sizeTable}
-        handleCloseModal={handleCloseModal}
-        handleCloseSize={handleCloseSize}
+        handleCloseModal={() => setShowModal(false)}
+        handleCloseSize={() => setShowSize(false)}
       />
-      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-36 pt-60 max-w-screen-2xl">
-        <div className="display">상품 정보 수정</div>
+      <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-24 pt-36 max-w-screen-2xl mx-auto">
+        <div className="display mb-10 text-gray-900">상품 정보 수정</div>
         <form
-          className="w-full flex flex-col mt-16 max-w-screen-xl"
+          className="w-full flex flex-col mt-8 max-w-screen-xl bg-white p-8 rounded-lg "
           onSubmit={handleSubmitUpdate}
         >
           <ImageUploader
@@ -264,18 +324,27 @@ export default function EditProductForm(data: any) {
             handleShowModal={handleShowModal}
             selectedHeight={selectedHeight}
           />
-          <div className="mt-[5rem] w-full h-fit flex justify-center label-1 text-gray-100">
-            <button type="submit" className="bg-primary px-12 py-4 rounded-3xl">
+          {/* Button group */}
+          <div className="mt-16 w-full h-fit flex justify-center gap-4">
+            <button
+              type="submit"
+              className="bg-primary px-12 py-4 rounded-3xl text-white hover:bg-blue-700 transition max-w-xs"
+            >
               상품 수정하기
             </button>
           </div>
         </form>
+
+        {/* Separate form for deletion */}
         <form
           className="w-full flex flex-col mt-4"
           onSubmit={handleSubmitDelete}
         >
           <div className="w-full h-fit flex justify-center label-1 text-gray-100">
-            <button type="submit" className="bg-primary px-12 py-4 rounded-3xl">
+            <button
+              type="submit"
+              className="bg-red-500 px-12 py-4 rounded-3xl text-white hover:bg-red-700 transition max-w-xs"
+            >
               상품 삭제하기
             </button>
           </div>
