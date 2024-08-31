@@ -14,6 +14,15 @@ const nextConfig = {
         protocol: "https",
         hostname: "firebasestorage.googleapis.com",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "sponer-57720.appspot.com",
+        pathname: "/profile_images/**",
+      },
     ],
   },
   env: {
@@ -24,6 +33,11 @@ const nextConfig = {
       /\\n/g,
       "\n"
     ),
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "3mb",
+    },
   },
 };
 
