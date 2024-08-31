@@ -10,7 +10,11 @@ import React, {
 import { PRODUCT_CATEGORIES_REVERSE } from "@/constants/variables";
 import { useRouter } from "next/navigation";
 import { IResponse } from "@/model/responses";
-import { showDefaultModalState, toastState } from "@/recoil/atoms";
+import {
+  showCustomModalState,
+  showDefaultModalState,
+  toastState,
+} from "@/recoil/atoms";
 import { useRecoilState } from "recoil";
 import { ISizeTable } from "@/constants/type-table";
 import { getSizeTable } from "@/libs/utils/table";
@@ -29,16 +33,17 @@ export default function CreateProductForm() {
   const [otherData, setFormData] = useState(new FormData());
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [isShowModal, setShowModal] = useRecoilState(showDefaultModalState);
+  const [isShowModal, setShowModal] = useRecoilState(showCustomModalState);
   const [isShowSize, setShowSize] = useState<boolean>(false);
 
-  const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
   const [toast, setToast] = useRecoilState(toastState);
 
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
 
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isValidSiz, setIsValidSize] = useState<boolean>(true);
+  const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 
   useEffect(() => {
     if (status === "loading") return;
@@ -83,6 +88,7 @@ export default function CreateProductForm() {
   ]);
 
   const selectType = (item: string) => setSelectedType(item);
+
   const selectSize = (item: string) => setSelectedSize(item);
   const selectGender = (item: string) => setSelectedGender(item);
   const toggleStyle = (item: string) =>
@@ -91,9 +97,32 @@ export default function CreateProductForm() {
     );
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
+    const validFiles: File[] = [];
+    let validSize = true;
+
+    files.forEach((file) => {
+      console.log(`File size of ${file.name}: ${file.size} bytes`);
+      if (file.size > MAX_IMAGE_SIZE) {
+        validSize = false;
+      } else {
+        validFiles.push(file);
+      }
+    });
+
+    if (!validSize) {
+      setToast({
+        isVisible: true,
+        message: "이미지 크기는 4MB를 초과할 수 없습니다.",
+        type: "error",
+      });
+      setIsValidSize(false);
+    } else {
+      setIsValidSize(true);
+    }
+
     setImages((prevImages) => [
       ...prevImages,
-      ...files.slice(0, 5 - prevImages.length),
+      ...validFiles.slice(0, 5 - prevImages.length),
     ]);
   };
 
@@ -151,14 +180,6 @@ export default function CreateProductForm() {
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
-  const handleCloseSize = () => {
-    setShowSize(false);
-  };
-
   const handleShowModal = () => {
     setShowModal(true);
     setShowSize(true);
@@ -169,10 +190,10 @@ export default function CreateProductForm() {
       <FormModal
         isShowModal={isShowModal}
         isShowSize={isShowSize}
-        modalContent={modalContent}
+        modalContent={null}
         sizeTable={sizeTable}
-        handleCloseModal={handleCloseModal}
-        handleCloseSize={handleCloseSize}
+        handleCloseModal={() => setShowModal(false)}
+        handleCloseSize={() => setShowSize(false)}
       />
       <div className="h-fit flex flex-col justify-start items-start px-4 lg:px-24 pt-36 max-w-screen-2xl mx-auto">
         <div className="display mb-10 text-gray-900">상품 정보 등록</div>
