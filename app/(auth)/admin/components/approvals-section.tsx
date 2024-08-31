@@ -1,15 +1,3 @@
-// "use client";
-
-// export default function ApprovalsSection() {
-//   return (
-//     <section className="bg-white rounded-lg shadow p-6">
-//       <h2 className="text-xl font-semibold text-gray-800 mb-4">사용자 승인</h2>
-//       <p>여기에 사용자 승인 관리가 표시됩니다.</p>
-//       {/* 이곳에 사용자 승인 관리 로직을 추가합니다. */}
-//     </section>
-//   );
-// }
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -42,7 +30,9 @@ export default function ApprovalsSection() {
       `Approve button clicked for user ID: ${userId}, History ID: ${historyId}`
     );
     try {
-      await approveBrand(userId, historyId); // 특정 History ID만 승인
+      // 특정 History ID만 승인
+      await approveBrand(userId, historyId);
+
       // 승인 후 해당 히스토리를 리스트에서 제거
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
