@@ -20,7 +20,7 @@ import { IUser } from "@/model/user";
 import { useRouter } from "next/navigation";
 import { createChatRoom } from "@/libs/api/chat-room";
 import { getUser } from "@/libs/api/user";
-import Modal from "@/components/global/modal";
+
 import SizeTable from "@/components/global/size-table";
 import { getSizeTable } from "@/libs/utils/table";
 import { ISizeTable } from "@/constants/type-table";
@@ -29,6 +29,7 @@ import { showDefaultModalState } from "@/recoil/atoms";
 import EmptyView from "@/components/global/empty-view";
 import Header from "@/components/global/header";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/my-page/product/custom-modal";
 
 interface ProductDetailParams {
   params: {
@@ -48,6 +49,7 @@ export default function Product({ params: { id } }: ProductDetailParams) {
   const [imageCurrIndex, setImageCurrIndex] = useState(1);
   const router = useRouter();
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchUser() {
@@ -128,24 +130,28 @@ export default function Product({ params: { id } }: ProductDetailParams) {
     router.push(`/chats/${response!.data}`);
   };
 
-  // const handleShowModal = () => setShowModal(true);
   const handleShowModal = () => {
     console.log("Modal Opened");
-    setShowModal(true);
+    setIsModalOpen(true);
   };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   if (loading) return <EmptyView text="로딩 중" />;
   if (!product) return <EmptyView text="상품이 존재하지 않습니다." />;
   return (
     <>
-      <Modal>
-        {sizeTable && (
+      <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {sizeTable ? (
           <SizeTable
-            tableHeader={sizeTable!.header}
-            tableBody={sizeTable!.body}
+            tableHeader={sizeTable.header}
+            tableBody={sizeTable.body}
           />
+        ) : (
+          <p>아직 해당 물품은 가이드 표가 준비되어 있지 않습니다.</p>
         )}
-      </Modal>
+      </CustomModal>
 
       <main className="flex flex-col items-center px-4">
         <div className="max-w-screen-sm lg:max-w-screen-2xl flex gap-x-36 w-full flex-col lg:flex-row">
