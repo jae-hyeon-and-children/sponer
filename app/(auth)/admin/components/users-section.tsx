@@ -24,8 +24,8 @@ async function fetchAllUsers(): Promise<User[]> {
     const data = doc.data() as User;
     return {
       ...data,
-      uid: doc.id, // 문서의 ID를 uid로 사용
-      phoneNumber: data.phoneNumber || "없음", // phoneNumber 필드 추가
+      uid: doc.id,
+      phoneNumber: data.phoneNumber || "없음",
       brandName: data.userType === "brand" ? data.brandName : undefined,
       nickName: data.userType === "stylist" ? data.nickName : undefined,
       address: data.address || "없음",

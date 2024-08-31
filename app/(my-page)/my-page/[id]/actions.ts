@@ -389,14 +389,14 @@ export async function getUserById(userId: string): Promise<IUser | null> {
       console.log("No such document, creating default user data");
       const defaultUser: IUser = {
         id: userId,
-        name: "", // 기본값 설정
-        profileImage: "", // 기본값 설정
-        email: "", // 기본값 설정
+        name: "",
+        profileImage: "",
+        email: "",
         address: "",
         phoneNumber: "",
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
-        userType: "", // 기본값 설정
+        userType: "",
       };
       return defaultUser;
     }

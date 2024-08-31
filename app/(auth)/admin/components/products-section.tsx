@@ -15,7 +15,7 @@ type Product = {
   genderCategory: string;
   size: string;
   description?: string;
-  link: string; // 제품의 상세 페이지 링크
+  link: string;
 };
 
 // 모든 제품을 가져오는 함수
@@ -26,8 +26,8 @@ async function fetchAllProducts(): Promise<Product[]> {
     const data = doc.data() as Omit<Product, "link">;
     return {
       ...data,
-      id: doc.id, // 문서의 ID를 제품의 ID로 사용
-      link: `/product/${doc.id}`, // 링크가 없는 경우 기본값 설정
+      id: doc.id,
+      link: `/product/${doc.id}`,
     };
   });
   return productsList;
