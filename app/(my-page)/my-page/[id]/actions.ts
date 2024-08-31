@@ -76,6 +76,20 @@ async function uploadFile(file: File, path: string): Promise<string> {
   return downloadURL;
 }
 
+// async function uploadFile(file: File, path: string): Promise<string> {
+//   try {
+//     const storageRef = ref(storage, path);
+//     console.log(`Uploading file to path: ${path}`);
+//     await uploadBytes(storageRef, file);
+//     const downloadURL = await getDownloadURL(storageRef);
+//     console.log(`File uploaded successfully: ${downloadURL}`);
+//     return downloadURL;
+//   } catch (error) {
+//     console.error("Error uploading file:", error);
+//     throw error; // 에러를 발생시켜 상위에서 잡을 수 있게 합니다.
+//   }
+// }
+
 // 사용자 승인 함수
 export async function approveBrand(userId: string, historyId: string) {
   try {
@@ -302,51 +316,6 @@ export async function editProfile(
     }
   }
 }
-
-// export async function getUserById(userId: string): Promise<IUser | null> {
-//   try {
-//     const docRef = doc(fireStore, COLLECTION_NAME_USER, userId);
-//     console.log("Fetching document with ID:", userId);
-
-//     const docSnap = await getDoc(docRef);
-
-//     if (docSnap.exists()) {
-//       console.log("Document data:", docSnap.data());
-//       const data = docSnap.data();
-
-//       if (data.profileImage) {
-//         const profileFileName = getFileNameFromUrl(
-//           data.profileImage,
-//           "profile"
-//         );
-//         const base64 = await urlToBase64(data.profileImage);
-//         data.profileImage = `data:image/jpeg;base64,${base64}`;
-
-//         data.profileFileName = profileFileName;
-//       }
-
-//       if (data.businessImageUrl) {
-//         const businessFileName = getFileNameFromUrl(
-//           data.businessImageUrl,
-//           "business"
-//         );
-
-//         const base64 = await urlToBase64(data.businessImageUrl);
-//         data.businessImageUrl = `data:image/jpeg;base64,${base64}`;
-
-//         data.businessFileName = businessFileName;
-//       }
-
-//       return data as IUser;
-//     } else {
-//       console.log("No such document!");
-//       return null;
-//     }
-//   } catch (error) {
-//     console.error("Error fetching document:", error);
-//     return null;
-//   }
-// }
 
 export async function getUserById(userId: string): Promise<IUser | null> {
   try {
