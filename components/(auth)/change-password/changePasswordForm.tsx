@@ -20,9 +20,7 @@ function ChangePasswordPageSkeleton() {
             </div>
             <div className="flex flex-col justify-center items-center text-center gap-2 mt-5">
               <div className="border bg-gray-300 text-gray-300 rounded-xl w-full h-14 flex justify-center items-center"></div>
-              <div className="mt-10 label-2 text-gray-300 w-full h-5 rounded">
-                {/* 로그인 페이지로 이동하기 */}
-              </div>
+              <div className="mt-10 label-2 text-gray-300 w-full h-5 rounded"></div>
             </div>
           </div>
         </section>
