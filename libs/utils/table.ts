@@ -14,18 +14,21 @@ import { ISizeTable } from "@/constants/type-table";
 import { PRODUCT_CATEGORIES } from "@/constants/variables";
 
 export function getSizeTable(category: string): ISizeTable | null {
+  console.log("getSizeTable called with category:", category);
+
   switch (category) {
-    case "tops":
+    case PRODUCT_CATEGORIES["상의"]:
       return { header: TOP_SIZE_TABLE_HEADER, body: TOP_SIZE_TABLE_BODY };
-    case "pants":
+    case PRODUCT_CATEGORIES["바지"]:
       return { header: PANTS_SIZE_TABLE_HEADER, body: PANTS_SIZE_TABLE_BODY };
-    case "dresses":
+    case PRODUCT_CATEGORIES["원피스"]:
       return { header: DRESS_SIZE_TABLE_HEADER, body: DRESS_SIZE_TABLE_BODY };
-    case "skirts":
+    case PRODUCT_CATEGORIES["스커트"]:
       return { header: SKIRT_SIZE_TABLE_HEADER, body: SKIRT_SIZE_TABLE_BODY };
-    case "hats":
+    case PRODUCT_CATEGORIES["모자"]:
       return { header: HAT_SIZE_TABLE_HEADER, body: HAT_SIZE_TABLE_BODY };
     default:
+      console.log("No matching category found, returning null");
       return null;
   }
 }
