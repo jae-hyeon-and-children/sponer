@@ -84,12 +84,6 @@ export default function Products() {
   return (
     <>
       <InstantSearch searchClient={searchClient} indexName={"Product"}>
-        {/* <SortBy
-          items={[
-            { value: "Product", label: "Default" },
-            { value: "Product_by_date_desc", label: "Newest First" }, // 커스텀 정렬 인덱스
-          ]}
-        /> */}
         <main className="flex">
           {isLoading ? <SkeletonFilterSideBar /> : <FilterSideBar />}
           <div className="pt-24 px-4 lg:pt-36 flex justify-center w-full">
