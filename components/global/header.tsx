@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import {
-  ArrowLeftOnRectangleIcon,
-  ArrowRightOnRectangleIcon,
+  ArrowLeftEndOnRectangleIcon,
+  ArrowRightEndOnRectangleIcon,
   EnvelopeIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -122,12 +122,12 @@ export default function Header() {
                   <UserCircleIcon className="h-6 w-6 text-black hover:text-gray-300" />
                 </Link>
                 <button onClick={() => signOut()} aria-label="로그아웃">
-                  <ArrowRightOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
+                  <ArrowRightEndOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
                 </button>
               </>
             ) : (
               <Link href="/login">
-                <ArrowLeftOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
+                <ArrowLeftEndOnRectangleIcon className="h-6 w-6 text-black hover:text-gray-300" />
               </Link>
             )}
           </div>
