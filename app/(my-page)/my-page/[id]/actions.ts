@@ -94,7 +94,8 @@ async function uploadFile(file: File, path: string): Promise<string> {
 export async function approveBrand(userId: string, historyId: string) {
   try {
     const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
-    const historyDocRef = doc(userRef, "History", historyId); // 특정 History 문서 참조
+    // 특정 History 문서 참조
+    const historyDocRef = doc(userRef, "History", historyId);
 
     // 특정 historyId에 해당하는 문서 가져오기
     const historyDoc = await getDoc(historyDocRef);
@@ -123,9 +124,10 @@ export async function rejectBrand(
 ) {
   try {
     const userRef = doc(fireStore, COLLECTION_NAME_USER, userId);
-    const historyRef = doc(userRef, "History", historyId); // 특정 History 문서 참조
-
-    await updateDoc(historyRef, { approve: false, reason }); // 해당 문서만 업데이트
+    // 특정 History 문서 참조
+    const historyRef = doc(userRef, "History", historyId);
+    // 해당 문서만 업데이트
+    await updateDoc(historyRef, { approve: false, reason });
   } catch (error) {
     console.error("Error rejecting brand:", error);
   }
@@ -142,7 +144,8 @@ export async function getPendingBrandUsers(): Promise<IUser[]> {
 
     for (const doc of querySnapshot.docs) {
       const userData = doc.data() as IUser;
-      userData.id = doc.id; // 사용자 ID 설정
+      // 사용자 ID 설정
+      userData.id = doc.id;
       const historyRef = collection(doc.ref, "History");
 
       const historyQuery = query(
@@ -352,7 +355,28 @@ export async function getUserById(userId: string): Promise<IUser | null> {
         data.businessFileName = businessFileName;
       }
 
-      return data as IUser;
+      // history 컬렉션에서 최신의 approve 상태 확인
+      const historyRef = collection(docRef, "History");
+      const historyQuery = query(
+        historyRef,
+        orderBy("createdAt", "desc"),
+        limit(1)
+      );
+      const historySnapshot = await getDocs(historyQuery);
+      let latestApproveStatus = false;
+
+      if (!historySnapshot.empty) {
+        const latestHistory =
+          historySnapshot.docs[0].data() as IBrandApplication;
+        latestApproveStatus = latestHistory.approve;
+        console.log("Latest approve status from history:", latestApproveStatus);
+      }
+
+      // approve 상태를 history 컬렉션의 최신 상태로 반영
+      return {
+        ...data,
+        approve: latestApproveStatus,
+      } as IUser;
     } else {
       // 문서가 존재하지 않을 경우 기본 사용자 객체 반환
       console.log("No such document, creating default user data");
@@ -366,6 +390,7 @@ export async function getUserById(userId: string): Promise<IUser | null> {
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
         userType: "",
+        approve: false, // 기본값 설정
       };
       return defaultUser;
     }
