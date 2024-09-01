@@ -227,17 +227,17 @@ export default function Product({ params: { id } }: ProductDetailParams) {
             )}
           </section>
           <section className="flex-1 flex flex-col lg:sticky lg:top-0 pt-16 lg:pt-60 h-fit">
-            <div className="mb-4 flex flex-wrap gap-3 items-center">
-              <div className="w-5 h-5 rounded-full bg-slate-500 overflow-hidden">
+            <div className="mb-4 flex flex-wrap gap-5 items-center">
+              <div className="w-12 h-12 rounded-full bg-slate-500 overflow-hidden">
                 <Image
-                  src={brand?.profileImage ?? ""}
+                  src={brand?.profileImage ?? "/path/to/default-image.png"} // 기본이미지 찾아서 넣어줘야 함 이건 임시방편
                   alt="IcArrowLeft"
-                  width={20}
-                  height={20}
+                  width={48}
+                  height={48}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <h2 className="label-1 text-gray-800 ">{brand?.brandName!}</h2>
+              <h2 className="label-1  text-gray-800 ">{brand?.brandName!}</h2>
             </div>
             <h1 className="display  text-gray-900 mb-3">{product!.title}</h1>
             <hr className="mb-12" />
