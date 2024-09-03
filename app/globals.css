@@ -30,4 +30,7 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .caption-2 {
+    @apply font-normal text-[0.5rem] leading-[140%];
+  }
 }
