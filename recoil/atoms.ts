@@ -1,15 +1,25 @@
 import { atom } from "recoil";
 import { IChatUser } from "@/model/chat-room";
 import { IProduct } from "@/model/product";
+import { ReactNode } from "react";
 
 export const showDefaultModalState = atom<boolean>({
   key: "showDefaultModalState",
   default: false,
 });
 
-export const modalMessageState = atom<string>({
+// export const modalMessageState = atom<string>({
+//   key: "modalMessageState",
+//   default: "null",
+// });
+
+export const modalMessageState = atom<ReactNode>({
   key: "modalMessageState",
-  default: "",
+  default: null,
+});
+export const modalTitleState = atom<ReactNode>({
+  key: "modalTitleState",
+  default: null,
 });
 
 export const showChatRoomListState = atom<boolean>({

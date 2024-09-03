@@ -13,7 +13,7 @@ export default function FilterSideBar() {
     <div className="relative">
       <button
         onClick={toggleSidebar}
-        className="lg:hidden fixed top-20 right-0 z-50 text-2xl p-2 bg-gray-800 text-white rounded-md"
+        className="lg:hidden fixed top-20 right-2 z-50 text-2xl p-2 bg-gray-800 text-white rounded-md"
       >
         <Bars3Icon className="w-6 h-6" />
       </button>
@@ -21,19 +21,18 @@ export default function FilterSideBar() {
       <div
         className={`${
           isSidebarVisible ? "translate-x-0" : "-translate-x-full"
-        } fixed lg:translate-x-0  lg:flex flex-col px-7 pt-24 lg:pt-36 gap-7 w-72 border-r-2 border-gray-100 h-screen lg:h-auto lg:sticky top-0 bg-white transition-transform duration-300 ease-in-out z-40`}
-        style={{ top: "72px" }}
+        } fixed lg:translate-x-0 lg:flex flex-col top-[75px] px-6 pt-20 lg:pt-28 gap-6 w-64 border-r-2  bg-gray-100  h-screen lg:h-screen lg:sticky transition-transform duration-300 ease-in-out z-40`}
       >
-        <div className="flex flex-col gap-3">
-          <h2 className="heading-3 text-gray-800">productCategory</h2>
+        <div className="flex flex-col gap-8 mt-5">
+          <h2 className="heading-3 text-gray-800">Product Category</h2>
           <CategoryRefinementList attribute="productCategory" />
         </div>
-        <div className="flex flex-col gap-3">
-          <h2 className="heading-3 text-gray-800">styleCategory</h2>
+        <div className="flex flex-col gap-8 mt-5">
+          <h2 className="heading-3 text-gray-800">Style Category</h2>
           <CategoryRefinementList attribute="styleCategory" />
         </div>
-        <div className="flex flex-col gap-3">
-          <h2 className="heading-3 text-gray-800">genderCategory</h2>
+        <div className="flex flex-col gap-8 mt-5">
+          <h2 className="heading-3 text-gray-800">Gender Category</h2>
           <CategoryRefinementList attribute="genderCategory" />
         </div>
       </div>

@@ -1,10 +1,14 @@
 "use client";
 
 import { useRecoilState } from "recoil";
-import { showDefaultModalState, modalMessageState } from "@/recoil/atoms";
+import {
+  showDefaultModalState,
+  modalMessageState,
+  modalTitleState,
+} from "@/recoil/atoms";
 import Modal from "@/components/global/modal";
-import { footerContents } from "@/constants/footer-content";
 import Image from "next/image";
+import { footerContents } from "./footer-content";
 
 interface FooterCompanyInfoProps {
   title: string;
@@ -24,15 +28,17 @@ function FooterCompanyInfo({ title, content }: FooterCompanyInfoProps) {
 
 interface FooterMenuProps {
   text: string;
-  content: string;
+  content: React.ReactNode;
 }
 
 function FooterMenu({ text, content }: FooterMenuProps) {
   const [showModal, setShowModal] = useRecoilState(showDefaultModalState);
-  const [modalMessage, setModalMessage] = useRecoilState(modalMessageState);
+  const [, setModalContent] = useRecoilState(modalMessageState);
+  const [, setModalTitle] = useRecoilState(modalTitleState);
 
   const handleClick = () => {
-    setModalMessage(content);
+    setModalContent(content);
+    setModalTitle(text);
     setShowModal(true);
   };
 
@@ -48,7 +54,8 @@ function FooterMenu({ text, content }: FooterMenuProps) {
 
 export default function Footer() {
   const [showModal, setShowModal] = useRecoilState(showDefaultModalState);
-  const [modalMessage] = useRecoilState(modalMessageState);
+  const [modalContent] = useRecoilState(modalMessageState);
+  const [modalTitle] = useRecoilState(modalTitleState);
 
   return (
     <footer className="bg-gray-800 py-8 flex justify-center px-4 mt-24 lg:mt-20">
@@ -78,10 +85,6 @@ export default function Footer() {
                     title="사업자등록번호"
                     content="306-36-36523"
                   />
-                  {/* <FooterCompanyInfo
-                    title="통신판매업 신고번호"
-                    content="제2020-서울어딘가-무슨호"
-                  /> */}
                 </ul>
               </div>
               <div className="mb-6 lg:mb-0 basis-1/3">
@@ -91,7 +94,6 @@ export default function Footer() {
                 <ul className="flex flex-col gap-2 paragraph-1 text-gray-300">
                   <li className="text-sm">1544-1232</li>
                   <li className="text-sm">평일 오전 9시 ~ 오후 6시</li>
-                  {/* <li className="text-sm">FAQ 자주 묻는 질문</li> */}
                 </ul>
               </div>
             </div>
@@ -104,26 +106,20 @@ export default function Footer() {
             </div>
           </div>
           <ul className="flex flex-col gap-1 paragraph-2 text-gray-400 lg:flex-row lg:gap-0 text-sm">
-            <FooterMenu
+            {/* <FooterMenu
               text="회사 소개"
               content={footerContents.companyIntro}
-            />
-            {/* <FooterMenu text="공지사항" content={footerContents.notice} />
-            <FooterMenu text="이벤트 공지" content={footerContents.event} /> */}
-            {/* <FooterMenu
-              text="입점/제휴/대리배달"
-              content={footerContents.partnership}
             /> */}
             <FooterMenu
               text="개인정보처리방침"
               content={footerContents.privacyPolicy}
             />
-            <FooterMenu
+            {/* <FooterMenu
               text="운영,관리방침"
               content={footerContents.operationPolicy}
-            />
+            /> */}
             <FooterMenu
-              text="이용약관"
+              text="서비스 이용약관"
               content={footerContents.termsOfService}
             />
           </ul>
@@ -132,8 +128,8 @@ export default function Footer() {
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">상세 내용</h2>
-            <p className="text-gray-700">{modalMessage}</p>
+            <h2 className="text-3xl font-bold mb-4">{modalTitle}</h2>
+            <div className="text-gray-700">{modalContent}</div>
           </div>
         </Modal>
       )}

@@ -123,7 +123,7 @@ export default function ApprovalsSection() {
                     onClick={() =>
                       handleApprove(user.id!, historyItem.historyId)
                     }
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg"
+                    className="bg-primary text-white px-4 py-2 rounded-lg"
                   >
                     승인
                   </button>
