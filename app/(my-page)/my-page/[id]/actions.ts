@@ -5,7 +5,8 @@ import {
   COLLECTION_NAME_PRODUCT,
   COLLECTION_NAME_USER,
 } from "@/constants/variables";
-import { urlToBase64 } from "@/libs/utils/format";
+import { urlToBase64 } from '@/libs/utils/format';
+
 import { getFileNameFromUrl } from "@/libs/utils/image";
 import { IResponse } from "@/model/responses";
 import { IBrandApplication, IUser } from "@/model/user";
