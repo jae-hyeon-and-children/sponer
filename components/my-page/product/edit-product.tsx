@@ -33,6 +33,7 @@ import { FormModal } from "./form-modal";
 import { ProductDetails } from "./product-details";
 import { ImageUploader } from "./image-uploader";
 import { useSession } from "next-auth/react";
+import LoadingSpinner from "@/components/global/LoadingSpinner";
 
 export const base64ToFile = (
   base64Data: string,
@@ -63,15 +64,18 @@ export default function EditProductForm(data: any) {
   const [otherData, setFormData] = useState(new FormData());
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [isShowModal, setShowModal] = useRecoilState(showCustomModalState);
   const [isShowSize, setShowSize] = useState<boolean>(false);
 
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
+  const [isValidSiz, setIsValidSize] = useState<boolean>(true);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [toast, setToast] = useRecoilState(toastState);
+  const [isShowModal, setShowModal] = useRecoilState(showCustomModalState);
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [isValidSiz, setIsValidSize] = useState<boolean>(true);
   const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 
   useEffect(() => {
@@ -218,11 +222,13 @@ export default function EditProductForm(data: any) {
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    setIsLoading(true); // 로딩 시작
     const formData = new FormData(event.currentTarget);
 
     const productId = formData.get("productId") as string;
     const result = await updateProduct(otherData, formData);
 
+    setIsLoading(false); // 로딩 종료
     if (!result.success && result.errors) {
       const newErrors: Record<string, string> = {};
       result.errors.forEach((error: any) => {
@@ -245,7 +251,7 @@ export default function EditProductForm(data: any) {
 
       setTimeout(() => {
         router.push("/my-page/product-list");
-      }, 2000);
+      }, 1000);
     }
   };
 
@@ -253,10 +259,12 @@ export default function EditProductForm(data: any) {
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    setIsLoading(true); // 로딩 시작
 
     const productId = data.data.id;
     const result: IResponse = await deleteProduct(productId);
 
+    setIsLoading(false); // 로딩 종료
     if (result.success) {
       setToast({
         isVisible: true,
@@ -266,7 +274,7 @@ export default function EditProductForm(data: any) {
 
       setTimeout(() => {
         router.push("/my-page/product-list");
-      }, 3000);
+      }, 1000);
     } else {
       setToast({
         isVisible: true,
@@ -285,6 +293,7 @@ export default function EditProductForm(data: any) {
 
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <FormModal
         isShowModal={isShowModal}
         isShowSize={isShowSize}

@@ -23,6 +23,7 @@ import { FormModal } from "./form-modal";
 import { ImageUploader } from "./image-uploader";
 import { ProductDetails } from "./product-details";
 import { useSession } from "next-auth/react";
+import LoadingSpinner from "@/components/global/LoadingSpinner";
 
 export default function CreateProductForm() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -39,6 +40,8 @@ export default function CreateProductForm() {
   const [toast, setToast] = useRecoilState(toastState);
 
   const [sizeTable, setSizeTable] = useState<ISizeTable | null>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -156,9 +159,11 @@ export default function CreateProductForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(event.currentTarget);
     const result: IResponse = await uploadProduct(otherData, formData);
 
+    setIsLoading(false);
     if (!result.success && result.errors) {
       const newErrors: Record<string, string> = {};
       result.errors.forEach((error: any) => {
@@ -176,7 +181,7 @@ export default function CreateProductForm() {
 
       setTimeout(() => {
         router.push("/my-page/product-list");
-      }, 2000);
+      }, 1000);
     }
   };
 
@@ -187,6 +192,7 @@ export default function CreateProductForm() {
 
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <FormModal
         isShowModal={isShowModal}
         isShowSize={isShowSize}
