@@ -1,4 +1,5 @@
 import { PhotoIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import { ChangeEvent, DragEvent, MouseEvent } from "react";
 
 interface ImageUploaderProps {
@@ -58,7 +59,7 @@ export function ImageUploader({
             >
               {images[index] ? (
                 <>
-                  <img
+                  <Image
                     src={URL.createObjectURL(images[index])}
                     alt={`uploaded-${index}`}
                     className="object-cover h-[311px] w-full"
@@ -74,7 +75,7 @@ export function ImageUploader({
                 </>
               ) : imageURLs[index] ? (
                 <>
-                  <img
+                  <Image
                     src={imageURLs[index]}
                     alt={`uploaded-${index}`}
                     className="object-cover h-[311px] w-full"
