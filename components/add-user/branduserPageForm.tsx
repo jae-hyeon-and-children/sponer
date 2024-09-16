@@ -86,7 +86,28 @@ export default function BrandUserPageForm() {
   const showToast = useToast();
   const uid = session?.user?.id ?? null;
 
+  // const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { files } = event.target;
+  //   if (!files) return;
+  //   const file = files[0];
+  //   const url = URL.createObjectURL(file);
+  //   setProfilephoto(url);
+  //   setIsValidSize(file.size <= 4 * 1024 * 1024);
+  // };
+
+  // const onCertificateImageChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const { files } = event.target;
+  //   if (!files) return;
+  //   const file = files[0];
+  //   const url = URL.createObjectURL(file);
+  //   setCertificatephoto(url);
+  //   setIsValidSize(file.size <= 4 * 1024 * 1024);
+  // };
+
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (typeof window === "undefined") return; // 서버 환경에서 실행되지 않도록 확인
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
@@ -98,6 +119,7 @@ export default function BrandUserPageForm() {
   const onCertificateImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    if (typeof window === "undefined") return; // 서버 환경에서 실행되지 않도록 확인
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
