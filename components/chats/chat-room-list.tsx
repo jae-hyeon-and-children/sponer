@@ -59,66 +59,6 @@ export default function ChatRoomList() {
   const getOtherUser = (chatRoom: IChatRoom) =>
     chatRoom.users.find((user) => user.id !== uid);
 
-  // const handleCreateAdminChatRoom = async () => {
-  //   if (!uid) return;
-
-  //   try {
-  //     // 관리자 정보 조회
-  //     const adminQuery = query(
-  //       collection(fireStore, COLLECTION_NAME_USER),
-  //       where("userType", "==", "admin")
-  //     );
-  //     const adminSnapshot = await getDocs(adminQuery);
-  //     const adminDoc = adminSnapshot.docs[0];
-
-  //     if (!adminDoc.exists()) {
-  //       console.error("관리자 정보를 찾을 수 없습니다.");
-  //       return;
-  //     }
-
-  //     const adminData = adminDoc.data() as DocumentData;
-
-  //     // DocumentData를 IUser로 변환
-  //     const adminUser: IUser = {
-  //       id: adminDoc.id,
-  //       name: adminData.name || "스포너 관리자",
-  //       email: adminData.email || "unknown@example.com",
-  //       profileImage: "/sponer_Logo.png",
-  //       address: adminData.address || "",
-  //       phoneNumber: adminData.phoneNumber || "",
-  //       createdAt: adminData.createdAt || Timestamp.now(),
-  //       updatedAt: adminData.updatedAt || Timestamp.now(),
-  //       userType: adminData.userType || "admin",
-  //     };
-
-  //     // 채팅방 생성
-  //     const result = await createChatRoom(
-  //       adminUser,
-  //       {
-  //         id: uid,
-  //         name: session?.user?.name || "Unknown User",
-  //         email: session?.user?.email || "unknown@example.com",
-  //         profileImage: session?.user?.image || "/default/path/to/profile.png",
-  //         address: "",
-  //         phoneNumber: "",
-  //         createdAt: Timestamp.now(),
-  //         updatedAt: Timestamp.now(),
-  //         userType: "user",
-  //       },
-  //       ""
-  //     );
-
-  //     if (result.success) {
-  //       console.log("Admin chat room created successfully:", result.data);
-  //       router.push(`/chats/${result.data}`);
-  //     } else {
-  //       console.error("Error creating admin chat room:", result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating admin chat room:", error);
-  //   }
-  // };
-
   const handleCreateAdminChatRoom = async () => {
     if (!uid) return;
 
