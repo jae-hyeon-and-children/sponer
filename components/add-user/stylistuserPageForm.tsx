@@ -77,17 +77,7 @@ export default function StylistUserPageForm() {
   const [isValidSize, setIsValidSize] = useState<boolean>(true);
   const showToast = useToast();
 
-  // const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { files } = event.target;
-  //   if (!files) return;
-  //   const file = files[0];
-  //   const url = URL.createObjectURL(file);
-  //   setProfilephoto(url);
-  //   setIsValidSize(file.size <= 4 * 1024 * 1024);
-  // };
-  // 함수가 클라이언트에서만 실행되도록 보장
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (typeof window === "undefined") return; // 서버 환경에서 실행되지 않도록 추가
     const { files } = event.target;
     if (!files) return;
     const file = files[0];
@@ -95,6 +85,16 @@ export default function StylistUserPageForm() {
     setProfilephoto(url);
     setIsValidSize(file.size <= 4 * 1024 * 1024);
   };
+  // 함수가 클라이언트에서만 실행되도록 보장
+  // const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (typeof window === "undefined") return; // 서버 환경에서 실행되지 않도록 추가
+  //   const { files } = event.target;
+  //   if (!files) return;
+  //   const file = files[0];
+  //   const url = URL.createObjectURL(file);
+  //   setProfilephoto(url);
+  //   setIsValidSize(file.size <= 4 * 1024 * 1024);
+  // };
 
   useEffect(() => {
     if (status === "unauthenticated") {
